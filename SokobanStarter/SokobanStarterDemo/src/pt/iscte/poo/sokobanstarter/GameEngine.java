@@ -145,7 +145,7 @@ public class GameEngine implements Observer {
 		// Criar o cenario de jogo
 		createWarehouse();      // criar o armazem
 		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
-		readFiles(0);
+		//readFiles(0);
 		sendImagesToGUI();      // enviar as imagens para a GUI
 
 		
