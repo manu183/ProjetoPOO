@@ -14,7 +14,7 @@ import pt.iscte.poo.utils.Point2D;
 // embora tambem possa ser usada para isso.
 //
 // No seu projeto e' suposto haver metodos diferentes.
-// 
+//  
 // As coisas que comuns com o projeto, e que se pretendem ilustrar aqui, sao:
 // - GameEngine implementa Observer - para  ter o metodo update(...)  
 // - Configurar a janela do interface grafico (GUI):
