@@ -1,13 +1,18 @@
 package pt.iscte.poo.sokobanstarter;
 
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import pt.iscte.poo.gui.ImageMatrixGUI;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.observer.Observed;
 import pt.iscte.poo.observer.Observer;
+import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
 // Note que esta classe e' um exemplo - nao pretende ser o inicio do projeto, 
@@ -49,6 +54,81 @@ public class GameEngine implements Observer {
 			return INSTANCE = new GameEngine();
 		return INSTANCE;
 	}
+	
+	//Função para ler os ficheiros que armazenam as diferentes disposições do armazém
+	public void readFiles(int levelNum){
+		if(levelNum<0 || levelNum>6) {
+			throw new IllegalArgumentException("There is no level number" + levelNum);
+		}
+		String fileName = "level"+levelNum+".txt";
+		File file = new File("levels/"+fileName);
+		Scanner scanner;
+		//Cada ficheiro de nível tem 10 linhas e 10 colunas
+		int linhas=0;
+		int colunas=0;
+		try {
+			scanner = new Scanner(file);
+			for(colunas=0; colunas<GRID_HEIGHT;colunas++){
+				//Verifica se existe realmente uma linha seguinte
+				if(scanner.hasNextLine()) {
+					scanner.nextLine();
+				}else{
+					//Senão existe nada na linha seguinte, então o ficheiro tem um formato inválido
+					throw new IllegalArgumentException("The file "+fileName+"doesn't have a valid format");
+				}
+				for(linhas=0; linhas<GRID_WIDTH; linhas++) {
+					String actual = "";
+					//Verifica se existe realmente texto na posição seguinte
+					if(scanner.hasNext()) {
+						actual=scanner.next();
+						//Consoante a string detetada são adicionados novos objetos, através da função detectString
+						detectString(actual, new Point2D(linhas,colunas));
+					}else {
+						//Senão existe nada na posição seguinte, então o ficheiro tem um formato inválido
+						throw new IllegalArgumentException("The file "+fileName+"doesn't have a valid format");
+					}
+				}
+			}
+			
+			
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+	}
+	//Detetar o objeto a que equivale uma String
+	public void detectString(String string, Point2D position) {
+		if(string.equals("#")) {
+			
+		}else if(string.equals(" ")) {
+			
+			
+		}else if(string.equals("=")) {
+			
+		}else if(string.equals("C")) {
+			tileList.add(new Caixote(position));
+			
+		}else if(string.equals("X")) {
+			
+		}else if(string.equals("E")) {
+			
+		}else if(string.equals("B")) {
+			
+		}else if(string.equals("T")) {
+			
+		}else {
+			throw new IllegalArgumentException(string + " is not recognizible");
+		}
+	}
+	
 
 	// Inicio
 	public void start() {
@@ -65,6 +145,7 @@ public class GameEngine implements Observer {
 		// Criar o cenario de jogo
 		createWarehouse();      // criar o armazem
 		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
+		readFiles(0);
 		sendImagesToGUI();      // enviar as imagens para a GUI
 
 		
@@ -79,8 +160,24 @@ public class GameEngine implements Observer {
 
 		int key = gui.keyPressed();    // obtem o codigo da tecla pressionada
 
-		if (key == KeyEvent.VK_ENTER)  // se a tecla for ENTER, manda a empilhadora mover
-			bobcat.move();			
+		//if (key == KeyEvent.VK_ENTER)  // se a tecla for ENTER, manda a empilhadora mover
+		//	bobcat.move();
+		
+		//Se a tecla for DOWN a empilhadora vai para baixo
+		if (key == KeyEvent.VK_DOWN)
+			bobcat.move(Direction.DOWN);
+		
+		//Se a tecla for UP a empilhadora vai para cima
+		if (key == KeyEvent.VK_UP)
+			bobcat.move(Direction.UP);
+		
+		//Se a tecla for LEFT a empilhadora vai para a esquerda
+		if (key == KeyEvent.VK_LEFT)
+			bobcat.move(Direction.LEFT);
+		
+		//Se a tecla for RIGHT a empilhadora vai para a direita
+		if (key == KeyEvent.VK_RIGHT)
+			bobcat.move(Direction.RIGHT);
 
 		gui.update();                  // redesenha a lista de ImageTiles na GUI, 
 		                               // tendo em conta as novas posicoes dos objetos
