@@ -3,14 +3,13 @@ package pt.iscte.poo.sokobanstarter;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Chao implements ImageTile{
-
+public class Teletransporte implements ImageTile{
 	private Point2D Point2D;
 	private String imageName;
 	
-	public Chao(Point2D Point2D){
+	public Teletransporte(Point2D Point2D){
 		this.Point2D = Point2D;
-		this.imageName="Chao";
+		this.imageName="Teletransporte";
 	}
 	
 	@Override
@@ -27,5 +26,4 @@ public class Chao implements ImageTile{
 	public int getLayer() {
 		return 0;
 	}
-
 }

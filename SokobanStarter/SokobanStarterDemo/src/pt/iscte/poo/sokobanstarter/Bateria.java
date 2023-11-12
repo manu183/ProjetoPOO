@@ -1,16 +1,14 @@
 package pt.iscte.poo.sokobanstarter;
 
-import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Chao implements ImageTile{
-
+public class Bateria extends GameElement{
 	private Point2D Point2D;
 	private String imageName;
 	
-	public Chao(Point2D Point2D){
+	public Bateria(Point2D Point2D){
 		this.Point2D = Point2D;
-		this.imageName="Chao";
+		imageName = "Bateria";
 	}
 	
 	@Override
@@ -27,5 +25,4 @@ public class Chao implements ImageTile{
 	public int getLayer() {
 		return 0;
 	}
-
 }

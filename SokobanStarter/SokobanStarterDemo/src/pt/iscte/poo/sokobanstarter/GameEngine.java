@@ -58,37 +58,29 @@ public class GameEngine implements Observer {
 	//Função para ler os ficheiros que armazenam as diferentes disposições do armazém
 	public void readFiles(int levelNum){
 		if(levelNum<0 || levelNum>6) {
-			throw new IllegalArgumentException("There is no level number" + levelNum);
+			throw new IllegalArgumentException("There is no level number " + levelNum);
 		}
 		String fileName = "level"+levelNum+".txt";
 		File file = new File("levels/"+fileName);
-		Scanner scanner;
 		//Cada ficheiro de nível tem 10 linhas e 10 colunas
 		int linhas=0;
 		int colunas=0;
+		String linha="";
 		try {
-			scanner = new Scanner(file);
-			for(colunas=0; colunas<GRID_HEIGHT;colunas++){
+			Scanner scanner = new Scanner(file);
+			for(linhas=0; linhas<GRID_HEIGHT;linhas++){
 				//Verifica se existe realmente uma linha seguinte
 				if(scanner.hasNextLine()) {
-					scanner.nextLine();
+					linha=scanner.nextLine();
 				}else{
 					//Senão existe nada na linha seguinte, então o ficheiro tem um formato inválido
 					throw new IllegalArgumentException("The file "+fileName+"doesn't have a valid format");
 				}
-				for(linhas=0; linhas<GRID_WIDTH; linhas++) {
-					String actual = "";
-					//Verifica se existe realmente texto na posição seguinte
-					if(scanner.hasNext()) {
-						actual=scanner.next();
-						//Consoante a string detetada são adicionados novos objetos, através da função detectString
-						detectString(actual, new Point2D(linhas,colunas));
-					}else {
-						//Senão existe nada na posição seguinte, então o ficheiro tem um formato inválido
-						throw new IllegalArgumentException("The file "+fileName+"doesn't have a valid format");
-					}
+				for(colunas=0; colunas<GRID_WIDTH; colunas++) {
+					detectString(linha.charAt(colunas), new Point2D(colunas,linhas));
 				}
 			}
+			scanner.close();
 			
 			
 			
@@ -105,27 +97,30 @@ public class GameEngine implements Observer {
 		
 	}
 	//Detetar o objeto a que equivale uma String
-	public void detectString(String string, Point2D position) {
-		if(string.equals("#")) {
+	public void detectString(char symbol, Point2D position) {
+		if(symbol=='#') {
+			tileList.add(new Parede(position));
 			
-		}else if(string.equals(" ")) {
+		}else if(symbol ==' ' || symbol=='=') {
+			tileList.add(new Chao(position));
 			
-			
-		}else if(string.equals("=")) {
-			
-		}else if(string.equals("C")) {
+		}else if(symbol=='C') {
 			tileList.add(new Caixote(position));
 			
-		}else if(string.equals("X")) {
+		}else if(symbol=='X') {
+			tileList.add(new Alvo(position));
 			
-		}else if(string.equals("E")) {
+		}else if(symbol=='E') {
+			bobcat = new Empilhadora(position);
+			tileList.add(bobcat);
 			
-		}else if(string.equals("B")) {
+		}else if(symbol=='B') {
+			tileList.add(new Bateria(position));
 			
-		}else if(string.equals("T")) {
-			
+		}else if(symbol=='T') {
+			tileList.add(new Teletransporte(position));
 		}else {
-			throw new IllegalArgumentException(string + " is not recognizible");
+			throw new IllegalArgumentException(symbol + " is not recognizible");
 		}
 	}
 	
@@ -144,8 +139,8 @@ public class GameEngine implements Observer {
 		
 		// Criar o cenario de jogo
 		createWarehouse();      // criar o armazem
-		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
-		//readFiles(0);
+//		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
+		readFiles(0);
 		sendImagesToGUI();      // enviar as imagens para a GUI
 
 		

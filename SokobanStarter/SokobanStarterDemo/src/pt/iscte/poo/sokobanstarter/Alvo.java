@@ -3,14 +3,13 @@ package pt.iscte.poo.sokobanstarter;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Chao implements ImageTile{
-
+public class Alvo implements ImageTile{
 	private Point2D Point2D;
 	private String imageName;
 	
-	public Chao(Point2D Point2D){
+	public Alvo(Point2D Point2D){
 		this.Point2D = Point2D;
-		this.imageName="Chao";
+		imageName = "Alvo";
 	}
 	
 	@Override
