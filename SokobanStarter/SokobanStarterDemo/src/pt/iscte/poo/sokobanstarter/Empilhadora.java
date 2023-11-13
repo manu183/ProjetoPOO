@@ -6,7 +6,7 @@ import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
-public class Empilhadora implements ImageTile{
+public class Empilhadora extends GameElement{
 
 	private Point2D position;
 	private String imageName;
@@ -30,7 +30,7 @@ public class Empilhadora implements ImageTile{
 	public int getLayer() {
 		return 2;
 	}
-
+	
 	public void move(Direction direction) {
 		
 		// Gera uma direcao aleatoria para o movimento

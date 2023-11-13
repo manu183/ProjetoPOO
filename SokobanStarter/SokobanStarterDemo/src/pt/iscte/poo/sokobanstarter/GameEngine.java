@@ -113,12 +113,19 @@ public class GameEngine implements Observer {
 		}else if(symbol=='E') {
 			bobcat = new Empilhadora(position);
 			tileList.add(bobcat);
-			
 		}else if(symbol=='B') {
 			tileList.add(new Bateria(position));
-			
+		//Elementos adicionais aos básicos
+		}else if(symbol=='O') {
+			tileList.add(new Buraco(position));
+		}else if(symbol=='P') {
+			tileList.add(new Palete(position));
+		}else if(symbol=='M') {
+			tileList.add(new Martelo(position));
+		}else if(symbol=='%') {
+			tileList.add(new ParedeRachada(position));
 		}else if(symbol=='T') {
-			tileList.add(new Teletransporte(position));
+			tileList.add(new Teleporte(position));
 		}else {
 			throw new IllegalArgumentException(symbol + " is not recognizible");
 		}
@@ -140,7 +147,7 @@ public class GameEngine implements Observer {
 		// Criar o cenario de jogo
 		createWarehouse();      // criar o armazem
 //		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
-		readFiles(0);
+		readFiles(6);
 		sendImagesToGUI();      // enviar as imagens para a GUI
 
 		
