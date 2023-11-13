@@ -3,14 +3,14 @@ package pt.iscte.poo.sokobanstarter;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Chao implements ImageTile{
+public class Chao extends GameElement{
 
-	private Point2D Point2D;
-	private String imageName;
+	private Point2D position;
+	private static String imageName = "Chao";
 	
-	public Chao(Point2D Point2D){
-		this.Point2D = Point2D;
-		this.imageName="Chao";
+	public Chao(Point2D position){
+		super(position,imageName);
+		this.position = position;
 	}
 	
 	@Override
@@ -20,7 +20,7 @@ public class Chao implements ImageTile{
 
 	@Override
 	public Point2D getPosition() {
-		return Point2D;
+		return position;
 	}
 
 	@Override

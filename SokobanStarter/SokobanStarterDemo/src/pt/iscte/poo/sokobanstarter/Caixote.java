@@ -5,12 +5,12 @@ import pt.iscte.poo.utils.Point2D;
 
 public class Caixote extends GameElement {
 
-	private Point2D Point2D;
-	private String imageName;
+	private Point2D position;
+	private static String imageName="Caixote";
 	
-	public Caixote(Point2D Point2D){
-		this.Point2D = Point2D;
-		imageName = "Caixote";
+	public Caixote(Point2D initialPosition){
+		super(initialPosition,imageName);
+		this.position = initialPosition;
 	}
 	
 	@Override
@@ -20,7 +20,7 @@ public class Caixote extends GameElement {
 
 	@Override
 	public Point2D getPosition() {
-		return Point2D;
+		return position;
 	}
 
 	@Override

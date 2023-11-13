@@ -4,12 +4,12 @@ import pt.iscte.poo.utils.Point2D;
 
 public class Parede extends GameElement{
 	
-	private Point2D Point2D;
-	private String imageName;
+	private Point2D position;
+	private static String imageName="Parede";
 	
-	public Parede(Point2D Point2D){
-		this.Point2D = Point2D;
-		imageName = "Parede";
+	public Parede(Point2D initialPosition){
+		super(initialPosition,imageName);
+		this.position = initialPosition;
 	}
 	
 	@Override
@@ -19,7 +19,7 @@ public class Parede extends GameElement{
 
 	@Override
 	public Point2D getPosition() {
-		return Point2D;
+		return position;
 	}
 
 	@Override

@@ -3,11 +3,12 @@ package pt.iscte.poo.sokobanstarter;
 import pt.iscte.poo.utils.Point2D;
 
 public class Bateria extends GameElement{
-	private Point2D Point2D;
+	private Point2D position;
 	private String imageName;
 	
-	public Bateria(Point2D Point2D){
-		this.Point2D = Point2D;
+	public Bateria(Point2D position){
+		super(position,"Bateria");
+		this.position = position;
 		imageName = "Bateria";
 	}
 	
@@ -18,7 +19,7 @@ public class Bateria extends GameElement{
 
 	@Override
 	public Point2D getPosition() {
-		return Point2D;
+		return position;
 	}
 
 	@Override

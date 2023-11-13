@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -41,7 +42,9 @@ public class GameEngine implements Observer {
 	private ImageMatrixGUI gui;  		// Referencia para ImageMatrixGUI (janela de interface com o utilizador) 
 	private List<ImageTile> tileList;	// Lista de imagens
 	private Empilhadora bobcat;	        // Referencia para a empilhadora
-
+	
+	//Guarda as posições de cada elemento num hashMap
+	public HashMap<Point2D, ArrayList<String>> map = new HashMap<>();
 
 	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
 	private GameEngine() {
@@ -54,6 +57,7 @@ public class GameEngine implements Observer {
 			return INSTANCE = new GameEngine();
 		return INSTANCE;
 	}
+	
 	
 	//Função para ler os ficheiros que armazenam as diferentes disposições do armazém
 	public void readFiles(int levelNum){
@@ -81,6 +85,7 @@ public class GameEngine implements Observer {
 				}
 			}
 			scanner.close();
+			System.out.println(map);
 			
 			
 			
@@ -89,12 +94,6 @@ public class GameEngine implements Observer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		
-		
 	}
 	//Detetar o objeto a que equivale uma String
 	public void detectString(char symbol, Point2D position) {
@@ -131,6 +130,25 @@ public class GameEngine implements Observer {
 		}
 	}
 	
+	//Alterar a localização de um elemento no hashMap
+	public void updateHashMap(Point2D position, Point2D newPosition, String elementName) {
+		if(map.containsKey(position)) {
+			ArrayList<String> elementos = map.get(position);
+			elementos.remove(elementName);
+			map.put(position, elementos);
+		}
+		
+		if(map.containsKey(newPosition)) {
+			ArrayList<String> elementos = map.get(newPosition);
+			elementos.add(elementName);
+			map.put(newPosition, elementos);
+		}else {
+			ArrayList<String> elementos = new ArrayList<>();
+			elementos.add(elementName);
+			map.put(newPosition, elementos);
+		}
+	}
+	
 
 	// Inicio
 	public void start() {
@@ -147,7 +165,7 @@ public class GameEngine implements Observer {
 		// Criar o cenario de jogo
 		createWarehouse();      // criar o armazem
 //		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
-		readFiles(6);
+		readFiles(1);
 		sendImagesToGUI();      // enviar as imagens para a GUI
 
 		
@@ -188,20 +206,19 @@ public class GameEngine implements Observer {
 
 	// Criacao da planta do armazem - so' chao neste exemplo 
 	private void createWarehouse() {
-
 		for (int y=0; y<GRID_HEIGHT; y++)
 			for (int x=0; x<GRID_HEIGHT; x++)
 				tileList.add(new Chao(new Point2D(x,y)));		
 	}
 
 	// Criacao de mais objetos - neste exemplo e' uma empilhadora e dois caixotes
-	private void createMoreStuff() {
-		bobcat = new Empilhadora( new Point2D(5,5));
-		tileList.add(bobcat);
-
-		tileList.add(new Caixote(new Point2D(3,3)));
-		tileList.add(new Caixote(new Point2D(3,2)));
-	}
+//	private void createMoreStuff() {
+//		bobcat = new Empilhadora( new Point2D(5,5));
+//		tileList.add(bobcat);
+//
+//		tileList.add(new Caixote(new Point2D(3,3)));
+//		tileList.add(new Caixote(new Point2D(3,2)));
+//	}
 
 	// Envio das mensagens para a GUI - note que isto so' precisa de ser feito no inicio
 	// Nao e' suposto re-enviar os objetos se a unica coisa que muda sao as posicoes  

@@ -12,8 +12,10 @@ public class Empilhadora extends GameElement{
 	private String imageName;
 	
 	public Empilhadora(Point2D initialPosition){
-		position = initialPosition;
+		super(initialPosition,"Empilhadora");
 		imageName = "Empilhadora_D";
+		position = initialPosition;
+		
 	}
 	
 	@Override
@@ -31,6 +33,7 @@ public class Empilhadora extends GameElement{
 		return 2;
 	}
 	
+	@Override
 	public void move(Direction direction) {
 		
 		// Gera uma direcao aleatoria para o movimento
@@ -41,9 +44,24 @@ public class Empilhadora extends GameElement{
 		
 		// Move segundo a direcao gerada, mas so' se estiver dentro dos limites
 		//Point2D newPosition = position.plus(randomDirection.asVector());
+		
+		//Mudar a imagem da empilhadora de acordo com a sua direção
+		if(direction.equals(Direction.RIGHT)) {
+			imageName="Empilhadora_R";
+		}else if(direction.equals(Direction.LEFT)) {
+			imageName="Empilhadora_L";
+		}else if(direction.equals(Direction.DOWN)) {
+			imageName="Empilhadora_D";
+		}else if(direction.equals(Direction.UP)) {
+			imageName="Empilhadora_U";
+			
+		}
 		Point2D newPosition = position.plus(direction.asVector());
 		if (newPosition.getX()>=0 && newPosition.getX()<10 && 
-			newPosition.getY()>=0 && newPosition.getY()<10 ){
+			newPosition.getY()>=0 && newPosition.getY()<10 &&
+			isValidMove(position, direction)){
+			//Atualiza o hashmap do gameEngine
+			super.move(direction,newPosition);
 			position = newPosition;
 		}
 	}
