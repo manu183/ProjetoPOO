@@ -1,5 +1,8 @@
 package pt.iscte.poo.sokobanstarter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pt.iscte.poo.utils.Point2D;
 
 public class Bateria extends GameElement{
@@ -10,7 +13,9 @@ public class Bateria extends GameElement{
 		super(position,"Bateria");
 		this.position = position;
 		imageName = "Bateria";
+
 	}
+
 	
 	@Override
 	public String getName() {

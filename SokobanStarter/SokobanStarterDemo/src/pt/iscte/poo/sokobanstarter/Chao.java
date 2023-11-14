@@ -1,6 +1,8 @@
 package pt.iscte.poo.sokobanstarter;
 
-import pt.iscte.poo.gui.ImageTile;
+import java.util.ArrayList;
+import java.util.List;
+
 import pt.iscte.poo.utils.Point2D;
 
 public class Chao extends GameElement{
@@ -8,10 +10,13 @@ public class Chao extends GameElement{
 	private Point2D position;
 	private static String imageName = "Chao";
 	
+	
 	public Chao(Point2D position){
-		super(position,imageName);
+		super(position, imageName);
 		this.position = position;
 	}
+
+	
 	
 	@Override
 	public String getName() {

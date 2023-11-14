@@ -1,8 +1,7 @@
 package pt.iscte.poo.sokobanstarter;
 
-import java.util.Random;
-
-import pt.iscte.poo.gui.ImageTile;
+import java.util.ArrayList;
+import java.util.List;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
@@ -12,11 +11,12 @@ public class Empilhadora extends GameElement{
 	private String imageName;
 	
 	public Empilhadora(Point2D initialPosition){
-		super(initialPosition,"Empilhadora");
+		super(initialPosition,"Empilhadora_D");
 		imageName = "Empilhadora_D";
 		position = initialPosition;
-		
+
 	}
+
 	
 	@Override
 	public String getName() {
@@ -64,5 +64,6 @@ public class Empilhadora extends GameElement{
 			super.move(direction,newPosition);
 			position = newPosition;
 		}
+		
 	}
 }
