@@ -12,7 +12,7 @@ public class Chao extends GameElement{
 	
 	
 	public Chao(Point2D position){
-		super(position, imageName);
+		//super(position, imageName);
 		this.position = position;
 	}
 

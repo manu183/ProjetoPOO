@@ -107,6 +107,7 @@ public class GameEngine implements Observer {
 	public void detectString(char symbol, Point2D position) {
 		switch (symbol) {
 		case '#':
+			//GameElement parede = GameElement.criar(bobcat)
 			addToHashMap(new Parede(position));
 			break;
 		case ' ':
@@ -173,7 +174,7 @@ public class GameEngine implements Observer {
 	public void moveImageTile(Point2D initialPosition, Point2D finalPosition, ImageTile object) {
 		List<ImageTile> elementos = map.get(initialPosition);
 		elementos.remove(object);
-		map.put(finalPosition, elementos);
+		map.put(initialPosition, elementos);
 		
 		if(map.containsKey(finalPosition)) {
 			elementos=map.get(finalPosition);

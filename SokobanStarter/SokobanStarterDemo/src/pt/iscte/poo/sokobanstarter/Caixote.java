@@ -6,14 +6,15 @@ import java.util.List;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
-public class Caixote extends GameElement {
+public class Caixote extends GameElement implements Movable{
 
 	private Point2D position;
 	private static String imageName="Caixote";
 	
-	public Caixote(Point2D initialPosition){
-		super(initialPosition,imageName);
+	protected Caixote(Point2D initialPosition){
+		//super(initialPosition,imageName);
 		this.position = initialPosition;
+		
 	}
 
 	
@@ -32,9 +33,11 @@ public class Caixote extends GameElement {
 		return 0;
 	}
 	
+
+
 	@Override
 	public void move(Direction direction) {
-		
+		// TODO Auto-generated method stub
 		//Mudar a imagem da empilhadora de acordo com a sua direção
 		Point2D newPosition = position.plus(direction.asVector());
 		if (newPosition.getX()>=0 && newPosition.getX()<10 && 
@@ -43,6 +46,7 @@ public class Caixote extends GameElement {
 			super.gameEngine.moveImageTile(position, newPosition, this);
 			position = newPosition;
 		}
+		
 	}
 
 }

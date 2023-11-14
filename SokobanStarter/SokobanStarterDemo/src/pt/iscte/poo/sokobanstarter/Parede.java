@@ -10,8 +10,8 @@ public class Parede extends GameElement{
 	private Point2D position;
 	private static String imageName="Parede";
 	
-	public Parede(Point2D position){
-		super(position,imageName);
+	protected Parede(Point2D position){
+		//super(position,imageName);
 		this.position = position;
 
 	}

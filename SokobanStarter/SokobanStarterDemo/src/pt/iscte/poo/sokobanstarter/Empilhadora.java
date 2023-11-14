@@ -2,16 +2,17 @@ package pt.iscte.poo.sokobanstarter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
-public class Empilhadora extends GameElement{
+public class Empilhadora extends GameElement implements Movable{
 
 	private Point2D position;
 	private String imageName;
 	
 	public Empilhadora(Point2D initialPosition){
-		super(initialPosition,"Empilhadora_D");
 		imageName = "Empilhadora_D";
 		position = initialPosition;
 
@@ -33,7 +34,7 @@ public class Empilhadora extends GameElement{
 		return 2;
 	}
 	
-	@Override
+	
 	public void move(Direction direction) {
 		
 		// Gera uma direcao aleatoria para o movimento
@@ -60,8 +61,13 @@ public class Empilhadora extends GameElement{
 		if (newPosition.getX()>=0 && newPosition.getX()<10 && 
 			newPosition.getY()>=0 && newPosition.getY()<10 &&
 			isValidMove(position, direction)){
-			//Atualiza o hashmap do gameEngine
-			super.move(direction,newPosition);
+			List<ImageTile> nextPosition = imageTileInPosition(newPosition);
+			if(existsInList("Caixote", nextPosition)) {
+				Point2D caixotePosition= newPosition;
+				Point2D newCaixotePosition = caixotePosition.plus(direction.asVector());
+				super.gameEngine.moveImageTile(caixotePosition,newCaixotePosition,new Caixote(newPosition));
+			}
+			super.gameEngine.moveImageTile(position,newPosition,this);
 			position = newPosition;
 		}
 		

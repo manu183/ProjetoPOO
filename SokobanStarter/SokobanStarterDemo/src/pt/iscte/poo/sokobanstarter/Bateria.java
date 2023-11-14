@@ -10,7 +10,7 @@ public class Bateria extends GameElement{
 	private String imageName;
 	
 	public Bateria(Point2D position){
-		super(position,"Bateria");
+		//super(position,"Bateria");
 		this.position = position;
 		imageName = "Bateria";
 

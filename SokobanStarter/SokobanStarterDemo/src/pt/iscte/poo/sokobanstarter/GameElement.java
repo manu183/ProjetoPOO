@@ -11,20 +11,30 @@ import pt.iscte.poo.utils.Point2D;
 public abstract class GameElement implements ImageTile {
 	GameEngine gameEngine = GameEngine.getInstance();
 	
-	public GameElement(Point2D position, String type) {
+	
+	//Criar um objeto filho de GameELement
+	public static GameElement criar(ImageTile image) {
+		String name = image.getName();
 		
+		switch(name) {
+		case "Chao": return new Chao(image.getPosition());
+		case "Parede": return new Parede(image.getPosition());
+		case "Empilhadora": return new Empilhadora(image.getPosition());
+		case "Caixote": return new Caixote(image.getPosition());
+		case "Bateria": return new Bateria(image.getPosition());
+		
+		
+		default: throw new IllegalArgumentException();
+		}
 	}
+	
+	
+	
+
+	
+	
+	
 	 
-
-
-	public void move(Direction direction) {
-	}
-
-	public void move(Direction direction, Point2D newPosition) {
-		// TODO Auto-generated method stub
-	//	gameEngine.updateHashMap(getPosition(), newPosition, this);
-	//	gameEngine.changeElementLocation(getPosition(), newPosition, this);
-	}
 	
 	// Calcula a posição final de um movimento
 	public Point2D calculateFinalPosition(Point2D initialPosition, Direction direction) {
