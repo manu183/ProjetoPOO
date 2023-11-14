@@ -3,7 +3,7 @@ package pt.iscte.poo.sokobanstarter;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Teleporte implements ImageTile{
+public class Teleporte extends GameElement{
 	private Point2D Point2D;
 	private String imageName;
 	

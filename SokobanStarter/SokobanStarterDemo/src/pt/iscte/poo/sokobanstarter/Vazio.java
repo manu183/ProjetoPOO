@@ -1,16 +1,17 @@
 package pt.iscte.poo.sokobanstarter;
 
-import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Palete extends GameElement {
-	private Point2D Point2D;
-	private String imageName;
+public class Vazio extends GameElement{
+	private Point2D position;
+	private static String imageName="Vazio";
 	
-	public Palete(Point2D Point2D){
-		this.Point2D = Point2D;
-		imageName = "Palete";
+	protected Vazio(Point2D position){
+		//super(position,imageName);
+		this.position = position;
+
 	}
+
 	
 	@Override
 	public String getName() {
@@ -19,7 +20,7 @@ public class Palete extends GameElement {
 
 	@Override
 	public Point2D getPosition() {
-		return Point2D;
+		return position;
 	}
 
 	@Override

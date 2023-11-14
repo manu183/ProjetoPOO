@@ -41,7 +41,7 @@ public class GameEngine implements Observer {
 	private ImageMatrixGUI gui; // Referencia para ImageMatrixGUI (janela de interface com o utilizador)
 	private List<ImageTile> tileList; // Lista de imagens
 	private Empilhadora bobcat; // Referencia para a empilhadora
-
+	
 	// Guarda as posições de cada elemento num hashMap
 	private HashMap<Point2D, List<ImageTile>> map = new HashMap<>();
 
@@ -69,6 +69,11 @@ public class GameEngine implements Observer {
 
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
+	public void setEmpilhadora(Empilhadora bobcat) {
+		this.bobcat=bobcat;
+	}
+	
+	
 	public void readFiles(int levelNum) {
 		if (levelNum < 0 || levelNum > 6) {
 			throw new IllegalArgumentException("There is no level number " + levelNum);
@@ -90,7 +95,17 @@ public class GameEngine implements Observer {
 					throw new IllegalArgumentException("The file " + fileName + "doesn't have a valid format");
 				}
 				for (colunas = 0; colunas < GRID_WIDTH; colunas++) {
-					detectString(linha.charAt(colunas), new Point2D(colunas, linhas));
+					//detectString(linha.charAt(colunas), new Point2D(colunas, linhas));
+					GameElement gameElement;
+					if(linha.charAt(colunas)=='E') {
+						this.bobcat = new Empilhadora(new Point2D(colunas,linhas)); 
+						addToHashMap(bobcat);
+					}else {
+						gameElement = GameElement.criateElement(linha.charAt(colunas),new Point2D(colunas,linhas));						
+						addToHashMap(gameElement);
+					}
+					
+		
 				}
 			}
 			scanner.close();
@@ -103,60 +118,16 @@ public class GameEngine implements Observer {
 		}
 	}
 
-	
-	public void detectString(char symbol, Point2D position) {
-		switch (symbol) {
-		case '#':
-			//GameElement parede = GameElement.criar(bobcat)
-			addToHashMap(new Parede(position));
-			break;
-		case ' ':
-			addToHashMap(new Chao(position));
-			break;
-		case '=':
-			addToHashMap(new Chao(position));
-			break;
-		case 'C':
-			addToHashMap(new Caixote(position));
-			break;
-		case 'X':
-			addToHashMap(new Alvo(position));
-			break;
-		case 'E':
-			bobcat = new Empilhadora(position);
-			addToHashMap(bobcat);
-			break;
-		case 'B':
-			addToHashMap(new Bateria(position));
-			break;
-		// Elementos adicionais aos básicos
-		case 'O':
-			addToHashMap(new Buraco(position));
-			break;
-		case 'P':
-			addToHashMap(new Palete(position));
-			break;
-		case 'M':
-			addToHashMap(new Martelo(position));
-			break;
-		case '%':
-			addToHashMap(new ParedeRachada(position));
-			break;
-		case 'T':
-			addToHashMap(new Teleporte(position));
-			break;
-		default:
-			throw new IllegalArgumentException(symbol + " is not recognizable");
-		}
-	}
 
-	public void addToHashMap(ImageTile object) {
+	public void addToHashMap(GameElement element) {
 		List<ImageTile> elementos = new ArrayList<>();
-		if (GameEngine.getInstance().map.containsKey(object.getPosition())) {
-			elementos = GameEngine.getInstance().map.get(object.getPosition());
+		if (GameEngine.getInstance().map.containsKey(element.getPosition())) {
+			elementos = GameEngine.getInstance().map.get(element.getPosition());
 		}
-		elementos.add(object);
-		map.put(object.getPosition(), (ArrayList<ImageTile>) elementos);
+		elementos.add(element);
+		map.put(element.getPosition(), (ArrayList<ImageTile>) elementos);
+		drawHashMap();
+		gui.addImage(element);
 	}
 
 	public void drawHashMap() {
@@ -171,14 +142,14 @@ public class GameEngine implements Observer {
 		}
 	}
 	
-	public void moveImageTile(Point2D initialPosition, Point2D finalPosition, ImageTile object) {
+	public void moveImageTile(Point2D initialPosition, Point2D finalPosition, GameElement element) {
 		List<ImageTile> elementos = map.get(initialPosition);
-		elementos.remove(object);
+		elementos.remove(element);
 		map.put(initialPosition, elementos);
 		
 		if(map.containsKey(finalPosition)) {
 			elementos=map.get(finalPosition);
-			elementos.add(object);	
+			elementos.add(element);	
 		}
 		map.put(finalPosition, elementos);
 		drawHashMap();
@@ -219,22 +190,26 @@ public class GameEngine implements Observer {
 		// if (key == KeyEvent.VK_ENTER) // se a tecla for ENTER, manda a empilhadora
 		// mover
 		// bobcat.move();
+		
+		Direction direction=Direction.directionFor(key);
+		
+		bobcat.move(direction);
 
 		// Se a tecla for DOWN a empilhadora vai para baixo
-		if (key == KeyEvent.VK_DOWN)
-			bobcat.move(Direction.DOWN);
-
-		// Se a tecla for UP a empilhadora vai para cima
-		if (key == KeyEvent.VK_UP)
-			bobcat.move(Direction.UP);
-
-		// Se a tecla for LEFT a empilhadora vai para a esquerda
-		if (key == KeyEvent.VK_LEFT)
-			bobcat.move(Direction.LEFT);
-
-		// Se a tecla for RIGHT a empilhadora vai para a direita
-		if (key == KeyEvent.VK_RIGHT)
-			bobcat.move(Direction.RIGHT);
+//		if (key == KeyEvent.VK_DOWN)
+//			bobcat.move(Direction.DOWN);
+//
+//		// Se a tecla for UP a empilhadora vai para cima
+//		if (key == KeyEvent.VK_UP)
+//			bobcat.move(Direction.UP);
+//
+//		// Se a tecla for LEFT a empilhadora vai para a esquerda
+//		if (key == KeyEvent.VK_LEFT)
+//			bobcat.move(Direction.LEFT);
+//
+//		// Se a tecla for RIGHT a empilhadora vai para a direita
+//		if (key == KeyEvent.VK_RIGHT)
+//			bobcat.move(Direction.RIGHT);
 
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos

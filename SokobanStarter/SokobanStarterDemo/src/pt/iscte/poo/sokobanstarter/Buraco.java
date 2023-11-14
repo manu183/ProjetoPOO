@@ -3,7 +3,7 @@ package pt.iscte.poo.sokobanstarter;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Buraco implements ImageTile{
+public class Buraco extends GameElement{
 	private Point2D Point2D;
 	private String imageName;
 	

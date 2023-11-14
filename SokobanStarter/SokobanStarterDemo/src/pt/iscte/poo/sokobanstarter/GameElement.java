@@ -13,18 +13,22 @@ public abstract class GameElement implements ImageTile {
 	
 	
 	//Criar um objeto filho de GameELement
-	public static GameElement criar(ImageTile image) {
-		String name = image.getName();
+	public static GameElement criateElement(char key, Point2D position) {
+	
 		
-		switch(name) {
-		case "Chao": return new Chao(image.getPosition());
-		case "Parede": return new Parede(image.getPosition());
-		case "Empilhadora": return new Empilhadora(image.getPosition());
-		case "Caixote": return new Caixote(image.getPosition());
-		case "Bateria": return new Bateria(image.getPosition());
-		
-		
-		default: throw new IllegalArgumentException();
+		switch(key) {
+		case '#': return new Parede(position);
+		case ' ': return new Chao(position);
+		case '=': return new Vazio(position);
+		case 'C': return new Caixote(position);
+		case 'X': return new Alvo(position);
+		case 'E': return new Empilhadora(position);
+		case 'B': return new Bateria(position);
+		case 'O': return new Buraco(position);
+		case 'P': return new Palete(position);
+		case '%': return new Parede(position);
+		case 'T': return new Teleporte(position);
+		default: throw new IllegalArgumentException(key + " is not recognizable");
 		}
 	}
 	
@@ -79,7 +83,7 @@ public abstract class GameElement implements ImageTile {
 		//também um caixote. Se for, então não é permitido o movimento
 		//ArraYlist que guarda o ArrayList da posição a seguir a nextPosition
 		List<ImageTile> afterNextPosition = imageTileInPosition(calculateFinalPosition(finalPosition, direction));
-		if(existsInList("Caixote", nextPosition) && existsInList("Caixote",afterNextPosition)){
+		if(existsInList("Caixote", nextPosition) && existsInList("Caixote",afterNextPosition) || existsInList("Caixote", nextPosition) && existsInList("Parede",afterNextPosition)){
 			return false;
 		}
 		

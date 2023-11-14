@@ -61,13 +61,7 @@ public class Empilhadora extends GameElement implements Movable{
 		if (newPosition.getX()>=0 && newPosition.getX()<10 && 
 			newPosition.getY()>=0 && newPosition.getY()<10 &&
 			isValidMove(position, direction)){
-			List<ImageTile> nextPosition = imageTileInPosition(newPosition);
-			if(existsInList("Caixote", nextPosition)) {
-				Point2D caixotePosition= newPosition;
-				Point2D newCaixotePosition = caixotePosition.plus(direction.asVector());
-				super.gameEngine.moveImageTile(caixotePosition,newCaixotePosition,new Caixote(newPosition));
-			}
-			super.gameEngine.moveImageTile(position,newPosition,this);
+			//List<ImageTile> nextPosition = imageTileInPosition(newPosition);
 			position = newPosition;
 		}
 		
