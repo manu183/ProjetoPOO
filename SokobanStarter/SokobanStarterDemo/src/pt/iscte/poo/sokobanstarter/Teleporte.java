@@ -1,29 +1,13 @@
 package pt.iscte.poo.sokobanstarter;
 
-import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Teleporte extends GameElement{
-	private Point2D Point2D;
-	private String imageName;
-	
-	public Teleporte(Point2D Point2D){
-		this.Point2D = Point2D;
-		this.imageName="Teleporte";
-	}
-	
-	@Override
-	public String getName() {
-		return imageName;
+public class Teleporte extends GameElement {
+
+	private static final String imageName = "Teleporte";
+
+	public Teleporte(Point2D position) {
+		super(position, imageName, 0);
 	}
 
-	@Override
-	public Point2D getPosition() {
-		return Point2D;
-	}
-
-	@Override
-	public int getLayer() {
-		return 0;
-	}
 }

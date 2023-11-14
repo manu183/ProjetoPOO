@@ -1,7 +1,5 @@
 package pt.iscte.poo.sokobanstarter;
 
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class GameEngine implements Observer {
 	private ImageMatrixGUI gui; // Referencia para ImageMatrixGUI (janela de interface com o utilizador)
 	private List<ImageTile> tileList; // Lista de imagens
 	private Empilhadora bobcat; // Referencia para a empilhadora
-	
+
 	// Guarda as posições de cada elemento num hashMap
 	private HashMap<Point2D, List<ImageTile>> map = new HashMap<>();
 
@@ -56,24 +54,21 @@ public class GameEngine implements Observer {
 			return INSTANCE = new GameEngine();
 		return INSTANCE;
 	}
-	
-	
-	
-	public HashMap<Point2D, List<ImageTile>> getMap(){
+
+	public HashMap<Point2D, List<ImageTile>> getMap() {
 		return map;
 	}
-	
+
 	public void setMap(HashMap<Point2D, List<ImageTile>> map) {
-		this.map=map;
+		this.map = map;
 	}
 
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
 	public void setEmpilhadora(Empilhadora bobcat) {
-		this.bobcat=bobcat;
+		this.bobcat = bobcat;
 	}
-	
-	
+
 	public void readFiles(int levelNum) {
 		if (levelNum < 0 || levelNum > 6) {
 			throw new IllegalArgumentException("There is no level number " + levelNum);
@@ -95,17 +90,16 @@ public class GameEngine implements Observer {
 					throw new IllegalArgumentException("The file " + fileName + "doesn't have a valid format");
 				}
 				for (colunas = 0; colunas < GRID_WIDTH; colunas++) {
-					//detectString(linha.charAt(colunas), new Point2D(colunas, linhas));
+					// detectString(linha.charAt(colunas), new Point2D(colunas, linhas));
 					GameElement gameElement;
-					if(linha.charAt(colunas)=='E') {
-						this.bobcat = new Empilhadora(new Point2D(colunas,linhas)); 
+					if (linha.charAt(colunas) == 'E') {
+						this.bobcat = new Empilhadora(new Point2D(colunas, linhas));
 						addToHashMap(bobcat);
-					}else {
-						gameElement = GameElement.criateElement(linha.charAt(colunas),new Point2D(colunas,linhas));						
+					} else {
+						gameElement = GameElement.criateElement(linha.charAt(colunas), new Point2D(colunas, linhas));
 						addToHashMap(gameElement);
 					}
-					
-		
+
 				}
 			}
 			scanner.close();
@@ -117,7 +111,6 @@ public class GameEngine implements Observer {
 			e.printStackTrace();
 		}
 	}
-
 
 	public void addToHashMap(GameElement element) {
 		List<ImageTile> elementos = new ArrayList<>();
@@ -141,15 +134,15 @@ public class GameEngine implements Observer {
 			tileList.add(atual);
 		}
 	}
-	
+
 	public void moveImageTile(Point2D initialPosition, Point2D finalPosition, GameElement element) {
 		List<ImageTile> elementos = map.get(initialPosition);
 		elementos.remove(element);
 		map.put(initialPosition, elementos);
-		
-		if(map.containsKey(finalPosition)) {
-			elementos=map.get(finalPosition);
-			elementos.add(element);	
+
+		if (map.containsKey(finalPosition)) {
+			elementos = map.get(finalPosition);
+			elementos.add(element);
 		}
 		map.put(finalPosition, elementos);
 		drawHashMap();
@@ -187,29 +180,9 @@ public class GameEngine implements Observer {
 
 		int key = gui.keyPressed(); // obtem o codigo da tecla pressionada
 
-		// if (key == KeyEvent.VK_ENTER) // se a tecla for ENTER, manda a empilhadora
-		// mover
-		// bobcat.move();
-		
-		Direction direction=Direction.directionFor(key);
-		
-		bobcat.move(direction);
+		Direction direction = Direction.directionFor(key);
 
-		// Se a tecla for DOWN a empilhadora vai para baixo
-//		if (key == KeyEvent.VK_DOWN)
-//			bobcat.move(Direction.DOWN);
-//
-//		// Se a tecla for UP a empilhadora vai para cima
-//		if (key == KeyEvent.VK_UP)
-//			bobcat.move(Direction.UP);
-//
-//		// Se a tecla for LEFT a empilhadora vai para a esquerda
-//		if (key == KeyEvent.VK_LEFT)
-//			bobcat.move(Direction.LEFT);
-//
-//		// Se a tecla for RIGHT a empilhadora vai para a direita
-//		if (key == KeyEvent.VK_RIGHT)
-//			bobcat.move(Direction.RIGHT);
+		bobcat.move(direction);
 
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos

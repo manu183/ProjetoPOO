@@ -1,52 +1,27 @@
 package pt.iscte.poo.sokobanstarter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
-public class Caixote extends GameElement implements Movable{
+public class Caixote extends GameElement implements Movable {
 
-	private Point2D position;
-	private static String imageName="Caixote";
-	
-	protected Caixote(Point2D initialPosition){
-		//super(initialPosition,imageName);
-		this.position = initialPosition;
-		
+	private static final String imageName = "Caixote";
+
+	public Caixote(Point2D position) {
+		super(position, imageName, 0);
+
 	}
-
-	
-	@Override
-	public String getName() {
-		return imageName;
-	}
-
-	@Override
-	public Point2D getPosition() {
-		return position;
-	}
-
-	@Override
-	public int getLayer() {
-		return 0;
-	}
-	
-
 
 	@Override
 	public void move(Direction direction) {
 		// TODO Auto-generated method stub
-		//Mudar a imagem da empilhadora de acordo com a sua direção
-		Point2D newPosition = position.plus(direction.asVector());
-		if (newPosition.getX()>=0 && newPosition.getX()<10 && 
-			newPosition.getY()>=0 && newPosition.getY()<10 &&
-			isValidMove(position, direction)){
-			super.gameEngine.moveImageTile(position, newPosition, this);
-			position = newPosition;
+		// Mudar a imagem da empilhadora de acordo com a sua direção
+		Point2D newPosition = super.getPosition().plus(direction.asVector());
+		if (newPosition.getX() >= 0 && newPosition.getX() < 10 && newPosition.getY() >= 0 && newPosition.getY() < 10
+				&& isValidMove(super.getPosition(), direction)) {
+			// TODO Acabar este método
 		}
-		
+
 	}
 
 }
