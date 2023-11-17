@@ -3,18 +3,40 @@ package pt.iscte.poo.sokobanstarter;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
-public class Empilhadora extends GameElement implements Movable {
+public class Empilhadora extends Movable {
 
-	private Point2D position;
-	private String imageName;
+	
+	private static final String initialImageName = "Empilhadora_D";
+	
 
 	public Empilhadora(Point2D initialPosition) {
-		super(initialPosition, "Empilhadora", 0);
-		imageName = "Empilhadora_D";
-		position = initialPosition;
+		super(initialPosition, initialImageName, 0);
 
 	}
-
+	
+	
+	
+	@Override
+	public void move(Direction direction) {
+		if (direction == Direction.RIGHT) {
+			super.setName("Empilhadora_R");
+			
+		} else if (direction ==Direction.LEFT) {
+			super.setName("Empilhadora_L");
+			
+		} else if (direction == Direction.DOWN) {
+			super.setName("Empilhadora_D");
+			
+		} else if (direction == Direction.UP) {
+			super.setName("Empilhadora_U");
+			
+		}
+		super.move(direction);
+		
+		
+	}
+	
+	/*
 	@Override
 	public String getName() {
 		return imageName;
@@ -29,23 +51,6 @@ public class Empilhadora extends GameElement implements Movable {
 	public int getLayer() {
 		return 2;
 	}
-
-	public void move(Direction direction) {
-		if (direction.equals(Direction.RIGHT)) {
-			imageName = "Empilhadora_R";
-		} else if (direction.equals(Direction.LEFT)) {
-			imageName = "Empilhadora_L";
-		} else if (direction.equals(Direction.DOWN)) {
-			imageName = "Empilhadora_D";
-		} else if (direction.equals(Direction.UP)) {
-			imageName = "Empilhadora_U";
-
-		}
-		Point2D newPosition = position.plus(direction.asVector());
-		if (newPosition.getX() >= 0 && newPosition.getX() < 10 && newPosition.getY() >= 0 && newPosition.getY() < 10
-				&& isValidMove(position, direction)) {
-			position = newPosition;
-		}
-
-	}
+*/	
+	
 }

@@ -3,7 +3,6 @@ package pt.iscte.poo.sokobanstarter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,8 +39,9 @@ public class GameEngine implements Observer {
 	private List<ImageTile> tileList; // Lista de imagens
 	private Empilhadora bobcat; // Referencia para a empilhadora
 
-	// Guarda as posições de cada elemento num hashMap
-	private HashMap<Point2D, List<ImageTile>> map = new HashMap<>();
+	// Guarda as posições de cada elemento num ArrayList
+	private List<GameElement> map = new ArrayList<>();
+	
 
 	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
 	private GameEngine() {
@@ -55,20 +55,40 @@ public class GameEngine implements Observer {
 		return INSTANCE;
 	}
 
-	public HashMap<Point2D, List<ImageTile>> getMap() {
+	public List<GameElement> getMap() {
 		return map;
 	}
 
-	public void setMap(HashMap<Point2D, List<ImageTile>> map) {
-		this.map = map;
+	public List<ImageTile> getTile() {
+		return tileList;
 	}
 
-	// Função para ler os ficheiros que armazenam as diferentes disposições do
-	// armazém
+	// Define o mapa e atualiza automaticamente o tileList com os Valores do mapa
+	public void setMap(List<GameElement> map) {
+		this.map = map;
+		updateTileList();
+	}
+
+	// Atualiza a tileList com o mapa
+	private void updateTileList() {
+		List<ImageTile> tileList = this.tileList;
+		tileList.removeAll(tileList);
+		tileList.addAll(map);
+	}
+
+	// Adiciona um elemento lido do ficheiro ao map e ao tileList
+	private void addToGame(GameElement gameElement) {
+		
+		map.add(gameElement);
+		tileList.add(gameElement);
+	}
+
 	public void setEmpilhadora(Empilhadora bobcat) {
 		this.bobcat = bobcat;
 	}
 
+	// Função para ler os ficheiros que armazenam as diferentes disposições do
+	// armazém
 	public void readFiles(int levelNum) {
 		if (levelNum < 0 || levelNum > 6) {
 			throw new IllegalArgumentException("There is no level number " + levelNum);
@@ -94,59 +114,22 @@ public class GameEngine implements Observer {
 					GameElement gameElement;
 					if (linha.charAt(colunas) == 'E') {
 						this.bobcat = new Empilhadora(new Point2D(colunas, linhas));
-						addToHashMap(bobcat);
+						addToGame(bobcat);
 					} else {
-						gameElement = GameElement.criateElement(linha.charAt(colunas), new Point2D(colunas, linhas));
-						addToHashMap(gameElement);
+						gameElement = GameElement.createElement(linha.charAt(colunas), new Point2D(colunas, linhas));
+						addToGame(gameElement);
 					}
 
 				}
 			}
 			scanner.close();
 			System.out.println(map);
-			drawHashMap();
+			// drawHashMap();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	public void addToHashMap(GameElement element) {
-		List<ImageTile> elementos = new ArrayList<>();
-		if (GameEngine.getInstance().map.containsKey(element.getPosition())) {
-			elementos = GameEngine.getInstance().map.get(element.getPosition());
-		}
-		elementos.add(element);
-		map.put(element.getPosition(), (ArrayList<ImageTile>) elementos);
-		drawHashMap();
-		gui.addImage(element);
-	}
-
-	public void drawHashMap() {
-		List<ImageTile> allElements = new ArrayList<>();
-		for (List<ImageTile> elements : map.values()) {
-			allElements.addAll(elements);
-		}
-		// System.out.println(allElements);
-
-		for (ImageTile atual : allElements) {
-			tileList.add(atual);
-		}
-	}
-
-	public void moveImageTile(Point2D initialPosition, Point2D finalPosition, GameElement element) {
-		List<ImageTile> elementos = map.get(initialPosition);
-		elementos.remove(element);
-		map.put(initialPosition, elementos);
-
-		if (map.containsKey(finalPosition)) {
-			elementos = map.get(finalPosition);
-			elementos.add(element);
-		}
-		map.put(finalPosition, elementos);
-		drawHashMap();
-		System.out.println(map);
 	}
 
 	// Inicio
@@ -183,7 +166,7 @@ public class GameEngine implements Observer {
 		Direction direction = Direction.directionFor(key);
 
 		bobcat.move(direction);
-
+		sendImagesToGUI();
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos
 	}
