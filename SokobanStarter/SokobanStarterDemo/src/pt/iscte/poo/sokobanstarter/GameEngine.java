@@ -39,13 +39,14 @@ public class GameEngine implements Observer {
 	private List<ImageTile> tileList; // Lista de imagens
 	private Empilhadora bobcat; // Referencia para a empilhadora
 
-	// Guarda as posições de cada elemento num ArrayList
-	private List<GameElement> map = new ArrayList<>();
+	// Guarda as posições de cada elemento numa classe GameMap baseada num HashMap
+	public GameMap gameMap;
 	
 
 	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
 	private GameEngine() {
 		tileList = new ArrayList<>();
+		gameMap = gameMap.getInstance();
 	}
 
 	// Implementacao do singleton para o GameEngine
@@ -55,32 +56,22 @@ public class GameEngine implements Observer {
 		return INSTANCE;
 	}
 
-	public List<GameElement> getMap() {
-		return map;
-	}
-
 	public List<ImageTile> getTile() {
 		return tileList;
 	}
 
 	// Define o mapa e atualiza automaticamente o tileList com os Valores do mapa
-	public void setMap(List<GameElement> map) {
-		this.map = map;
-		updateTileList();
-	}
 
-	// Atualiza a tileList com o mapa
-	private void updateTileList() {
-		List<ImageTile> tileList = this.tileList;
-		tileList.removeAll(tileList);
-		tileList.addAll(map);
-	}
+	
 
 	// Adiciona um elemento lido do ficheiro ao map e ao tileList
 	private void addToGame(GameElement gameElement) {
-		
-		map.add(gameElement);
-		tileList.add(gameElement);
+		gameMap.addElement(gameElement);
+	}
+	
+	public void sycronizeTileList() {
+		tileList.removeAll(tileList);
+		tileList.addAll(gameMap.convertToArrayList());
 	}
 
 	public void setEmpilhadora(Empilhadora bobcat) {
@@ -95,12 +86,12 @@ public class GameEngine implements Observer {
 		}
 		String fileName = "level" + levelNum + ".txt";
 		File file = new File("levels/" + fileName);
+		
 		// Cada ficheiro de nível tem 10 linhas e 10 colunas
 		int linhas = 0;
 		int colunas = 0;
 		String linha = "";
-		try {
-			Scanner scanner = new Scanner(file);
+		try (Scanner scanner = new Scanner(file)) {
 			for (linhas = 0; linhas < GRID_HEIGHT; linhas++) {
 				// Verifica se existe realmente uma linha seguinte
 				if (scanner.hasNextLine()) {
@@ -122,9 +113,11 @@ public class GameEngine implements Observer {
 
 				}
 			}
+			sycronizeTileList();
 			scanner.close();
-			System.out.println(map);
+			
 			// drawHashMap();
+//			updateTileList();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -175,7 +168,7 @@ public class GameEngine implements Observer {
 	private void createWarehouse() {
 		for (int y = 0; y < GRID_HEIGHT; y++)
 			for (int x = 0; x < GRID_HEIGHT; x++)
-				tileList.add(new Chao(new Point2D(x, y)));
+				gameMap.addElement(new Chao(new Point2D(x, y)));
 	}
 
 	// Criacao de mais objetos - neste exemplo e' uma empilhadora e dois caixotes

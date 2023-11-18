@@ -36,21 +36,9 @@ public class Empilhadora extends Movable {
 		
 	}
 	
-	/*
-	@Override
-	public String getName() {
-		return imageName;
+	public boolean checkCaixote(Point2D position) {
+		return super.gameEngine.gameMap.existsOnPosition(position, Caixote.imageName);
 	}
-
-	@Override
-	public Point2D getPosition() {
-		return position;
-	}
-
-	@Override
-	public int getLayer() {
-		return 2;
-	}
-*/	
+	
 	
 }

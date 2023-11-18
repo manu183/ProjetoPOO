@@ -76,7 +76,7 @@ public abstract class GameElement implements ImageTile {
 
 	@Override
 	public String toString() {
-		return "(" + getPosition() + "):" + getName();
+		return getPosition()+":"+ getName();
 	}
 
 }

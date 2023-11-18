@@ -5,23 +5,28 @@ import pt.iscte.poo.utils.Point2D;
 
 public class Caixote extends Movable {
 
-	private static final String imageName = "Caixote";
+	public static final String imageName = "Caixote";
 
 	public Caixote(Point2D position) {
 		super(position, imageName, 0);
 
 	}
 
-//	@Override
-//	public void move(Direction direction) {
-//		// TODO Auto-generated method stub
-//		// Mudar a imagem da empilhadora de acordo com a sua direção
-//		Point2D newPosition = super.getPosition().plus(direction.asVector());
-//		if (newPosition.getX() >= 0 && newPosition.getX() < 10 && newPosition.getY() >= 0 && newPosition.getY() < 10
-//				&& isValidMove(super.getPosition(), direction)) {
-//			// TODO Acabar este método
-//		}
-//
-//	}
+	@Override
+	public boolean isValidMove(Point2D initialPosition, Direction direction) {
+		//Verifica a implementação feita no Movable, que vê se existe alguma parede para onde o objeto deseija deslocar
+		if (!super.isValidMove(initialPosition, direction))
+			return false;
+		
+		//Verifica se existe um caixote seguido de um caixote
+		if (super.gameEngine.gameMap.existsOnPosition(super.calculateFinalPosition(initialPosition, direction),
+				imageName)) 
+			return false;
+		
+
+		return false;
+	}
+	
+	
 
 }

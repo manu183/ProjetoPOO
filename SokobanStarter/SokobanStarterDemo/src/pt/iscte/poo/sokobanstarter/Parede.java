@@ -4,7 +4,7 @@ import pt.iscte.poo.utils.Point2D;
 
 public class Parede extends GameElement {
 
-	private static final String imageName = "Parede";
+	public static final String imageName = "Parede";
 
 	public Parede(Point2D position) {
 		super(position, imageName, 0);
