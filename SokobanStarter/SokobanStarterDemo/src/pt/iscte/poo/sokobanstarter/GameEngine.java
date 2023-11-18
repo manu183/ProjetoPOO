@@ -131,7 +131,9 @@ public class GameEngine implements Observer {
 		// Setup inicial da janela que faz a interface com o utilizador
 		// algumas coisas poderiam ser feitas no main, mas estes passos tem sempre que
 		// ser feitos!
-
+		GameManager.getInstance();
+		
+		
 		gui = ImageMatrixGUI.getInstance(); // 1. obter instancia ativa de ImageMatrixGUI
 		gui.setSize(GRID_HEIGHT, GRID_WIDTH); // 2. configurar as dimensoes
 		gui.registerObserver(this); // 3. registar o objeto ativo GameEngine como observador da GUI
@@ -170,6 +172,8 @@ public class GameEngine implements Observer {
 			for (int x = 0; x < GRID_HEIGHT; x++)
 				gameMap.addElement(new Chao(new Point2D(x, y)));
 	}
+	
+	
 
 	// Criacao de mais objetos - neste exemplo e' uma empilhadora e dois caixotes
 //	private void createMoreStuff() {

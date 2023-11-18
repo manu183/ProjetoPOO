@@ -1,17 +1,17 @@
 package pt.iscte.poo.sokobanstarter;
 
-import pt.iscte.poo.gui.ImageMatrixGUI;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
 public class Empilhadora extends Movable {
-	private ImageMatrixGUI gui=ImageMatrixGUI.getInstance();
+	private int battery_energy;
 	
 	public static final String initialImageName = "Empilhadora_D";
 	
 
 	public Empilhadora(Point2D initialPosition) {
 		super(initialPosition, initialImageName, 0);
+		this.battery_energy=75;
 
 	}
 	
@@ -34,10 +34,13 @@ public class Empilhadora extends Movable {
 			super.setName("Empilhadora_U");
 			
 		}
-		Point2D nextPosition =super.calculateFinalPosition(getPosition(), direction);
-
 		
-		//Verifica se existe um caixote para a posição que deseja mover e faz com que o objeto se mexa
+		//Calcula o nova posição da empilhadora
+		Point2D nextPosition =super.calculateFinalPosition(getPosition(), direction);
+		
+		//Verifica se existe um caixote para a posição que deseja mover e 
+		//faz com que o objeto se mexa
+		
 		if(checkCaixote(nextPosition)) {
 			//Obter o caixote do mapa
 			GameElement caixote = super.gameEngine.gameMap.getSpecificElementAt(nextPosition, Caixote.imageName);
@@ -52,19 +55,30 @@ public class Empilhadora extends Movable {
 		if(!checkCaixote(nextPosition)) {
 			super.move(direction);			
 		}
-		System.out.println("Move empilhadora!!!");
-		System.out.println();
-		System.out.println();
 		
 		// Atualizar a posição
 		super.gameEngine.sycronizeTileList();
 		
-		gui.setStatusMessage("Empilhadore andou para" +getPosition());
+		//Atualiza o nível de energia
+		battery_energy--;
+		System.out.println("Energia na bateria:"+battery_energy);
+		
+		System.out.println("Wins level:"+super.gameEngine.gameMap.winsLevel());
 		
 	}
 	
 	public boolean checkCaixote(Point2D position) {
 		return super.gameEngine.gameMap.existsOnPosition(position, Caixote.imageName);
+	}
+	
+	
+	@Override
+	public boolean isValidMove(Point2D initialPosition, Direction direction) {
+		if(battery_energy<=0) {
+			return false;
+		}
+		return super.isValidMove(initialPosition, direction);			
+			
 	}
 	
 	
