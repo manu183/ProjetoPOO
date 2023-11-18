@@ -32,34 +32,39 @@ public abstract class Movable extends GameElement {
 			throw new IllegalArgumentException("Unrecognized key '" + key + "' for creating Movable element");
 		}
 	}
+	
+	public static Movable createMovable(String name, Point2D position) {
 
-//	public void updatePosition(GameElement gameElement, Point2D newPosition) {
-//		List<GameElement> map = gameEngine.getMap();
-//
-//		Point2D position = gameElement.getPosition();
-//		String name = gameElement.getName();
-//
-//		for (GameElement actual : map) {
-//			if (actual.getPosition().equals(position) && actual.getName().equals(name)) {
-//				actual.setPosition(newPosition);
-//				break;
-//			}
-//		}
-//		gameEngine.setMap(map);
-//	}
+		switch (name) {
+		case Caixote.imageName:
+			return new Caixote(position);
+		case Empilhadora.initialImageName:
+			return new Empilhadora(position);
+		case Palete.imageName:
+			return new Palete(position);
+		default:
+			throw new IllegalArgumentException("Unrecognized name " + "name" + " for creating Movable element");
+		}
+	}
+
 
 	public void move(Direction direction) {
 		System.out.println("Last position:" + this);
-		Point2D newPosition = super.getPosition().plus(direction.asVector());
-		if (newPosition.getX() >= 0 && newPosition.getX() < 10 && newPosition.getY() >= 0 && newPosition.getY() < 10
-		 && isValidMove(super.getPosition(), direction)) {
-			// position = newPosition;
+		
+		
+		
+		//Verifica através da função isValidMove se o objeto se pode mover
+		 if(isValidMove(super.getPosition(), direction)) {
+			
+			 //Calcular a nova posição
+			Point2D newPosition = super.getPosition().plus(direction.asVector()); 
+			 
 			System.out.println("New Position:" + newPosition);
 			// Atualizar o map do gameEngine
 			super.gameEngine.gameMap.updateElementPosition(this, newPosition);
-			// Atualizar a posição
-			super.gameEngine.sycronizeTileList();
+			
 			super.setPosition(newPosition);
+			
 			// Verificar se realmente atualizou
 			System.out.println("Verificação:" + this);
 			System.out.println("Mexer!");
@@ -70,12 +75,17 @@ public abstract class Movable extends GameElement {
 	}
 
 	
-	public boolean isValidMove(Point2D initialPosition, Direction direction) {
+	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
 		// TODO Auto-generated method stub
 		// Verifica se existe algum obstáculo na direção que pretende que seja uma
 		// parede ou então dois caixotes seguidos
 		Point2D nextPosition = calculateFinalPosition(initialPosition, direction);
-
+		
+		if (nextPosition.getX() < 0 && nextPosition.getX() >= 10 && nextPosition.getY() < 0 && nextPosition.getY() >= 10) {
+			return false;
+		}
+		
+		
 		// Verifica se existe uma parede na posição seguinte
 		if (super.gameEngine.gameMap.existsOnPosition(nextPosition, Parede.imageName)) {
 			return false;

@@ -6,13 +6,13 @@ import pt.iscte.poo.utils.Point2D;
 
 public abstract class GameElement implements ImageTile {
 	protected GameEngine gameEngine = GameEngine.getInstance();
-	protected ImageMatrixGUI gui;
+	protected ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
 
 	private Point2D position;
 	private String name;
 	private int layer;
 
-	public GameElement(Point2D position, String name, int layer) {
+	protected GameElement(Point2D position, String name, int layer) {
 		this.position = position;
 		this.name = name;
 		this.layer = layer;
@@ -43,7 +43,7 @@ public abstract class GameElement implements ImageTile {
 		return layer;
 	}
 
-	// Criar um objeto filho de GameELement
+	//Criação de Objetos através da char que o identifica
 	public static GameElement createElement(char key, Point2D position) {
 
 		switch (key) {
@@ -66,11 +66,42 @@ public abstract class GameElement implements ImageTile {
 		case 'P':
 			return Movable.createMovable(key, position);
 		case '%':
-			return new Parede(position);
+			return new ParedeRachada(position);
 		case 'T':
 			return new Teleporte(position);
 		default:
 			throw new IllegalArgumentException("Unrecognized key '" + key + "' for creating GameElement element");
+		}
+	}
+	
+	//Criação de Objetos através do seu nome
+	public static GameElement createElement(String name, Point2D position) {
+
+		switch (name) {
+		case "Parede":
+			return new Parede(position);
+		case "Chao":
+			return new Chao(position);
+		case "Vazio":
+			return new Vazio(position);
+		case "Caixote":
+			return Movable.createMovable(name, position);
+		case "Alvo":
+			return new Alvo(position);
+		case "Empilhadora_R":
+			return Movable.createMovable(name, position);
+		case "Bateria":
+			return new Bateria(position);
+		case "Buraco":
+			return new Buraco(position);
+		case "Palete":
+			return Movable.createMovable(name, position);
+		case "ParedeRachada":
+			return new ParedeRachada(position);
+		case "Teleporte":
+			return new Teleporte(position);
+		default:
+			throw new IllegalArgumentException("Unrecognized name " + name + " for creating GameElement element");
 		}
 	}
 

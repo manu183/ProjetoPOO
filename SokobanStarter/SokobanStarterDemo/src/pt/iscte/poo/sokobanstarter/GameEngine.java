@@ -144,7 +144,7 @@ public class GameEngine implements Observer {
 		sendImagesToGUI(); // enviar as imagens para a GUI
 
 		// Escrever uma mensagem na StatusBar
-		gui.setStatusMessage("Sokoban Starter - demo");
+		gui.setStatusMessage("Sokoban Starter | Level:0 | Battery:0 | Player:Name");
 	}
 
 	// O metodo update() e' invocado automaticamente sempre que o utilizador carrega

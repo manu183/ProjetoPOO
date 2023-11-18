@@ -4,7 +4,7 @@ import pt.iscte.poo.utils.Point2D;
 
 public class Palete extends Movable {
 
-	private static final String imageName = "Palete";
+	public static final String imageName = "Palete";
 
 	public Palete(Point2D position) {
 		super(position, imageName, 0);
