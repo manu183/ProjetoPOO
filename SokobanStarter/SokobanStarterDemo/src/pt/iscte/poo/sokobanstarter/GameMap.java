@@ -3,11 +3,9 @@ package pt.iscte.poo.sokobanstarter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import java.util.Iterator;
 
 import pt.iscte.poo.utils.Point2D;
 
@@ -44,7 +42,7 @@ public class GameMap implements Comparator<Point2D> {
 				break;
 			}
 		}
-		
+
 		// Atualizar o arraylist
 		map.put(position, elements);
 	}
@@ -95,34 +93,31 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return false;
 	}
-	
-	//Retorna todos os arraylist que contenham um certo GameEngine
-	
-	
+
+	// Retorna todos os arraylist que contenham um certo GameEngine
+
 	public boolean winsLevel() {
 		boolean res = true;
 		List<GameElement> elements = convertToArrayList();
-		
-		//Um arrayList que contém todas as posições que contém um alvo
+
+		// Um arrayList que contém todas as posições que contém um alvo
 		List<Point2D> target_positions = new ArrayList<>();
-		
-		for(GameElement actual:elements) {
-			if(actual.getName().equals(Alvo.imageName)) {
+
+		for (GameElement actual : elements) {
+			if (actual.getName().equals(Alvo.imageName)) {
 				target_positions.add(actual.getPosition());
 			}
 		}
-		
-		for(Point2D actual : target_positions) {
-			if(!existsOnPosition(actual,Caixote.imageName)) {
-				res=false;
+
+		for (Point2D actual : target_positions) {
+			if (!existsOnPosition(actual, Caixote.imageName)) {
+				res = false;
 			}
 		}
 		System.out.println(target_positions);
-		
+
 		return res;
 	}
-	
-	
 
 	// Este método serve para obter um ArrayList de modo a que seja possível
 	// atualizar o listTile

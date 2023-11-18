@@ -41,7 +41,6 @@ public class GameEngine implements Observer {
 
 	// Guarda as posições de cada elemento numa classe GameMap baseada num HashMap
 	public GameMap gameMap;
-	
 
 	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
 	private GameEngine() {
@@ -62,13 +61,11 @@ public class GameEngine implements Observer {
 
 	// Define o mapa e atualiza automaticamente o tileList com os Valores do mapa
 
-	
-
 	// Adiciona um elemento lido do ficheiro ao map e ao tileList
 	private void addToGame(GameElement gameElement) {
 		gameMap.addElement(gameElement);
 	}
-	
+
 	public void sycronizeTileList() {
 		tileList.removeAll(tileList);
 		tileList.addAll(gameMap.convertToArrayList());
@@ -86,7 +83,7 @@ public class GameEngine implements Observer {
 		}
 		String fileName = "level" + levelNum + ".txt";
 		File file = new File("levels/" + fileName);
-		
+
 		// Cada ficheiro de nível tem 10 linhas e 10 colunas
 		int linhas = 0;
 		int colunas = 0;
@@ -115,7 +112,7 @@ public class GameEngine implements Observer {
 			}
 			sycronizeTileList();
 			scanner.close();
-			
+
 			// drawHashMap();
 //			updateTileList();
 
@@ -131,9 +128,8 @@ public class GameEngine implements Observer {
 		// Setup inicial da janela que faz a interface com o utilizador
 		// algumas coisas poderiam ser feitas no main, mas estes passos tem sempre que
 		// ser feitos!
-		GameManager.getInstance();
-		
-		
+//		GameManager.getInstance();
+
 		gui = ImageMatrixGUI.getInstance(); // 1. obter instancia ativa de ImageMatrixGUI
 		gui.setSize(GRID_HEIGHT, GRID_WIDTH); // 2. configurar as dimensoes
 		gui.registerObserver(this); // 3. registar o objeto ativo GameEngine como observador da GUI
@@ -172,8 +168,6 @@ public class GameEngine implements Observer {
 			for (int x = 0; x < GRID_HEIGHT; x++)
 				gameMap.addElement(new Chao(new Point2D(x, y)));
 	}
-	
-	
 
 	// Criacao de mais objetos - neste exemplo e' uma empilhadora e dois caixotes
 //	private void createMoreStuff() {

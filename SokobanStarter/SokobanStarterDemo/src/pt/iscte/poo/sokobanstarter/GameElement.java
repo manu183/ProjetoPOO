@@ -43,7 +43,7 @@ public abstract class GameElement implements ImageTile {
 		return layer;
 	}
 
-	//Criação de Objetos através da char que o identifica
+	// Criação de Objetos através da char que o identifica
 	public static GameElement createElement(char key, Point2D position) {
 
 		switch (key) {
@@ -73,8 +73,8 @@ public abstract class GameElement implements ImageTile {
 			throw new IllegalArgumentException("Unrecognized key '" + key + "' for creating GameElement element");
 		}
 	}
-	
-	//Criação de Objetos através do seu nome
+
+	// Criação de Objetos através do seu nome
 	public static GameElement createElement(String name, Point2D position) {
 
 		switch (name) {
@@ -107,7 +107,7 @@ public abstract class GameElement implements ImageTile {
 
 	@Override
 	public String toString() {
-		return getPosition()+":"+ getName();
+		return getPosition() + ":" + getName();
 	}
 
 }
