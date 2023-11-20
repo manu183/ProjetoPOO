@@ -24,10 +24,16 @@ public class GameMap implements Comparator<Point2D> {
 		return INSTANCE;
 	}
 
+	//Adicionar um gameElement
 	public void addElement(GameElement gameElement) {
-		List<GameElement> elements = getElementsAt(gameElement.getPosition());
-		elements.add(gameElement);
-		map.put(gameElement.getPosition(), elements);
+		// Verifica se um objeto já exista nessa posição de modo a não haver dois
+		// GameElements repetidos na mesma posição
+		if (!existsOnPosition(gameElement)) {
+			List<GameElement> elements = getElementsAt(gameElement.getPosition());
+			elements.add(gameElement);
+			map.put(gameElement.getPosition(), elements);
+		}
+
 	}
 
 	public void removeElement(GameElement gameElement) {
@@ -56,6 +62,10 @@ public class GameMap implements Comparator<Point2D> {
 		addElement(gameElement);
 	}
 
+	public void deleteAll() {
+		map.clear();
+	}
+
 	public List<GameElement> getElementsAt(Point2D position) {
 		List<GameElement> elements = map.get(position);
 
@@ -66,6 +76,7 @@ public class GameMap implements Comparator<Point2D> {
 		return elements;
 	}
 
+	// Retorna O GameElement que existe numa certa posição
 	public GameElement getSpecificElementAt(Point2D position, String imageName) {
 		GameElement gameElement = null;
 		if (existsOnPosition(position, imageName)) {
@@ -93,8 +104,17 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return false;
 	}
-
-	// Retorna todos os arraylist que contenham um certo GameEngine
+	public boolean existsOnPosition(GameElement gameElement) {
+		List<GameElement> elements = getElementsAt(gameElement.getPosition());
+		for (GameElement actual : elements) {
+			if (actual.getName().equals(gameElement.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 
 	public boolean winsLevel() {
 		boolean res = true;
@@ -108,7 +128,7 @@ public class GameMap implements Comparator<Point2D> {
 				target_positions.add(actual.getPosition());
 			}
 		}
-
+		// Verificar se existe algum posição alvo que não contém um caixote
 		for (Point2D actual : target_positions) {
 			if (!existsOnPosition(actual, Caixote.imageName)) {
 				res = false;

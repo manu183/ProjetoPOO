@@ -5,13 +5,8 @@ import pt.iscte.poo.utils.Point2D;
 
 public abstract class Movable extends GameElement {
 
-//	private Point2D position;
-//	private String name;
-//	private int layer;
-
 	public Movable(Point2D position, String name, int layer) {
 		super(position, name, layer);
-//		this.position=position;
 
 	}
 
@@ -45,30 +40,31 @@ public abstract class Movable extends GameElement {
 
 	public void move(Direction direction) {
 		System.out.println("Last position:" + this);
+		
+		Point2D newPosition = super.getPosition().plus(direction.asVector());
 
 		// Verifica através da função isValidMove se o objeto se pode mover
 		if (isValidMove(super.getPosition(), direction)) {
 
 			// Calcular a nova posição
-			Point2D newPosition = super.getPosition().plus(direction.asVector());
 
 			System.out.println("New Position:" + newPosition);
 			// Atualizar o map do gameEngine
 			super.gameEngine.gameMap.updateElementPosition(this, newPosition);
 
-			super.setPosition(newPosition);
 
 			// Verificar se realmente atualizou
-			System.out.println("Verificação:" + this);
-			System.out.println("Mexer!");
-			System.out.println(gameEngine.gameMap.toString());
-			System.out.println(gameEngine.getTile());
-			System.out.println();
+//			System.out.println("Verificação:" + this);
+//			System.out.println("Mexer!");
+//			System.out.println(gameEngine.gameMap.toString());
+//			System.out.println(gameEngine.getTile());
+//			System.out.println();
+		}else {
+			System.err.println("It was not possible to move  "+getName()+" to position" + newPosition);
 		}
 	}
 
 	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
-		// TODO Auto-generated method stub
 		// Verifica se existe algum obstáculo na direção que pretende que seja uma
 		// parede ou então dois caixotes seguidos
 		Point2D nextPosition = calculateFinalPosition(initialPosition, direction);
@@ -88,11 +84,16 @@ public abstract class Movable extends GameElement {
 	}
 
 	// Calcula a posição final de um movimento
-
 	public Point2D calculateFinalPosition(Point2D initialPosition, Direction direction) {
 		Point2D finalPosition = initialPosition.plus(direction.asVector());
 
 		return finalPosition;
+	}
+
+	// Verifica se existe algum elemento numa certa posição, chamando a função do
+	// GameMap
+	public boolean checkElementAtPosition(Point2D position, String imageName) {
+		return super.gameEngine.gameMap.existsOnPosition(position, imageName);
 	}
 
 }

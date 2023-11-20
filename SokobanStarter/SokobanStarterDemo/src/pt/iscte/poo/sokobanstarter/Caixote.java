@@ -12,23 +12,6 @@ public class Caixote extends Movable {
 
 	}
 	
-	@Override
-	public void move(Direction direction) {
-		
-		if(isValidMove(getPosition(),direction)) {
-			Point2D newPosition=super.calculateFinalPosition(getPosition(), direction);
-			super.gameEngine.gameMap.updateElementPosition(this, newPosition);
-			System.out.println("Move caixote!!!");
-			super.gameEngine.sycronizeTileList();
-			
-		}else {
-
-			System.out.println("It is not possible to move Caixote to that position!");
-		}
-		System.out.println();
-		System.out.println();
-		System.out.println(super.gameEngine.gameMap);
-	}
 
 	@Override
 	public boolean isValidMove(Point2D initialPosition, Direction direction) {

@@ -1,5 +1,6 @@
 package pt.iscte.poo.sokobanstarter;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -41,11 +42,18 @@ public class GameEngine implements Observer {
 
 	// Guarda as posições de cada elemento numa classe GameMap baseada num HashMap
 	public GameMap gameMap;
+	//Guarda o nível atual do jogador
+	private int level;
+	//Guarda o nome do Jogador
+	private String userName;
 
 	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
 	private GameEngine() {
-		tileList = new ArrayList<>();
-		gameMap = gameMap.getInstance();
+		this.tileList = new ArrayList<>();
+		this.gameMap = GameMap.getInstance();
+		this.gui=ImageMatrixGUI.getInstance();
+		this.level=0;
+		this.userName="NOT_DEFINED";
 	}
 
 	// Implementacao do singleton para o GameEngine
@@ -65,15 +73,16 @@ public class GameEngine implements Observer {
 	private void addToGame(GameElement gameElement) {
 		gameMap.addElement(gameElement);
 	}
+	
+	private void deleteGameMap() {
+		gameMap.deleteAll();
+	}
 
 	public void sycronizeTileList() {
 		tileList.removeAll(tileList);
 		tileList.addAll(gameMap.convertToArrayList());
 	}
 
-	public void setEmpilhadora(Empilhadora bobcat) {
-		this.bobcat = bobcat;
-	}
 
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
@@ -81,6 +90,9 @@ public class GameEngine implements Observer {
 		if (levelNum < 0 || levelNum > 6) {
 			throw new IllegalArgumentException("There is no level number " + levelNum);
 		}
+		//Define todos os elementos do gameMap como chão por defeito
+		createWarehouse();
+		
 		String fileName = "level" + levelNum + ".txt";
 		File file = new File("levels/" + fileName);
 
@@ -110,11 +122,11 @@ public class GameEngine implements Observer {
 
 				}
 			}
-			sycronizeTileList();
 			scanner.close();
+			sycronizeTileList();
+			sendImagesToGUI();
+			gui.update();
 
-			// drawHashMap();
-//			updateTileList();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -124,27 +136,31 @@ public class GameEngine implements Observer {
 
 	// Inicio
 	public void start() {
+		
+		introductionMenu();
 
 		// Setup inicial da janela que faz a interface com o utilizador
 		// algumas coisas poderiam ser feitas no main, mas estes passos tem sempre que
 		// ser feitos!
-//		GameManager.getInstance();
-
-		gui = ImageMatrixGUI.getInstance(); // 1. obter instancia ativa de ImageMatrixGUI
+//		gui = ImageMatrixGUI.getInstance(); // 1. obter instancia ativa de ImageMatrixGUI
 		gui.setSize(GRID_HEIGHT, GRID_WIDTH); // 2. configurar as dimensoes
 		gui.registerObserver(this); // 3. registar o objeto ativo GameEngine como observador da GUI
 		gui.go(); // 4. lancar a GUI
 
 		// Criar o cenario de jogo
-		createWarehouse(); // criar o armazem
+//		createWarehouse(); // criar o armazem
 //		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
-		readFiles(1);
+		readFiles(level);
 		sendImagesToGUI(); // enviar as imagens para a GUI
 
 		// Escrever uma mensagem na StatusBar
-		gui.setStatusMessage("Sokoban Starter | Level:0 | Battery:0 | Player:Name");
+		gui.setStatusMessage("Sokoban Starter | Player name:"+userName+" | level="+ level+" | Battery energy:"+bobcat.getBattery());
 	}
 
+	
+	
+	
+	
 	// O metodo update() e' invocado automaticamente sempre que o utilizador carrega
 	// numa tecla
 	// no argumento do metodo e' passada uma referencia para o objeto observado
@@ -153,14 +169,59 @@ public class GameEngine implements Observer {
 	public void update(Observed source) {
 
 		int key = gui.keyPressed(); // obtem o codigo da tecla pressionada
+		
+		if(key==KeyEvent.VK_SPACE) {
+			restartLevel();			
+		}else {
+			Direction direction = Direction.directionFor(key);
+			
+			bobcat.move(direction);
+			
+		}
 
-		Direction direction = Direction.directionFor(key);
-
-		bobcat.move(direction);
 		sendImagesToGUI();
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos
+		
+		//Atualiza o título da GUI
+		gui.setStatusMessage("Sokoban Starter | Player name:"+userName+" | level="+ level+" | Battery energy:"+bobcat.getBattery());
+		
+		winLevel();
 	}
+	
+	//Cria o menu de introdução que pergunta o nome ao jogador
+	public void introductionMenu() {
+//		gui = ImageMatrixGUI.getInstance();
+		gui.setMessage("Hi! Welcome to Sokoban");
+		String name=gui.askUser("What is your name?");
+		this.userName=name;
+		System.out.println(name);
+	}
+	
+	
+	
+	//Método que verifica se o nível foi ganho e que no futuro irá aumentar o nível
+	public void winLevel() {
+		if(gameMap.winsLevel()) {
+			System.out.println("Won the level!");
+			gui.setStatusMessage("You won this level!");	
+			gui.setMessage("Won the level");
+			levelUp();
+		}
+	}
+	public void levelUp() {
+		level++;
+		deleteGameMap();
+		readFiles(level);
+	}
+	
+	public void restartLevel() {
+		deleteGameMap();
+		readFiles(level);
+	}
+	
+	
+	
 
 	// Criacao da planta do armazem - so' chao neste exemplo
 	private void createWarehouse() {
