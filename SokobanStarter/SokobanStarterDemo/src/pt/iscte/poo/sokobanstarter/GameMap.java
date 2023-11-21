@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
 public class GameMap implements Comparator<Point2D> {
@@ -24,7 +25,7 @@ public class GameMap implements Comparator<Point2D> {
 		return INSTANCE;
 	}
 
-	//Adicionar um gameElement
+	// Adicionar um gameElement
 	public void addElement(GameElement gameElement) {
 		// Verifica se um objeto já exista nessa posição de modo a não haver dois
 		// GameElements repetidos na mesma posição
@@ -76,24 +77,6 @@ public class GameMap implements Comparator<Point2D> {
 		return elements;
 	}
 
-	// Retorna O GameElement que existe numa certa posição
-	public GameElement getSpecificElementAt(Point2D position, String imageName) {
-		GameElement gameElement = null;
-		if (existsOnPosition(position, imageName)) {
-			List<GameElement> elements = map.get(position);
-			for (GameElement actual : elements) {
-				if (actual.getName().equals(imageName)) {
-					gameElement = actual;
-					break;
-				}
-			}
-		} else {
-			throw new IllegalArgumentException("There isn't no such object type in this position!");
-		}
-
-		return gameElement;
-
-	}
 	public GameElement getSpecificElementAt(GameElement gameElement) {
 		if (existsOnPosition(gameElement)) {
 			List<GameElement> elements = map.get(gameElement.getPosition());
@@ -120,6 +103,7 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return false;
 	}
+
 	public boolean existsOnPosition(GameElement gameElement) {
 		List<GameElement> elements = getElementsAt(gameElement.getPosition());
 		for (GameElement actual : elements) {
@@ -129,8 +113,6 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return false;
 	}
-	
-	
 
 	public boolean winsLevel() {
 		boolean res = true;
@@ -156,7 +138,18 @@ public class GameMap implements Comparator<Point2D> {
 	}
 
 	// Este método serve para obter um ArrayList de modo a que seja possível
-	// atualizar o listTile
+	// atualizar a GUI, que recebe objetos ImageTile
+	public List<ImageTile> arrayToGUI() {
+		List<ImageTile> allElements = new ArrayList<>();
+		List<Point2D> keys = new ArrayList<>(map.keySet());
+		keys.sort((o1, o2) -> compare(o1, o2));
+		for (Point2D actual : keys) {
+			List<GameElement> gameElements = getElementsAt(actual);
+			allElements.addAll(gameElements);
+		}
+		return allElements;
+	}
+
 	public List<GameElement> convertToArrayList() {
 		List<GameElement> allElements = new ArrayList<>();
 		List<Point2D> keys = new ArrayList<>(map.keySet());

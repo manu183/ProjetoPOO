@@ -8,6 +8,7 @@ public class Alvo extends GameElement {
 
 	public Alvo(Point2D position) {
 		super(position, imageName, 0);
+		super.setTransposable(true);
 
 	}
 }

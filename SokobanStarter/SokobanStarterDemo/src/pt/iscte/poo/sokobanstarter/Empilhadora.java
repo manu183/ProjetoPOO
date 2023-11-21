@@ -1,5 +1,7 @@
 package pt.iscte.poo.sokobanstarter;
 
+import java.util.List;
+
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
@@ -49,69 +51,37 @@ public class Empilhadora extends Movable {
 
 		// Calcula o nova posição da empilhadora
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
-		
-		
-		
 
-		// Vê se existe alguma bateria na próxima posição
-		if (checkElementAtPosition(nextPosition, Bateria.imageName)) {
-			addBattery(10);
-			GameElement bateria = super.gameEngine.gameMap.getSpecificElementAt(nextPosition, Bateria.imageName);
-			super.gameEngine.gameMap.removeElement(bateria);
-		}
-		
-		// Vê se existe algum Martelo na próxima posição
-		if (checkElementAtPosition(nextPosition, Martelo.imageName)) {
-			GameElement martelo = super.gameEngine.gameMap.getSpecificElementAt(nextPosition, Martelo.imageName);
-			super.gameEngine.gameMap.removeElement(martelo);
-			this.hasMartelo=true;
-		}
-		
-		
+		// Obtém uma lista com os objetos existentes na posição seguinte
+		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
+		System.out.println(elements);
 
-		// Verifica se existe um caixote para a posição que deseja mover e
-		// faz com que o objeto se mexa
-		if (checkElementAtPosition(nextPosition, Caixote.imageName)) {
-			// Obter o caixote da próxima posição
-			GameElement caixote = super.gameEngine.gameMap.getSpecificElementAt(nextPosition, Caixote.imageName);
-			// Criar o objeto Caixote para poder mover o caixote
-			Caixote caixoteTemp = new Caixote(caixote.getPosition());
-			// Mover o caixote
-			caixoteTemp.move(direction);
-		}
-
-		// Verifica se o caixote ainda se encontra na posição de modo a que a
-		// empilhadora possa se mover para lá sem que o caixote esteja nessa posição
-		if (!checkElementAtPosition(nextPosition, Caixote.imageName)
-				&& !checkElementAtPosition(nextPosition, Parede.imageName)) {
-			super.move(direction);
-			// Atualiza o nível de energia
-			if (battery_energy - 1 >= 0) {
-				battery_energy--;
-			}
-			System.out.println("Battery energy:" + battery_energy);
-			
-			//Verifica se existe um buraco na próxima posição de modo a que se haja o user perca o jogo
-			if(checkElementAtPosition(nextPosition, Buraco.imageName)) {
-				GameElement empilhadora = super.gameEngine.gameMap.getSpecificElementAt(getPosition(), initialImageName);
-				System.out.println("Perdeste o jogo!!!!!!!!!!!!!!!!!!");
-				super.gameEngine.gameMap.removeElement(empilhadora);
+		// Verifica se os objetos na posição seguinte é Cachable
+		Catchable cat = null;
+		for (GameElement actual : elements) {
+			if (Catchable.isCachable(actual)) {
+				cat = Catchable.createCatchable(actual);
+				System.out.println("Chatchable:" + cat);
 			}
 		}
-
-		// Atualizar a posição
-		super.gameEngine.sycronizeTileList();
-		System.out.println("Has Martelo:"+ hasMartelo);
-		System.out.println("Wins level:" + super.gameEngine.gameMap.winsLevel());
-
-	}
-
-	@Override
-	public boolean isValidMove(Point2D initialPosition, Direction direction) {
-		if (battery_energy <= 0) {
-			return false;
+		if (cat != null) {
+			cat.action();
 		}
-		return super.isValidMove(initialPosition, direction);
+
+		// Verifica se existe um objeto movable na próxima posição
+		Movable mov = null;
+		for (GameElement actual : elements) {
+			if (Movable.isMovable(actual)) {
+				mov = Movable.createMovable(actual);
+				System.out.println("Movable:" + mov);
+			}
+		}
+		if (mov != null) {
+			mov.move(direction);
+		}
+
+		// Chamo a função global que move objetos Movable
+		super.move(direction);
 
 	}
 
