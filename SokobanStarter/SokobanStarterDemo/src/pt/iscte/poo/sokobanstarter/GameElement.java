@@ -65,6 +65,8 @@ public abstract class GameElement implements ImageTile {
 			return new Buraco(position);
 		case 'P':
 			return Movable.createMovable(key, position);
+		case 'M':
+			return new Martelo(position);
 		case '%':
 			return new ParedeRachada(position);
 		case 'T':

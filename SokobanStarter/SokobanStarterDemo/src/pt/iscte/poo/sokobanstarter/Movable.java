@@ -40,7 +40,7 @@ public abstract class Movable extends GameElement {
 
 	public void move(Direction direction) {
 		System.out.println("Last position:" + this);
-		
+
 		Point2D newPosition = super.getPosition().plus(direction.asVector());
 
 		// Verifica através da função isValidMove se o objeto se pode mover
@@ -52,15 +52,14 @@ public abstract class Movable extends GameElement {
 			// Atualizar o map do gameEngine
 			super.gameEngine.gameMap.updateElementPosition(this, newPosition);
 
-
 			// Verificar se realmente atualizou
 //			System.out.println("Verificação:" + this);
 //			System.out.println("Mexer!");
 //			System.out.println(gameEngine.gameMap.toString());
 //			System.out.println(gameEngine.getTile());
 //			System.out.println();
-		}else {
-			System.err.println("It was not possible to move  "+getName()+" to position" + newPosition);
+		} else {
+			System.err.println("It was not possible to move  " + getName() + " to position" + newPosition);
 		}
 	}
 
@@ -75,7 +74,8 @@ public abstract class Movable extends GameElement {
 		}
 
 		// Verifica se existe uma parede na posição seguinte
-		if (super.gameEngine.gameMap.existsOnPosition(nextPosition, Parede.imageName)) {
+		if (super.gameEngine.gameMap.existsOnPosition(nextPosition, Parede.imageName)
+				|| super.gameEngine.gameMap.existsOnPosition(nextPosition, ParedeRachada.imageName)) {
 			return false;
 		}
 

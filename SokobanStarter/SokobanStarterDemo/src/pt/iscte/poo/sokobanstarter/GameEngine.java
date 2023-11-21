@@ -137,7 +137,7 @@ public class GameEngine implements Observer {
 	// Inicio
 	public void start() {
 		
-		introductionMenu();
+//		introductionMenu();
 
 		// Setup inicial da janela que faz a interface com o utilizador
 		// algumas coisas poderiam ser feitas no main, mas estes passos tem sempre que
@@ -150,7 +150,8 @@ public class GameEngine implements Observer {
 		// Criar o cenario de jogo
 //		createWarehouse(); // criar o armazem
 //		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
-		readFiles(level);
+//		readFiles(level);
+		readFiles(1);
 		sendImagesToGUI(); // enviar as imagens para a GUI
 
 		// Escrever uma mensagem na StatusBar
