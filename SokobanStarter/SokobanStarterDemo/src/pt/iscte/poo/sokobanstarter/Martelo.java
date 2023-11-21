@@ -8,6 +8,7 @@ public class Martelo extends GameElement {
 
 	public Martelo(Point2D position) {
 		super(position, imageName, 0);
+		super.setTransposable(true);
 	}
 
 }

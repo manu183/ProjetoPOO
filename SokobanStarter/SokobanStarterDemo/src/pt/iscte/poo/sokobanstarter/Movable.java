@@ -1,5 +1,7 @@
 package pt.iscte.poo.sokobanstarter;
 
+import java.util.List;
+
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
@@ -11,7 +13,6 @@ public abstract class Movable extends GameElement {
 	}
 
 	public static Movable createMovable(char key, Point2D position) {
-
 		switch (key) {
 		case 'C':
 			return new Caixote(position);
@@ -67,21 +68,33 @@ public abstract class Movable extends GameElement {
 		// Verifica se existe algum obstáculo na direção que pretende que seja uma
 		// parede ou então dois caixotes seguidos
 		Point2D nextPosition = calculateFinalPosition(initialPosition, direction);
+		
+		boolean isValidMove=false;
+		
+		// Obtém todos os gameElements que existem no nextPosition
+		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
 
+
+		
+		for(GameElement atual : elements) {
+			if(atual.getTransposable() && isOnBoard(nextPosition)) {
+				isValidMove=true;
+			}
+		}
+		System.out.println("isValidMove:"+isValidMove);
+
+
+		return isValidMove;
+
+	}
+	public boolean isOnBoard(Point2D nextPosition) {
 		if (nextPosition.getX() < 0 && nextPosition.getX() >= 10 && nextPosition.getY() < 0
 				&& nextPosition.getY() >= 10) {
 			return false;
 		}
-
-		// Verifica se existe uma parede na posição seguinte
-		if (super.gameEngine.gameMap.existsOnPosition(nextPosition, Parede.imageName)
-				|| super.gameEngine.gameMap.existsOnPosition(nextPosition, ParedeRachada.imageName)) {
-			return false;
-		}
-
 		return true;
-
 	}
+	
 
 	// Calcula a posição final de um movimento
 	public Point2D calculateFinalPosition(Point2D initialPosition, Direction direction) {

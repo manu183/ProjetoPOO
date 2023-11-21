@@ -11,6 +11,8 @@ public abstract class GameElement implements ImageTile {
 	private Point2D position;
 	private String name;
 	private int layer;
+	
+	private boolean isTransposable=false;
 
 	protected GameElement(Point2D position, String name, int layer) {
 		this.position = position;
@@ -18,6 +20,7 @@ public abstract class GameElement implements ImageTile {
 		this.layer = layer;
 
 	}
+
 
 	@Override
 	public String getName() {
@@ -42,7 +45,16 @@ public abstract class GameElement implements ImageTile {
 	public int getLayer() {
 		return layer;
 	}
-
+	
+	
+	public void setTransposable(boolean isTransposable) {
+		this.isTransposable=isTransposable;
+	}
+	
+	public boolean getTransposable() {
+		return isTransposable;
+	}
+	
 	// Criação de Objetos através da char que o identifica
 	public static GameElement createElement(char key, Point2D position) {
 

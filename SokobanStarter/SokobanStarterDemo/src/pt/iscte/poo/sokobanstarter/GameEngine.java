@@ -44,6 +44,8 @@ public class GameEngine implements Observer {
 	public GameMap gameMap;
 	//Guarda o nível atual do jogador
 	private int level;
+	//Guarda a pontuação do jogador
+	private int score;
 	//Guarda o nome do Jogador
 	private String userName;
 
@@ -137,7 +139,7 @@ public class GameEngine implements Observer {
 	// Inicio
 	public void start() {
 		
-//		introductionMenu();
+		introductionMenu();
 
 		// Setup inicial da janela que faz a interface com o utilizador
 		// algumas coisas poderiam ser feitas no main, mas estes passos tem sempre que
@@ -151,7 +153,7 @@ public class GameEngine implements Observer {
 //		createWarehouse(); // criar o armazem
 //		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
 //		readFiles(level);
-		readFiles(1);
+		readFiles(level);
 		sendImagesToGUI(); // enviar as imagens para a GUI
 
 		// Escrever uma mensagem na StatusBar
@@ -208,6 +210,7 @@ public class GameEngine implements Observer {
 			gui.setStatusMessage("You won this level!");	
 			gui.setMessage("Won the level");
 			levelUp();
+			score++;
 		}
 	}
 	public void levelUp() {

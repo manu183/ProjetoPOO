@@ -49,6 +49,9 @@ public class Empilhadora extends Movable {
 
 		// Calcula o nova posição da empilhadora
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
+		
+		
+		
 
 		// Vê se existe alguma bateria na próxima posição
 		if (checkElementAtPosition(nextPosition, Bateria.imageName)) {

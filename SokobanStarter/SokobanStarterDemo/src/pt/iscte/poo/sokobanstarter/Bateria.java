@@ -8,6 +8,7 @@ public class Bateria extends GameElement {
 
 	public Bateria(Point2D position) {
 		super(position, imageName, 0);
+		super.setTransposable(true);
 
 	}
 }
