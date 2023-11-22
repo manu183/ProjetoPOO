@@ -11,37 +11,52 @@ import pt.iscte.poo.utils.Point2D;
 public class Teste {
 	public static void main(String[] args) {
 		Score registScore = Score.getInstance();
+//		registScore.addNewScore();
 		 // Chamadas consecutivas com valores diferentes
-        registScore.getFile("Joao", 5);
-        registScore.getFile("Maria", 10);
-        registScore.getFile("Carlos", 15);
-        registScore.getFile("Ana", 20);
-        registScore.getFile("Pedro", 25);
-        registScore.getFile("Sofia", 30);
-        registScore.getFile("Miguel", 35);
-        registScore.getFile("Ines", 40);
-        registScore.getFile("Ricardo", 45);
-        registScore.getFile("Andreia", 50);
-        registScore.getFile("Hugo", 55);
-        registScore.getFile("Luisa", 60);
-        registScore.getFile("Rui", 65);
-        registScore.getFile("Catarina", 70);
-        registScore.getFile("Tiago", 75);
-        registScore.getFile("Beatriz", 80);
-        registScore.getFile("Daniel", 85);
-        registScore.getFile("Patricia", 90);
-        registScore.getFile("Nuno", 95);
-        registScore.getFile("Vera", 100);
-        registScore.getFile("Joana", 105);
-        registScore.getFile("Eduardo", 110);
-        registScore.getFile("Marta", 115);
-        registScore.getFile("Rodrigo", 120);
-        registScore.getFile("Sara", 125);
-        registScore.getFile("Jorge", 130);
-        registScore.getFile("Teresa", 135);
-        registScore.getFile("Goncalo", 140);
-        registScore.getFile("Filipa", 145);
-        registScore.getFile("Bruno", 150);
+			registScore.addNewScore("Joao", 5);
+		       registScore.addNewScore("Maria", 10);
+     
+        registScore.addNewScore("Carlos", 15);
+        registScore.addNewScore("Ana", 20);
+       
+        registScore.addNewScore("Pedro", 25);
+        registScore.addNewScore("Sofia", 30);
+      
+        registScore.addNewScore("Miguel", 35);
+        registScore.addNewScore("Ines", 40);
+        
+        registScore.addNewScore("Ricardo", 45);
+        registScore.addNewScore("Andreia", 50);
+        
+        registScore.addNewScore("Hugo", 55);
+        registScore.addNewScore("Luisa", 60);
+        
+        registScore.addNewScore("Rui", 65);
+        registScore.addNewScore("Catarina", 70);
+        
+        registScore.addNewScore("Tiago", 75);
+        registScore.addNewScore("Beatriz", 80);
+        
+        registScore.addNewScore("Daniel", 85);
+        registScore.addNewScore("Patricia", 90);
+        
+        registScore.addNewScore("Nuno", 95);
+        registScore.addNewScore("Vera", 100);
+        
+        registScore.addNewScore("Joana", 105);
+        registScore.addNewScore("Eduardo", 110);
+        
+        registScore.addNewScore("Marta", 115);
+        registScore.addNewScore("Rodrigo", 120);
+        
+        registScore.addNewScore("Sara", 125);
+        registScore.addNewScore("Jorge", 130);
+        
+        registScore.addNewScore("Teresa", 135);
+        registScore.addNewScore("Goncalo", 140);
+        
+        registScore.addNewScore("Filipa", 145);
+        registScore.addNewScore("Bruno", 150);
 		
 		
 	}

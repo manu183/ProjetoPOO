@@ -18,7 +18,7 @@ public class Score {
 	private static final int SCORES_TO_WRITE = 5;
 
 	private static Score INSTANCE;
-	private Map<Integer, List<String>> scores;
+	private Map<Integer, List<User>> scores;
 
 	private Score() {
 		this.fileName = "levels/scores.txt";
@@ -32,114 +32,152 @@ public class Score {
 			return INSTANCE = new Score();
 		return INSTANCE;
 	}
-	
-	
 
-	private void addScore(String userName, int score) {
-		if(userName == null || score == -1) {
-			throw new IllegalArgumentException("userName or score is null or invalid!");
-		}
-		
-		List<String> userNames = getUsers(score);
+	private class User {
+		private final String userName;
+		private final int score;
 
-		if (userNames == null) {
-			userNames = new ArrayList<>();
-			scores.put(score, userNames);
+		public User(String userName, int score) {
+			this.userName = userName;
+			this.score = score;
 		}
 
-		userNames.add(userName + " " + score);
+		public int getScore() {
+			return score;
+		}
 
-		scores.put(score, userNames);
+		public String getUserName() {
+			return userName;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+
+			if (obj == null || getClass() != obj.getClass()) {
+				return false;
+			}
+			User otherUser = (User) obj;
+
+			if (score != otherUser.getScore()) {
+				return false;
+			}
+
+			return userName.equals(otherUser.getUserName());
+		}
+
+		@Override
+		public String toString() {
+			return userName + " " + score;
+		}
 	}
 
-	private List<String> getUsers(int score) {
-		List<String> userNames = scores.get(score);
-
-		if (userNames == null) {
-			userNames = new ArrayList<>();
+	public void addNewScore(String userName, int score) {
+		if (file.exists()) {
+			System.out.println("File exists");
+			readScoreFile();
+		} else {
+			System.out.println("File does not exists");
 		}
+		add(new User(userName, score));
+		writeScoreFile();
+	}
 
-		return userNames;
+	private void readScoreFile() {
+		try (Scanner scanner = new Scanner(file)) {
+			// Verifica se há mais linhas antes de tentar ler
+			while (scanner.hasNextLine()) {
+				// Leia a linha inteira e depois crie um Scanner para analisar os tokens
+				String line = scanner.nextLine();
+				Scanner lineScanner = new Scanner(line);
+
+				String position = lineScanner.next();
+//	            System.out.println(position);
+
+				String userName = lineScanner.next();
+//	            System.out.println(userName);
+
+				// Verifica se há um próximo token inteiro antes de chamá-lo
+				if (lineScanner.hasNextInt()) {
+					int score = lineScanner.nextInt();
+					System.out.println(score);
+					User newUser = new User(userName, score);
+					System.out.println("New user:" + newUser.toString());
+					add(newUser);
+				} else {
+					lineScanner.close(); // Certifique-se de fechar o scanner da linha
+					throw new IllegalArgumentException("Erro ao ler pontuação. Score não é um inteiro válido.");
+				}
+
+				lineScanner.close(); // Certifique-se de fechar o scanner da linha
+			}
+		} catch (FileNotFoundException e) {
+			throw new IllegalArgumentException("Error reading file. Invalid format.");
+		}
+	}
+
+	private void add(User user) {
+		if (!alreadyExists(user)) {
+			List<User> users = getUsersByScore(user.getScore());
+			users.add(user);
+			scores.put(user.getScore(), users);
+			System.out.println(scores);
+		} else {
+			System.out.println("This user and this pontuaction is already registed!");
+		}
+	}
+
+	private boolean alreadyExists(User user) {
+		List<User> users = getUsersByScore(user.getScore());
+		for (User actual : users) {
+			if (actual.equals(user)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private List<User> getUsersByScore(int score) {
+		List<User> users = scores.get(score);
+		if (users == null) {
+			users = new ArrayList<>();
+		}
+		return users;
 	}
 
 	private List<String> sortScores() {
-		// Obtemos todas as keys e guardamos num ArrayList
-		List<Map.Entry<Integer, List<String>>> keyList = new ArrayList<>(scores.entrySet());
-		System.out.println(keyList);
-		
-		// Ordenar a lista por ordem decrescente
-//		keyList.sort((a, b) -> b - a);
+		List<Integer> sortedKeys = new ArrayList<>(scores.keySet());
+//	    System.out.println("Sorting:...");
+		sortedKeys.sort((a, b) -> b - a);
+		System.out.println("Keys:" + sortedKeys);
 
-		// Criar uma lista do tipo String que irá devolver a pontuação concatenada com o
-		// userName
-		// para ser usada na função writeScoreFile
-		List<String> sortedScores = new ArrayList<>();
-		
-//		for(Integer actual : keyList) {
-//			sortedScores.addAll(getUsers(actual));
-//		}
-//		System.out.println(sortedScores);
+		List<String> result = new ArrayList<>();
 
-		return sortedScores;
-
-	}
-
-	
-	
-
-	private void readScoreFile() {
-		try {
-			Scanner scanner = new Scanner(file);
-			if(scanner.hasNextLine()) {				
-				scanner.nextLine();
-				while (scanner.hasNext()) {
-					// position guarda por exemplo o "1." algo que não interessa para ler o ficheiro
-					String position = scanner.next();
-//					System.out.println(position);
-					
-					String userName = scanner.next();
-//					System.out.println(userName);
-					
-					//Defini-se o score como -1 de modo a saber, que se caso, ele não tenha sido bem lido
-					//tem o valor -1.
-					int score=-1;
-					if (scanner.hasNextInt()) {
-	                    score = scanner.nextInt();
-//	                    System.out.println(score);
-	                    addScore(userName, score);
-	                } else {
-	                    System.err.println("Erro ao ler pontuação. Score não é um inteiro válido.");
-	                    // Avançar para o próximo token para evitar um loop infinito
-	                    scanner.next();
-	                }
-				}
+		for (Integer key : sortedKeys) {
+			List<User> usersKey = getUsersByScore(key);
+			for (User actual : usersKey) {
+				result.add(actual.toString());
 			}
-			scanner.close();
-		} catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("Error reading file. Invalid format.");
 		}
+		return result;
 	}
 
 	private void writeScoreFile() {
+		List<String> sortedScores = sortScores();
+		System.out.println("SortedScores:" + sortedScores);
+
 		try {
-			PrintWriter writer = new PrintWriter(file);
-			// String separador para o cabeçalho do ficheiro, em que repete 32 vezes "-"
-			String separator = "-".repeat(20);
-			writer.println(separator + " Scores " + separator);
-			List<String> userNames = sortScores();
-			List<Integer> keyList = new ArrayList<>(scores.keySet());
-			
-			//O Math.min(SCORES_TO_WRITE, toWrite.size()) serve para calcular o int mínimo uma vez
-			//que podem não existir o 5 registos
-			for (int i = 0; i < Math.min(SCORES_TO_WRITE, userNames.size()); i++) {
-				String now = userNames.get(i);
-				// Escreve no ficheiro. O (i+1)+"."+" " corresponde à numeração, por exemplo o
-				// "1. "
-				writer.println((i + 1) + "." + " " + now);
+			int numScoresToWrite = Math.min(sortedScores.size(), SCORES_TO_WRITE);
+			PrintWriter writer = new PrintWriter(fileName);
+			for (int i = 0; i < numScoresToWrite; i++) {
+				String now = sortedScores.get(i);
+				String ordinal = (i + 1) + ".";
+				writer.println(ordinal + " " + now);
+				System.out.println("Should have printed!");
 			}
 			writer.close();
-//			System.out.println(fileName);
-			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,14 +187,5 @@ public class Score {
 	// Única função pública que trata de chamar as funções necessárias para que seja
 	// gerado um ficheiro
 	// com as melhores pontuações
-	public void getFile(String userName, int score) {
-		// Verifica se o ficheiro já existe de modo a que não se tente ler se o mesmo
-		// não existir
-		if (file.exists()) {
-			readScoreFile();			
-		}
-		addScore(userName, score);
-		writeScoreFile();
-	}
 
 }

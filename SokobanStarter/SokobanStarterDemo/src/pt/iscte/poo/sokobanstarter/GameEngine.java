@@ -207,10 +207,9 @@ public class GameEngine implements Observer {
 			readFiles(level);			
 		}else {
 			//Significa que o utilizador ganhou o jogou
-			
-			//Escreve as pntuações no ficheiro "levels/scores.txt"
+			//Escreve as pontuações no ficheiro "levels/scores.txt"
 			Score registScore = Score.getInstance();
-			registScore.getFile(userName, score);
+			registScore.addNewScore(userName, score);
 		}
 	}
 
