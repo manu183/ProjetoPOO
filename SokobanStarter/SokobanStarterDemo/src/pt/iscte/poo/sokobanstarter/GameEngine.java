@@ -3,6 +3,7 @@ package pt.iscte.poo.sokobanstarter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 import pt.iscte.poo.gui.ImageMatrixGUI;
@@ -34,7 +35,6 @@ public class GameEngine implements Observer {
 
 	private static GameEngine INSTANCE; // Referencia para o unico objeto GameEngine (singleton)
 	private ImageMatrixGUI gui; // Referencia para ImageMatrixGUI (janela de interface com o utilizador)
-//	private List<ImageTile> tileList; // Lista de imagens
 	public Empilhadora bobcat; // Referencia para a empilhadora
 
 	// Guarda as posições de cada elemento numa classe GameMap baseada num HashMap
@@ -62,9 +62,7 @@ public class GameEngine implements Observer {
 		return INSTANCE;
 	}
 
-//	public List<ImageTile> getTile() {
-//		return tileList;
-//	}
+
 
 	// Define o mapa e atualiza automaticamente o tileList com os Valores do mapa
 
@@ -77,10 +75,7 @@ public class GameEngine implements Observer {
 		gameMap.deleteAll();
 	}
 
-//	public void sycronizeTileList() {
-//		tileList.removeAll(tileList);
-//		tileList.addAll(gameMap.convertToArrayList());
-//	}
+
 
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
@@ -189,9 +184,8 @@ public class GameEngine implements Observer {
 	public void introductionMenu() {
 //		gui = ImageMatrixGUI.getInstance();
 		gui.setMessage("Hi! Welcome to Sokoban");
-		String name = gui.askUser("What is your name?");
-		this.userName = name;
-		System.out.println(name);
+		userName = gui.askUser("What is your name?");
+		System.out.println(userName);
 	}
 
 	// Método que verifica se o nível foi ganho e que no futuro irá aumentar o nível
@@ -200,15 +194,24 @@ public class GameEngine implements Observer {
 			System.out.println("Won the level!");
 			gui.setStatusMessage("You won this level!");
 			gui.setMessage("Won the level");
+			score+=bobcat.getBattery();
 			levelUp();
-			score++;
 		}
 	}
+	
 
 	public void levelUp() {
-		level++;
-		deleteGameMap();
-		readFiles(level);
+		if(level >=0 && level+1<6) {
+			level++;
+			deleteGameMap();
+			readFiles(level);			
+		}else {
+			//Significa que o utilizador ganhou o jogou
+			
+			//Escreve as pntuações no ficheiro "levels/scores.txt"
+			Score registScore = Score.getInstance();
+			registScore.getFile(userName, score);
+		}
 	}
 
 	public void restartLevel() {
@@ -222,8 +225,6 @@ public class GameEngine implements Observer {
 			for (int x = 0; x < GRID_HEIGHT; x++)
 				gameMap.addElement(new Chao(new Point2D(x, y)));
 	}
-
-	
 
 	// Envio das mensagens para a GUI - note que isto so' precisa de ser feito no
 	// inicio

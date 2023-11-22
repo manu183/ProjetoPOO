@@ -79,10 +79,18 @@ public class Empilhadora extends Movable {
 		if (mov != null) {
 			mov.move(direction);
 		}
+		
+		//A battery_energy só baixa se a empilhadora objetivamente se mexer
+		if(super.isValidMove(getPosition(),direction)) {
+			if(battery_energy-1>=0)
+				battery_energy--;
+		}
+
 
 		// Chamo a função global que move objetos Movable
 		super.move(direction);
-
+		
+		
 	}
 
 }

@@ -113,7 +113,8 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return false;
 	}
-
+	
+	//Verificação que verifica se o nível foi ganho, ou seja, se 
 	public boolean winsLevel() {
 		boolean res = true;
 		List<GameElement> elements = convertToArrayList();
@@ -132,8 +133,6 @@ public class GameMap implements Comparator<Point2D> {
 				res = false;
 			}
 		}
-//		System.out.println(target_positions);
-
 		return res;
 	}
 
@@ -149,7 +148,8 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return allElements;
 	}
-
+	
+	//Retorna uma lista com todos os GameElements
 	public List<GameElement> convertToArrayList() {
 		List<GameElement> allElements = new ArrayList<>();
 		List<Point2D> keys = new ArrayList<>(map.keySet());
