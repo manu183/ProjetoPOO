@@ -13,8 +13,8 @@ public class Bateria extends Catchable {
 	}
 
 	@Override
-	public void action() {
-		super.action();
+	public void catchElement() {
+		super.catchElement();
 		super.gameEngine.bobcat.addBattery(10);
 	}
 }

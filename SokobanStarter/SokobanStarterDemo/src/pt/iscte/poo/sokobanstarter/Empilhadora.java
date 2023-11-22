@@ -65,7 +65,7 @@ public class Empilhadora extends Movable {
 			}
 		}
 		if (cat != null) {
-			cat.action();
+			cat.catchElement();
 		}
 
 		// Verifica se existe um objeto movable na próxima posição
@@ -79,18 +79,27 @@ public class Empilhadora extends Movable {
 		if (mov != null) {
 			mov.move(direction);
 		}
-		
-		//A battery_energy só baixa se a empilhadora objetivamente se mexer
-		if(super.isValidMove(getPosition(),direction)) {
-			if(battery_energy-1>=0)
-				battery_energy--;
-		}
 
+		// A battery_energy só baixa se a empilhadora objetivamente se mexer
+//		if(super.isValidMove(getPosition(),direction)) {
+//			if(battery_energy-1>=0)
+//				battery_energy--;
+//		}
 
 		// Chamo a função global que move objetos Movable
 		super.move(direction);
-		
-		
+
+	}
+
+	@Override
+	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
+		// Return falso caso a battery_energy-1, que corresponde à energia do próximo
+		// movimento, seja menor do que 0 ou então se a isValidMove do Movable retornar false
+		if (battery_energy - 1 < 0 || !super.isValidMove(getPosition(), direction))
+			return false;
+		// Reduz a battery_energy
+		battery_energy--;
+		return true;
 	}
 
 }
