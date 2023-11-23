@@ -92,23 +92,23 @@ public class Empilhadora extends Movable {
 		
 		//Verifica se existe um buraco e caso exista acaba o jogo
 		for(GameElement actual : elements) {
-			if (actual instanceof Buraco) {
+			if (actual instanceof Buraco && !(actual instanceof Palete)) {
 				gui.setStatusMessage("gg");
-				gui.setMessage("LOst the level");
+				gui.setMessage("Lost the level");
 				super.gameEngine.gameMap.deleteAll();
 			}
 		}
 		
 		//verifica se existe uma parede rachada e se já foi apanhado o martelo
-		GameElement p = null;
+		ParedeRachada p = null;
 		for(GameElement actual : elements) {
 			if(actual instanceof ParedeRachada && hasMartelo == true) {
 				actual.setTransposable(true);
-				p = ParedeRachada.createElement("ParedeRachada", super.getPosition());
+				p = new ParedeRachada(super.getPosition());
 			}
 		}
-		if(p!=null) {
-			super.gameEngine.gameMap.removeElement(p);
+		if (p != null) {
+			p.breakElement();
 		}
 
 		// A battery_energy só baixa se a empilhadora objetivamente se mexer
