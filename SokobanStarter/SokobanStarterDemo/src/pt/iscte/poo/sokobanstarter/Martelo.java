@@ -10,5 +10,11 @@ public class Martelo extends Catchable {
 		super(position, imageName, 0);
 		super.setTransposable(true);
 	}
+	
+	@Override
+	public void catchElement() {
+		super.catchElement();
+		super.gameEngine.bobcat.addMartelo(true);
+	}
 
 }

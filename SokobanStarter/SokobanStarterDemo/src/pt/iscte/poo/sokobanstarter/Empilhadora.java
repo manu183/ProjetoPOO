@@ -10,6 +10,8 @@ public class Empilhadora extends Movable {
 	private int battery_energy;
 	private boolean hasMartelo;
 
+	
+
 	public static final String initialImageName = "Empilhadora_D";
 
 	public Empilhadora(Point2D initialPosition) {
@@ -25,6 +27,14 @@ public class Empilhadora extends Movable {
 
 	public void addBattery(int energy) {
 		battery_energy += energy;
+	}
+	
+	public boolean hasMartelo() {
+		return hasMartelo;
+	}
+
+	public void addMartelo(boolean hasMartelo) {
+		this.hasMartelo = hasMartelo;
 	}
 
 	private void updateImageName(Direction direction) {
@@ -78,6 +88,27 @@ public class Empilhadora extends Movable {
 		}
 		if (mov != null) {
 			mov.move(direction);
+		}
+		
+		//Verifica se existe um buraco e caso exista acaba o jogo
+		for(GameElement actual : elements) {
+			if (actual instanceof Buraco) {
+				gui.setStatusMessage("gg");
+				gui.setMessage("LOst the level");
+				super.gameEngine.gameMap.deleteAll();
+			}
+		}
+		
+		//verifica se existe uma parede rachada e se já foi apanhado o martelo
+		GameElement p = null;
+		for(GameElement actual : elements) {
+			if(actual instanceof ParedeRachada && hasMartelo == true) {
+				actual.setTransposable(true);
+				p = ParedeRachada.createElement("ParedeRachada", super.getPosition());
+			}
+		}
+		if(p!=null) {
+			super.gameEngine.gameMap.removeElement(p);
 		}
 
 		// A battery_energy só baixa se a empilhadora objetivamente se mexer
