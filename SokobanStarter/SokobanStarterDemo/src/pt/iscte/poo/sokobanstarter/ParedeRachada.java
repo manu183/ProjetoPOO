@@ -10,9 +10,6 @@ public class ParedeRachada extends GameElement {
 		super(position, imageName, 0);
 	}
 	
-	public void removeElement() {
-		super.gameEngine.gameMap.removeElement(this);
-	}
 
 	public void breakElement() {
 		removeElement();

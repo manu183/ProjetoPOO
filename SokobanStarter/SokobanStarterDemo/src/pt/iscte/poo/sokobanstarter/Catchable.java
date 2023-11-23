@@ -54,10 +54,6 @@ public abstract class Catchable extends GameElement {
 		return false;
 	}
 
-	public void removeElement() {
-		super.gameEngine.gameMap.removeElement(this);
-	}
-
 	public void catchElement() {
 		removeElement();
 	}

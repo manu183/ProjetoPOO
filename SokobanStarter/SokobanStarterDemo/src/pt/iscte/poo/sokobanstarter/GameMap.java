@@ -77,22 +77,22 @@ public class GameMap implements Comparator<Point2D> {
 		return elements;
 	}
 
-	public GameElement getSpecificElementAt(GameElement gameElement) {
-		if (existsOnPosition(gameElement)) {
-			List<GameElement> elements = map.get(gameElement.getPosition());
-			for (GameElement actual : elements) {
-				if (actual.getName().equals(gameElement.getName())) {
-					gameElement = actual;
-					break;
-				}
-			}
-		} else {
-			throw new IllegalArgumentException("There isn't no such object type in this position!");
-		}
-
-		return gameElement;
-
-	}
+//	public GameElement getSpecificElementAt(Point2D position,GameElement gameElement) {
+//		if (existsOnPosition(gameElement)) {
+//			List<GameElement> elements = map.get(gameElement.getPosition());
+//			for (GameElement actual : elements) {
+//				if (actual.getName().equals(gameElement.getName())) {
+//					gameElement = actual;
+//					break;
+//				}
+//			}
+//		} else {
+//			throw new IllegalArgumentException("There isn't no such object type in this position!");
+//		}
+//
+//		return gameElement;
+//
+//	}
 
 	public boolean existsOnPosition(Point2D position, String imageName) {
 		List<GameElement> elements = getElementsAt(position);

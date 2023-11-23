@@ -118,6 +118,11 @@ public abstract class GameElement implements ImageTile {
 			throw new IllegalArgumentException("Unrecognized name " + name + " for creating GameElement element");
 		}
 	}
+	
+	public void removeElement() {
+		gameEngine.gameMap.removeElement(this);
+	}
+	
 
 	@Override
 	public String toString() {

@@ -8,6 +8,8 @@ public class Buraco extends GameElement {
 
 	public Buraco(Point2D position) {
 		super(position, imageName, 0);
+		super.setTransposable(true);
 	
 	}
+	
 }

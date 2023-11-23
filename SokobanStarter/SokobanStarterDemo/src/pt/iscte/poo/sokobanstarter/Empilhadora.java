@@ -10,8 +10,6 @@ public class Empilhadora extends Movable {
 	private int battery_energy;
 	private boolean hasMartelo;
 
-	
-
 	public static final String initialImageName = "Empilhadora_D";
 
 	public Empilhadora(Point2D initialPosition) {
@@ -28,7 +26,7 @@ public class Empilhadora extends Movable {
 	public void addBattery(int energy) {
 		battery_energy += energy;
 	}
-	
+
 	public boolean hasMartelo() {
 		return hasMartelo;
 	}
@@ -89,33 +87,30 @@ public class Empilhadora extends Movable {
 		if (mov != null) {
 			mov.move(direction);
 		}
-		
-		//Verifica se existe um buraco e caso exista acaba o jogo
-		for(GameElement actual : elements) {
-			if (actual instanceof Buraco && !(actual instanceof Palete)) {
-				gui.setStatusMessage("gg");
-				gui.setMessage("Lost the level");
-				super.gameEngine.gameMap.deleteAll();
-			}
+
+		// Verifica se existe um buraco e caso exista acaba o jogo
+
+		Buraco buraco = new Buraco(nextPosition);
+	
+		Palete palete = new Palete(nextPosition);
+		if (super.gameEngine.gameMap.existsOnPosition(buraco) && !super.gameEngine.gameMap.existsOnPosition(palete)) {
+			gui.setStatusMessage("gg");
+			gui.setMessage("Lost the level");
+
 		}
-		
-		//verifica se existe uma parede rachada e se já foi apanhado o martelo
+
+
+		// verifica se existe uma parede rachada e se já foi apanhado o martelo
 		ParedeRachada p = null;
-		for(GameElement actual : elements) {
-			if(actual instanceof ParedeRachada && hasMartelo == true) {
+		for (GameElement actual : elements) {
+			if (actual instanceof ParedeRachada && hasMartelo == true) {
 				actual.setTransposable(true);
-				p = new ParedeRachada(super.getPosition());
+				p = new ParedeRachada(actual.getPosition());
 			}
 		}
 		if (p != null) {
 			p.breakElement();
 		}
-
-		// A battery_energy só baixa se a empilhadora objetivamente se mexer
-//		if(super.isValidMove(getPosition(),direction)) {
-//			if(battery_energy-1>=0)
-//				battery_energy--;
-//		}
 
 		// Chamo a função global que move objetos Movable
 		super.move(direction);
@@ -125,7 +120,8 @@ public class Empilhadora extends Movable {
 	@Override
 	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
 		// Return falso caso a battery_energy-1, que corresponde à energia do próximo
-		// movimento, seja menor do que 0 ou então se a isValidMove do Movable retornar false
+		// movimento, seja menor do que 0 ou então se a isValidMove do Movable retornar
+		// false
 		if (battery_energy - 1 < 0 || !super.isValidMove(getPosition(), direction))
 			return false;
 		// Reduz a battery_energy
