@@ -51,7 +51,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 0;
+		this.level = 6;
 		this.userName = "NOT_DEFINED";
 	}
 
@@ -165,7 +165,7 @@ public class GameEngine implements Observer {
 //		createWarehouse(); // criar o armazem
 //		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
 //		readFiles(level);
-		readFiles(1);
+		readFiles(level);
 		sendImagesToGUI(); // enviar as imagens para a GUI
 
 		// Escrever uma mensagem na StatusBar

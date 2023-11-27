@@ -16,7 +16,7 @@ public class Palete extends Movable {
 
 	public void move(Direction direction) {
 
-		Point2D nextPosition = super.getPosition().plus(direction.asVector());
+		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
 
 		if(isValidMove(getPosition(),direction)) {
@@ -25,7 +25,6 @@ public class Palete extends Movable {
 					this.setTransposable(true);
 				}
 			}
-
 			super.move(direction);
 		}
 

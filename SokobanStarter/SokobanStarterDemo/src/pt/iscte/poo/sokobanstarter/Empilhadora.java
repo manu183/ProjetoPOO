@@ -80,10 +80,10 @@ public class Empilhadora extends Movable {
 		}
 
 		// Verifica se existe um objeto movable na próxima posição
-		Movable mov = null;
+		GameElement mov = null;
 		for (GameElement actual : elements) {
 			if (Movable.isMovable(actual)) {
-				mov = Movable.createMovable(actual);
+				mov = actual;
 				System.out.println("Movable:" + mov);
 			}
 		}

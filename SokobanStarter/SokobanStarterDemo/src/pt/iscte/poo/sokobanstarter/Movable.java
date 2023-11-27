@@ -32,35 +32,7 @@ public abstract class Movable extends GameElement {
 		}
 	}
 
-	public static Movable createMovable(String name, Point2D position) {
-
-		switch (name) {
-		case Caixote.imageName:
-			return new Caixote(position);
-		case Empilhadora.initialImageName:
-			return new Empilhadora(position);
-		case Palete.imageName:
-			return new Palete(position);
-		default:
-			throw new IllegalArgumentException("Unrecognized name " + "name" + " for creating Movable element");
-		}
-	}
-
-	public static Movable createMovable(GameElement gameElement) {
-
-		switch (gameElement.getName()) {
-		case Caixote.imageName:
-			return new Caixote(gameElement.getPosition());
-		case Empilhadora.initialImageName:
-			return new Empilhadora(gameElement.getPosition());
-		case Palete.imageName:
-			return new Palete(gameElement.getPosition());
-		default:
-			throw new IllegalArgumentException(
-					"Unrecognized name " + gameElement.getName() + " for creating Movable element");
-		}
-	}
-
+	@Override
 	public void move(Direction direction) {
 		System.out.println("Last GameElement:" + this);
 
@@ -97,7 +69,7 @@ public abstract class Movable extends GameElement {
 		} else {
 			System.err.println("It was not possible to move  " + getName() + " to position" + nextPosition);
 		}
-//		System.out.println();
+		System.out.println(".".repeat(50));
 	}
 
 	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
@@ -109,13 +81,17 @@ public abstract class Movable extends GameElement {
 
 		// Obtém todos os gameElements que existem no nextPosition
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-
+		System.out.println("Next Elements:"+elements);
 		// Verifica se existe algum objeto de elements que não seja Transposable.
 		// Verifica também se existe algum objeto que não esteja dentro do tabuleiro de
 		// jogo.
 		for (GameElement atual : elements) {
 			if (!atual.getTransposable() || !isOnBoard(nextPosition)) {
 				isValidMove = false;
+				System.out.println("Atual:"+atual);
+				System.out.println("!Transposable:"+!atual.getTransposable());
+				System.out.println("isInboard:"+!isOnBoard(nextPosition));
+				System.out.println("aqui");
 			}
 		}
 		System.out.println("isValidMove:" + isValidMove);
