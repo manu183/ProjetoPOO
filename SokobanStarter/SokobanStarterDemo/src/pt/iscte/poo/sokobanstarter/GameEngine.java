@@ -74,6 +74,10 @@ public class GameEngine implements Observer {
 	private void deleteGameMap() {
 		gameMap.deleteAll();
 	}
+	
+	public void increaseScore() {
+		score++;
+	}
 
 
 
@@ -93,6 +97,11 @@ public class GameEngine implements Observer {
 		int linhas = 0;
 		int colunas = 0;
 		String linha = "";
+		
+		//Durante a leitura de um ficheiro é também verificado se existe mais do
+		//que dois teleportes, algo que não pode acontecer
+		int numTeleportes=0;
+		
 		try (Scanner scanner = new Scanner(file)) {
 			for (linhas = 0; linhas < GRID_HEIGHT; linhas++) {
 				// Verifica se existe realmente uma linha seguinte
@@ -111,14 +120,27 @@ public class GameEngine implements Observer {
 					} else {
 						gameElement = GameElement.createElement(linha.charAt(colunas), new Point2D(colunas, linhas));
 						addToGame(gameElement);
+						if(gameElement instanceof Teleporte) {
+							System.out.println("Teleporte:"+gameElement);
+							numTeleportes++;
+						}
 					}
 
 				}
 			}
 			scanner.close();
-			System.out.println(gameMap);
+			
+			//Verifica que se caso existam teleportes, eles não correspondam a um par
+			if(numTeleportes>0 && numTeleportes!=2) {
+				throw new IllegalArgumentException("The file can only have 2");
+			}
+			
 			sendImagesToGUI();
+			System.out.println("GUI:"+gameMap+"\n");
 			gui.update();
+			
+			
+			
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -143,7 +165,7 @@ public class GameEngine implements Observer {
 //		createWarehouse(); // criar o armazem
 //		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
 //		readFiles(level);
-		readFiles(5);
+		readFiles(1);
 		sendImagesToGUI(); // enviar as imagens para a GUI
 
 		// Escrever uma mensagem na StatusBar
@@ -168,8 +190,10 @@ public class GameEngine implements Observer {
 			bobcat.move(direction);
 
 		}
+		
 
 		sendImagesToGUI();
+		System.out.println("GUI:"+gameMap+"\n");
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos
 
@@ -194,7 +218,7 @@ public class GameEngine implements Observer {
 			System.out.println("Won the level!");
 			gui.setStatusMessage("You won this level!");
 			gui.setMessage("Won the level");
-			score+=bobcat.getBattery();
+//			score+=bobcat.getBattery();
 			levelUp();
 		}
 	}

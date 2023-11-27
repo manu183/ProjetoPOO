@@ -62,22 +62,42 @@ public abstract class Movable extends GameElement {
 	}
 
 	public void move(Direction direction) {
-		System.out.println("Last position:" + this);
+		System.out.println("Last GameElement:" + this);
 
-		Point2D nextPosition = super.getPosition().plus(direction.asVector());
-
-		System.out.println("Chegou aqui");
-
+		// Calcular a nova posição
+		Point2D nextPosition = calculateFinalPosition(getPosition(),direction);
 		// Verifica através da função isValidMove se o objeto se pode mover
 		if (isValidMove(super.getPosition(), direction)) {
-			// Calcular a nova posição
-			System.out.println("New Position:" + nextPosition);
-			// Atualizar o map do gameEngine
-			super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
+//			List<GameElement> elementsInPos = super.gameEngine.gameMap.getElementsAt(getPosition());
 
+//			List<GameElement> nextElements = super.gameEngine.gameMap.getElementsAt(nextPosition);
+//			System.out.println("This position Elements of " + getName() + ":" + elementsInPos);
+//			System.out.println("Next Elements of " + getName() + ":" + nextElements);
+			
+			//1.Verifica-se se este elemento é uma palete de modo a que não possa ser removido
+			//2.Verifica-se se no próxima posição existe um buraco e se não existe uma palete
+			if (!(this instanceof Palete) && super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition))
+					&& !super.gameEngine.gameMap.containsOnPosition(new Palete(nextPosition))) {
+				System.out.println("BURACO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				//Como o elemento cai num buraco o mesmo desaparece
+				super.removeElement();
+			}
+			//Verificamos o caso de quando a próxima posição é um teleporte
+			else if(super.gameEngine.gameMap.containsOnPosition(new Teleporte(nextPosition))){
+				Teleporte teleporte = new Teleporte(nextPosition);
+				//Obter a posição do outro teleporte
+				Point2D teleportePos = teleporte.getOtherTeleportPosition();
+				this.setPosition(teleportePos);
+				
+			}else {
+				// Atualiza o elemento no mapa de jogo
+				super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
+			}
+//			System.out.println("GameMap:" + super.gameEngine.gameMap);
 		} else {
 			System.err.println("It was not possible to move  " + getName() + " to position" + nextPosition);
 		}
+//		System.out.println();
 	}
 
 	protected boolean isValidMove(Point2D initialPosition, Direction direction) {

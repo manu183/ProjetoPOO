@@ -36,7 +36,7 @@ public abstract class GameElement implements ImageTile {
 		return position;
 	}
 
-	// Para os objetos Movable
+	// Para os objetos Movable de modo a atualizar a sua posição no mapa
 	protected void setPosition(Point2D newPosition) {
 		this.position = newPosition;
 	}
@@ -53,6 +53,13 @@ public abstract class GameElement implements ImageTile {
 	
 	public boolean getTransposable() {
 		return isTransposable;
+	}
+	
+	public void removeElement() {
+//		System.out.println("GameElement to remove:"+this);
+		gameEngine.gameMap.removeElement(this);
+//		System.out.println("GameMap after remove:");
+//		System.out.println(gameEngine.gameMap);
 	}
 	
 	// Criação de Objetos através da char que o identifica
@@ -119,9 +126,7 @@ public abstract class GameElement implements ImageTile {
 		}
 	}
 	
-	public void removeElement() {
-		gameEngine.gameMap.removeElement(this);
-	}
+	
 	
 
 	@Override

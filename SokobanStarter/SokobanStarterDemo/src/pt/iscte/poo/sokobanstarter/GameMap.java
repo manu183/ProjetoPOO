@@ -29,7 +29,7 @@ public class GameMap implements Comparator<Point2D> {
 	public void addElement(GameElement gameElement) {
 		// Verifica se um objeto já exista nessa posição de modo a não haver dois
 		// GameElements repetidos na mesma posição
-		if (!existsOnPosition(gameElement)) {
+		if (!containsOnPosition(gameElement)) {
 			List<GameElement> elements = getElementsAt(gameElement.getPosition());
 			elements.add(gameElement);
 			map.put(gameElement.getPosition(), elements);
@@ -76,24 +76,9 @@ public class GameMap implements Comparator<Point2D> {
 
 		return elements;
 	}
+	
 
-//	public GameElement getSpecificElementAt(Point2D position,GameElement gameElement) {
-//		if (existsOnPosition(gameElement)) {
-//			List<GameElement> elements = map.get(gameElement.getPosition());
-//			for (GameElement actual : elements) {
-//				if (actual.getName().equals(gameElement.getName())) {
-//					gameElement = actual;
-//					break;
-//				}
-//			}
-//		} else {
-//			throw new IllegalArgumentException("There isn't no such object type in this position!");
-//		}
-//
-//		return gameElement;
-//
-//	}
-
+	//TODO Apagar esta função
 	public boolean existsOnPosition(Point2D position, String imageName) {
 		List<GameElement> elements = getElementsAt(position);
 		for (GameElement actual : elements) {
@@ -104,7 +89,7 @@ public class GameMap implements Comparator<Point2D> {
 		return false;
 	}
 
-	public boolean existsOnPosition(GameElement gameElement) {
+	public boolean containsOnPosition(GameElement gameElement) {
 		List<GameElement> elements = getElementsAt(gameElement.getPosition());
 		for (GameElement actual : elements) {
 			if (actual.getClass().equals(gameElement.getClass())) {
@@ -113,6 +98,8 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return false;
 	}
+	
+	
 	
 	//Verificação que verifica se o nível foi ganho, ou seja, se 
 	public boolean winsLevel() {
@@ -134,6 +121,24 @@ public class GameMap implements Comparator<Point2D> {
 			}
 		}
 		return res;
+	}
+	
+	//Esta função serve para obter todos os objetos de um certo GameElement
+	public List<GameElement> getAllGameElement(GameElement gameElement) {
+		List<GameElement> elements = convertToArrayList();
+		
+		//Esta lista serve para guardar todos os gameElement que não
+		//pertençam à mesma classe de gameElement
+		List<GameElement> toRemove = new ArrayList<>();
+		for(GameElement actual : elements) {
+			if(!(actual.getClass().equals(gameElement.getClass()))) {
+				toRemove.add(actual);
+			}
+		}
+		//Remover de elements os elementos de toRemove
+		elements.removeAll(toRemove);
+		
+		return elements;
 	}
 
 	// Este método serve para obter um ArrayList de modo a que seja possível

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Score {
 	private String fileName;
@@ -150,7 +149,7 @@ public class Score {
 	private List<String> sortScores() {
 		List<Integer> sortedKeys = new ArrayList<>(scores.keySet());
 //	    System.out.println("Sorting:...");
-		sortedKeys.sort((a, b) -> b - a);
+		sortedKeys.sort((a, b) -> a - b);
 		System.out.println("Keys:" + sortedKeys);
 
 		List<String> result = new ArrayList<>();

@@ -51,6 +51,9 @@ public class Empilhadora extends Movable {
 			break;
 		}
 	}
+	
+	
+	
 
 	@Override
 	public void move(Direction direction) {
@@ -62,7 +65,7 @@ public class Empilhadora extends Movable {
 
 		// Obtém uma lista com os objetos existentes na posição seguinte
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-		System.out.println(elements);
+//		System.out.println("Elementos da posição:"+elements);
 
 		// Verifica se os objetos na posição seguinte é Cachable
 		Catchable cat = null;
@@ -91,9 +94,8 @@ public class Empilhadora extends Movable {
 		// Verifica se existe um buraco e caso exista acaba o jogo
 
 		Buraco buraco = new Buraco(nextPosition);
-	
 		Palete palete = new Palete(nextPosition);
-		if (super.gameEngine.gameMap.existsOnPosition(buraco) && !super.gameEngine.gameMap.existsOnPosition(palete)) {
+		if (super.gameEngine.gameMap.containsOnPosition(buraco) && !super.gameEngine.gameMap.containsOnPosition(palete)) {
 			gui.setStatusMessage("gg");
 			gui.setMessage("Lost the level");
 
@@ -111,9 +113,14 @@ public class Empilhadora extends Movable {
 		if (p != null) {
 			p.breakElement();
 		}
+		
+		
+		
 
 		// Chamo a função global que move objetos Movable
 		super.move(direction);
+		
+		
 
 	}
 
@@ -126,6 +133,10 @@ public class Empilhadora extends Movable {
 			return false;
 		// Reduz a battery_energy
 		battery_energy--;
+		
+		//Cada vez que existe um movimento válido o score do gameEngine aumenta
+		//de modo a registar o total de movimentações
+		super.gameEngine.increaseScore();
 		return true;
 	}
 
