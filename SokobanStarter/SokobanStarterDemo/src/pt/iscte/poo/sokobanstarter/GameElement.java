@@ -142,9 +142,14 @@ public abstract class GameElement implements ImageTile {
 
 	
 	//Para os objetos Movable
-	public void move(Direction direction) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void move(Direction direction) {}
+	
+	//Para os objetos Catchable
+	public void catchElement() {}
+	
+	//Para os objetos ParedeRachada
+	public void breakElement() {}
+	
+	
 
 }

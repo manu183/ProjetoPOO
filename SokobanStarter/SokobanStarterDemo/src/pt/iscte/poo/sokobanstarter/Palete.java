@@ -14,29 +14,60 @@ public class Palete extends Movable {
 
 	}
 
+	@Override
 	public void move(Direction direction) {
 
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-
-		if(isValidMove(getPosition(),direction)) {
+		
+		System.out.println(this);
+		System.out.println("isValidMove:"+isValidMove(getPosition(), direction));
+		if (isValidMove(getPosition(), direction)) {
 			for (GameElement actual : elements) {
 				if (actual instanceof Buraco) {
-					this.setTransposable(true);
+					if(!alreadyExistsPalete(nextPosition)) {
+						this.setTransposable(true);
+						System.out.println("isTransposable is now true");
+					}
 				}
 			}
+			System.out.println("MOVEEEEEEEEEE");
 			super.move(direction);
 		}
 
 	}
-	
+
+	@Override
 	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
-		if(super.gameEngine.gameMap.existsOnPosition(initialPosition, Buraco.imageName) || !super.isValidMove(initialPosition, direction)) {
+		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
+		if(!super.isValidMove(initialPosition, direction) || (isOnBuraco(initialPosition) && !alreadyExistsPalete(nextPosition))){
+			System.out.println("Palete nextPosition:"+nextPosition);
 			return false;
 		}
 		return true;
 
 	}
 	
+	private boolean alreadyExistsPalete(Point2D position) {
+		if(super.gameEngine.gameMap.containsOnPosition(new Palete(position))) {
+			return true;
+		}
+		return false;
+	}
 	
+	public boolean isOnBuraco(Point2D position) {
+		if(super.gameEngine.gameMap.containsOnPosition(new Buraco(position))) {
+			return true;
+		}
+		return false;
+	}
+//	@Override
+//	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
+//		if(super.gameEngine.gameMap.existsOnPosition(initialPosition, Buraco.imageName) || !super.isValidMove(initialPosition, direction)) {
+//			return false;
+//		}
+//		return true;
+//
+//	}
+
 }

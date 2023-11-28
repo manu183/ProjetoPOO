@@ -29,11 +29,14 @@ public class GameMap implements Comparator<Point2D> {
 	public void addElement(GameElement gameElement) {
 		// Verifica se um objeto já exista nessa posição de modo a não haver dois
 		// GameElements repetidos na mesma posição
-		if (!containsOnPosition(gameElement)) {
-			List<GameElement> elements = getElementsAt(gameElement.getPosition());
-			elements.add(gameElement);
-			map.put(gameElement.getPosition(), elements);
-		}
+//		if (!containsOnPosition(gameElement)) {
+//			List<GameElement> elements = getElementsAt(gameElement.getPosition());
+//			elements.add(gameElement);
+//			map.put(gameElement.getPosition(), elements);
+//		}
+		List<GameElement> elements = getElementsAt(gameElement.getPosition());
+		elements.add(gameElement);
+		map.put(gameElement.getPosition(), elements);
 
 	}
 
@@ -183,9 +186,9 @@ public class GameMap implements Comparator<Point2D> {
 			int j = 0;
 			int elementsSize = gameElements.size();
 			for (GameElement element : gameElements) {
-				res += element.getName();
+				res += element.getName()+",isTranponsable:"+element.getTransposable();
 				if (j != elementsSize - 1)
-					res += ", ";
+					res += "; ";
 				j++;
 			}
 			if (i != size - 1)

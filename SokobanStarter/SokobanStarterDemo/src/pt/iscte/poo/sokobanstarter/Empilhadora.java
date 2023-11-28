@@ -51,9 +51,6 @@ public class Empilhadora extends Movable {
 			break;
 		}
 	}
-	
-	
-	
 
 	@Override
 	public void move(Direction direction) {
@@ -67,60 +64,54 @@ public class Empilhadora extends Movable {
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
 //		System.out.println("Elementos da posição:"+elements);
 
-		// Verifica se os objetos na posição seguinte é Cachable
-		Catchable cat = null;
+		// Cria um gameElement para os eventuais objetos Catchable
+		GameElement cat = null;
+		// Cria um gameElement para os eventuais objetos Movable
+		GameElement mov = null;
+		// Cria um gameElement para os eventuais objetos ParedeRachada
+		GameElement paredeRachada = null;
+		// Cria um gameElement para os eventuais objetos Buraco
+		boolean hasBuraco = false;
+		// Cria um gameElement para os eventuais objetos Palete
+		boolean hasPalete = false;
+
 		for (GameElement actual : elements) {
-			if (Catchable.isCachable(actual)) {
-				cat = Catchable.createCatchable(actual);
+			if (actual instanceof Catchable) {
+				cat = actual;
 				System.out.println("Chatchable:" + cat);
+			}
+			if (actual instanceof Movable) {
+				mov = actual;
+				System.out.println("Movabke:" + mov);
+			}
+			if (actual instanceof ParedeRachada && hasMartelo == true) {
+				paredeRachada = actual;
+			}
+			if(actual instanceof Buraco ){
+				hasBuraco=true;
+			}
+			if(actual instanceof Palete) {
+				hasPalete=true;
 			}
 		}
 		if (cat != null) {
 			cat.catchElement();
 		}
-
-		// Verifica se existe um objeto movable na próxima posição
-		GameElement mov = null;
-		for (GameElement actual : elements) {
-			if (Movable.isMovable(actual)) {
-				mov = actual;
-				System.out.println("Movable:" + mov);
-			}
-		}
-		if (mov != null) {
+		if (mov != null && mov.getTransposable()==false) {
 			mov.move(direction);
 		}
-
-		// Verifica se existe um buraco e caso exista acaba o jogo
-
-		Buraco buraco = new Buraco(nextPosition);
-		Palete palete = new Palete(nextPosition);
-		if (super.gameEngine.gameMap.containsOnPosition(buraco) && !super.gameEngine.gameMap.containsOnPosition(palete)) {
+		if (paredeRachada != null) {
+			paredeRachada.breakElement();
+		}
+		
+		if(hasBuraco==true && hasPalete==false) {
 			gui.setStatusMessage("gg");
 			gui.setMessage("Lost the level");
-
+			gui.setMessage("Click on TabBar to Restart the level");
 		}
 
-
-		// verifica se existe uma parede rachada e se já foi apanhado o martelo
-		ParedeRachada p = null;
-		for (GameElement actual : elements) {
-			if (actual instanceof ParedeRachada && hasMartelo == true) {
-				actual.setTransposable(true);
-				p = new ParedeRachada(actual.getPosition());
-			}
-		}
-		if (p != null) {
-			p.breakElement();
-		}
-		
-		
-		
-
-		// Chamo a função global que move objetos Movable
+		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora
 		super.move(direction);
-		
-		
 
 	}
 
@@ -133,11 +124,12 @@ public class Empilhadora extends Movable {
 			return false;
 		// Reduz a battery_energy
 		battery_energy--;
-		
-		//Cada vez que existe um movimento válido o score do gameEngine aumenta
-		//de modo a registar o total de movimentações
+
+		// Cada vez que existe um movimento válido o score do gameEngine aumenta
+		// de modo a registar o total de movimentações
 		super.gameEngine.increaseScore();
 		return true;
 	}
+
 
 }
