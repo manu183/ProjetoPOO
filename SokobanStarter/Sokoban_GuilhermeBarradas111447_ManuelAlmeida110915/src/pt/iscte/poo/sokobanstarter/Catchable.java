@@ -8,7 +8,6 @@ public abstract class Catchable extends GameElement {
 
 	}	
 	
-	@Override
 	public void catchElement() {
 		removeElement();
 	}

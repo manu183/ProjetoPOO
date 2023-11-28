@@ -64,28 +64,24 @@ public class Empilhadora extends Movable {
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
 //		System.out.println("Elementos da posição:"+elements);
 
-		// Cria um gameElement para os eventuais objetos Catchable
-		GameElement cat = null;
-		// Cria um gameElement para os eventuais objetos Movable
-		GameElement mov = null;
-		// Cria um gameElement para os eventuais objetos ParedeRachada
-		GameElement paredeRachada = null;
+		
+		GameElement next = null;
 		// Cria um gameElement para os eventuais objetos Buraco
 		boolean hasBuraco = false;
 		// Cria um gameElement para os eventuais objetos Palete
 		boolean hasPalete = false;
 
 		for (GameElement actual : elements) {
-			if (actual instanceof Catchable) {
-				cat = actual;
-				System.out.println("Chatchable:" + cat);
+			if (next instanceof Catchable) {
+				next = actual;
+				System.out.println("Chatchable:" + next);
 			}
-			if (actual instanceof Movable) {
-				mov = actual;
-				System.out.println("Movabke:" + mov);
+			if (next instanceof Movable) {
+				next = actual;
+				System.out.println("Movabke:" + next);
 			}
 			if (actual instanceof ParedeRachada && hasMartelo == true) {
-				paredeRachada = actual;
+				next = actual;
 			}
 			if(actual instanceof Buraco ){
 				hasBuraco=true;
@@ -94,15 +90,19 @@ public class Empilhadora extends Movable {
 				hasPalete=true;
 			}
 		}
-		if (cat != null) {
-			cat.catchElement();
+		
+		if(next != null) {
+			if(next instanceof Catchable) {
+				((Catchable)next).catchElement();
+			}
+			else if(next instanceof Movable && next.getTransposable()==false) {				
+				((Movable) next).move(direction);
+			}else if(next instanceof ParedeRachada) {
+				((ParedeRachada)next).breakElement();
+			}
 		}
-		if (mov != null && mov.getTransposable()==false) {
-			mov.move(direction);
-		}
-		if (paredeRachada != null) {
-			paredeRachada.breakElement();
-		}
+		
+		
 		
 		if(hasBuraco==true && hasPalete==false) {
 			gui.setStatusMessage("gg");

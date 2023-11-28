@@ -1,5 +1,5 @@
-1. Bruno 150
-2. Filipa 145
-3. Goncalo 140
-4. Teresa 135
-5. Jorge 130
+1. Joao 5
+2. Maria 10
+3. Carlos 15
+4. Ana 20
+5. Pedro 25

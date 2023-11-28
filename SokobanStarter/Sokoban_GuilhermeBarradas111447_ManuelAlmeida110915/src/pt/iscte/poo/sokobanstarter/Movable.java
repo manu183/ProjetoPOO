@@ -32,7 +32,7 @@ public abstract class Movable extends GameElement {
 		}
 	}
 
-	@Override
+	
 	public void move(Direction direction) {
 		System.out.println("Last GameElement:" + this);
 
