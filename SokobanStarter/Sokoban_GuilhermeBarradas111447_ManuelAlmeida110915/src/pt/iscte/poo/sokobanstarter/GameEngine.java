@@ -3,6 +3,7 @@ package pt.iscte.poo.sokobanstarter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -51,7 +52,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 5;
+		this.level = 0;
 		this.userName = "NOT_DEFINED";
 	}
 

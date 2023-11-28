@@ -139,7 +139,6 @@ public abstract class GameElement implements ImageTile {
 	public String toString() {
 		return getPosition() + ":" + getName()+ ", isTransposable:"+getTransposable();
 	}
-
 	
 
 }

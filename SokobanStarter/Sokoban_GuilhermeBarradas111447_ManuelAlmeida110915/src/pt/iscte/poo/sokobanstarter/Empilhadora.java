@@ -72,11 +72,11 @@ public class Empilhadora extends Movable {
 		boolean hasPalete = false;
 
 		for (GameElement actual : elements) {
-			if (next instanceof Catchable) {
+			if (actual instanceof Catchable) {
 				next = actual;
 				System.out.println("Chatchable:" + next);
 			}
-			if (next instanceof Movable) {
+			if (actual instanceof Movable) {
 				next = actual;
 				System.out.println("Movabke:" + next);
 			}
@@ -95,12 +95,14 @@ public class Empilhadora extends Movable {
 			if(next instanceof Catchable) {
 				((Catchable)next).catchElement();
 			}
-			else if(next instanceof Movable && next.getTransposable()==false) {				
+			if(next instanceof Movable && next.getTransposable()==false) {				
 				((Movable) next).move(direction);
-			}else if(next instanceof ParedeRachada) {
+			}
+			if(next instanceof ParedeRachada) {
 				((ParedeRachada)next).breakElement();
 			}
 		}
+		
 		
 		
 		

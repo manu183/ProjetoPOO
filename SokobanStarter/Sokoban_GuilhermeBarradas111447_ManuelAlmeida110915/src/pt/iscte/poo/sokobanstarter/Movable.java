@@ -19,18 +19,6 @@ public abstract class Movable extends GameElement {
 		return false;
 	}
 
-	public static Movable createMovable(char key, Point2D position) {
-		switch (key) {
-		case 'C':
-			return new Caixote(position);
-		case 'E':
-			return new Empilhadora(position);
-		case 'P':
-			return new Palete(position);
-		default:
-			throw new IllegalArgumentException("Unrecognized key '" + key + "' for creating Movable element");
-		}
-	}
 
 	
 	public void move(Direction direction) {
