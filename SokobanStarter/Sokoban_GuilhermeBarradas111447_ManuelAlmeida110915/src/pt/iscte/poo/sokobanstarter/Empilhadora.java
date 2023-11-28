@@ -104,7 +104,7 @@ public class Empilhadora extends Movable {
 		
 		
 		
-		if(hasBuraco==true && hasPalete==false) {
+		if((hasBuraco==true && hasPalete==false) || super.gameEngine.gameMap.hasCaixote() == false) {
 			gui.setStatusMessage("gg");
 			gui.setMessage("Lost the level");
 			gui.setMessage("Click on TabBar to Restart the level");
