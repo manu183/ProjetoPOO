@@ -102,7 +102,15 @@ public class GameMap implements Comparator<Point2D> {
 		return false;
 	}
 	
-	
+	public boolean hasCaixote() {
+		List<GameElement> elements = convertToArrayList();
+		for(GameElement actual: elements) {
+			if(actual instanceof Caixote) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	//Verificação que verifica se o nível foi ganho, ou seja, se 
 	public boolean winsLevel() {
