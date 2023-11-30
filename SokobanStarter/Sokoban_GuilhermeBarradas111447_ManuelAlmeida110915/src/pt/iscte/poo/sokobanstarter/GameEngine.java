@@ -52,7 +52,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 0;
+		this.level = 5;
 		this.userName = "NOT_DEFINED";
 	}
 
@@ -137,7 +137,8 @@ public class GameEngine implements Observer {
 			}
 			
 			sendImagesToGUI();
-			System.out.println("GUI:"+gameMap+"\n");
+			System.out.println("GUI:"+gameMap);
+			System.out.println(".".repeat(50));
 			gui.update();
 			
 			

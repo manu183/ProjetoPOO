@@ -78,7 +78,7 @@ public class Empilhadora extends Movable {
 			}
 			if (actual instanceof Movable) {
 				next = actual;
-				System.out.println("Movabke:" + next);
+				System.out.println("Movable:" + next);
 			}
 			if (actual instanceof ParedeRachada && hasMartelo == true) {
 				next = actual;
@@ -113,16 +113,17 @@ public class Empilhadora extends Movable {
 		}
 
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora
+		System.out.println(this);
 		super.move(direction);
 
 	}
 
 	@Override
-	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
+	protected boolean isValidMove(Point2D finalPosition) {
 		// Return falso caso a battery_energy-1, que corresponde à energia do próximo
 		// movimento, seja menor do que 0 ou então se a isValidMove do Movable retornar
 		// false
-		if (battery_energy - 1 < 0 || !super.isValidMove(getPosition(), direction))
+		if (battery_energy - 1 < 0 || !super.isValidMove(finalPosition))
 			return false;
 		// Reduz a battery_energy
 		battery_energy--;

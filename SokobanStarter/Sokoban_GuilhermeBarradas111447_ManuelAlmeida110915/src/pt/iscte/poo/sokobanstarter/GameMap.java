@@ -82,15 +82,15 @@ public class GameMap implements Comparator<Point2D> {
 	
 
 	//TODO Apagar esta função
-	public boolean existsOnPosition(Point2D position, String imageName) {
-		List<GameElement> elements = getElementsAt(position);
-		for (GameElement actual : elements) {
-			if (actual.getName().equals(imageName)) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	public boolean existsOnPosition(Point2D position, String imageName) {
+//		List<GameElement> elements = getElementsAt(position);
+//		for (GameElement actual : elements) {
+//			if (actual.getName().equals(imageName)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 
 	public boolean containsOnPosition(GameElement gameElement) {
 		List<GameElement> elements = getElementsAt(gameElement.getPosition());
@@ -127,7 +127,7 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		// Verificar se existe algum posição alvo que não contém um caixote
 		for (Point2D actual : target_positions) {
-			if (!existsOnPosition(actual, Caixote.imageName)) {
+			if (!containsOnPosition(new Caixote(actual))) {
 				res = false;
 			}
 		}

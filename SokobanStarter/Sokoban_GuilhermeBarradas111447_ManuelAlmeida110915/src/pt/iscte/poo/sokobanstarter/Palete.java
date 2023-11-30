@@ -20,33 +20,31 @@ public class Palete extends Movable {
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
 		
-		System.out.println(this);
-		System.out.println("isValidMove:"+isValidMove(getPosition(), direction));
-		if (isValidMove(getPosition(), direction)) {
-			for (GameElement actual : elements) {
-				if (actual instanceof Buraco) {
-					if(!alreadyExistsPalete(nextPosition)) {
-						this.setTransposable(true);
-						System.out.println("isTransposable is now true");
-					}
+//		System.out.println(this);
+//		System.out.println("isValidMove:"+isValidMove(nextPosition));
+		if (isValidMove(nextPosition)) {
+			if(super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition))) {
+				if(!alreadyExistsPalete(nextPosition)) {
+					super.setTransposable(true);
+				}else {
+					super.setTransposable(false);
 				}
 			}
-			System.out.println("MOVEEEEEEEEEE");
 			super.move(direction);
+			System.out.println("MOVEEEEEEEEEE");
 		}
 
 	}
 
-	@Override
-	protected boolean isValidMove(Point2D initialPosition, Direction direction) {
-		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
-		if(!super.isValidMove(initialPosition, direction) || (isOnBuraco(initialPosition) && !alreadyExistsPalete(nextPosition))){
-			System.out.println("Palete nextPosition:"+nextPosition);
-			return false;
-		}
-		return true;
-
-	}
+//	@Override
+//	protected boolean isValidMove(Point2D finalPosition) {
+//		if(!super.isValidMove(finalPosition) || (isOnBuraco(super.getPosition()) && !alreadyExistsPalete(finalPosition))){
+//			System.out.println("Palete nextPosition:"+finalPosition);
+//			return false;
+//		}
+//		return true;
+//
+//	}
 	
 	private boolean alreadyExistsPalete(Point2D position) {
 		if(super.gameEngine.gameMap.containsOnPosition(new Palete(position))) {
