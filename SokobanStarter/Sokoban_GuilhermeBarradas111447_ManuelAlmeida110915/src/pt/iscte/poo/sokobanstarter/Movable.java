@@ -39,17 +39,18 @@ public abstract class Movable extends GameElement {
 			}
 			// Verificamos o caso de quando a próxima posição é um teleporte
 			else if (super.gameEngine.gameMap.containsOnPosition(new Teleporte(nextPosition))) {
-				System.out.println("Teleporte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				Teleporte teleporte = new Teleporte(nextPosition);
-				// Obter a posição do outro teleporte
-				Point2D teleportePos = teleporte.getOtherTeleportPosition();
-//				this.setPosition(teleportePos);
+				Teleporte otherTeleporte = teleporte.getOtherTeleporte();
+				System.out.println("otherTeleporte:"+otherTeleporte);
+	
+				if(otherTeleporte.isAvaible()) {
+					super.gameEngine.gameMap.updateElementPosition(this, otherTeleporte.getPosition());					
+				}else {
+					super.gameEngine.gameMap.updateElementPosition(this, nextPosition);					
 
-				// Só é possível entrar no teleporte se não se encontrar que não seja
-				// transposable no teleporte par
-				if (isValidMove(nextPosition)) {
-					super.gameEngine.gameMap.updateElementPosition(this, teleportePos);
 				}
+				
+				
 			} else {
 				// Atualiza o elemento no mapa de jogo
 				super.gameEngine.gameMap.updateElementPosition(this, nextPosition);

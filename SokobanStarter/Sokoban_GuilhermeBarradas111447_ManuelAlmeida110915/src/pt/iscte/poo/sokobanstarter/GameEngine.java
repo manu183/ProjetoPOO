@@ -52,7 +52,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 5;
+		this.level = 6;
 		this.userName = "NOT_DEFINED";
 	}
 
