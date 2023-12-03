@@ -133,6 +133,33 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return res;
 	}
+	// Verificação que verifica se o nível foi ganho, ou seja, se
+		public boolean loseLevel() {
+			boolean res = true;
+			List<GameElement> elements = convertToArrayList();
+			
+			int numEmpilhadora=0;
+			int numCaixotes=0;
+			int numAlvos=0;
+			//Pretende-se calcular o número de caixotes, de alvo, e se existe empilhadora
+			for(GameElement actual:elements) {
+				if(actual instanceof Empilhadora) {
+					numEmpilhadora++;
+				}else if(actual instanceof Caixote) {
+					numCaixotes++;
+				}else if(actual instanceof Alvo) {
+					numAlvos++;
+				}
+			}
+			if(numEmpilhadora!=1 || numCaixotes==0 || numAlvos==0 || numCaixotes<numAlvos) {
+				return true;
+			}
+			return false;
+			
+		}
+	
+	
+	
 
 	// Esta função serve para obter todos os objetos de um certo GameElement
 	public List<GameElement> getAllGameElement(GameElement gameElement) {
@@ -161,6 +188,15 @@ public class GameMap implements Comparator<Point2D> {
 		for (Point2D actual : keys) {
 			List<GameElement> gameElements = getElementsAt(actual);
 			allElements.addAll(gameElements);
+		}
+		return allElements;
+	}
+	
+	//Uma lista de ImageTile com o GameElement Vazio para o final do jogo
+	public List<ImageTile> winGUI(){
+		List<ImageTile> allElements = arrayToGUI();
+		for(ImageTile actual:allElements) {
+			actual= new Vazio(actual.getPosition());
 		}
 		return allElements;
 	}

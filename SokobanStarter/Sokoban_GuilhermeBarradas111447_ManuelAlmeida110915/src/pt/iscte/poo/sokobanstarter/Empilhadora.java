@@ -84,12 +84,7 @@ public class Empilhadora extends Movable {
 			if (actual instanceof ParedeRachada && hasMartelo == true) {
 				next = actual;
 			}
-			if(actual instanceof Buraco ){
-				hasBuraco=true;
-			}
-			if(actual instanceof Palete) {
-				hasPalete=true;
-			}
+
 		}
 		
 		if(next != null) {
@@ -104,12 +99,6 @@ public class Empilhadora extends Movable {
 			}
 		}
 		
-		
-		if((hasBuraco==true && hasPalete==false) || super.gameEngine.gameMap.hasCaixote() == false) {
-			gui.setStatusMessage("gg");
-			gui.setMessage("Lost the level");
-			gui.setMessage("Click on TabBar to Restart the level");
-		}
 
 		
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora

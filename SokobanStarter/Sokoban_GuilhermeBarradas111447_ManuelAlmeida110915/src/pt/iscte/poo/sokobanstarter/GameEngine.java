@@ -44,8 +44,8 @@ public class GameEngine implements Observer {
 	private int score;
 	// Guarda o nome do Jogador
 	private String userName;
-	
-	//Score
+
+	// Score
 	private Score registScore;
 
 	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
@@ -55,7 +55,7 @@ public class GameEngine implements Observer {
 		this.gui = ImageMatrixGUI.getInstance();
 		this.level = 6;
 		this.userName = "NOT_DEFINED";
-		this.registScore=Score.getInstance();
+		this.registScore = Score.getInstance();
 	}
 
 	// Implementacao do singleton para o GameEngine
@@ -64,8 +64,6 @@ public class GameEngine implements Observer {
 			return INSTANCE = new GameEngine();
 		return INSTANCE;
 	}
-
-
 
 	// Define o mapa e atualiza automaticamente o tileList com os Valores do mapa
 
@@ -77,12 +75,10 @@ public class GameEngine implements Observer {
 	private void deleteGameMap() {
 		gameMap.deleteAll();
 	}
-	
+
 	public void increaseScore() {
 		score++;
 	}
-
-
 
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
@@ -100,11 +96,11 @@ public class GameEngine implements Observer {
 		int linhas = 0;
 		int colunas = 0;
 		String linha = "";
-		
-		//Durante a leitura de um ficheiro é também verificado se existe mais do
-		//que dois teleportes, algo que não pode acontecer
-		int numTeleportes=0;
-		
+
+		// Durante a leitura de um ficheiro é também verificado se existe mais do
+		// que dois teleportes, algo que não pode acontecer
+		int numTeleportes = 0;
+
 		try (Scanner scanner = new Scanner(file)) {
 			for (linhas = 0; linhas < GRID_HEIGHT; linhas++) {
 				// Verifica se existe realmente uma linha seguinte
@@ -123,8 +119,8 @@ public class GameEngine implements Observer {
 					} else {
 						gameElement = GameElement.createElement(linha.charAt(colunas), new Point2D(colunas, linhas));
 						addToGame(gameElement);
-						if(gameElement instanceof Teleporte) {
-							System.out.println("Teleporte:"+gameElement);
+						if (gameElement instanceof Teleporte) {
+							System.out.println("Teleporte:" + gameElement);
 							numTeleportes++;
 						}
 					}
@@ -132,20 +128,17 @@ public class GameEngine implements Observer {
 				}
 			}
 			scanner.close();
-			
-			//Verifica que se caso existam teleportes, eles não correspondam a um par
-			if(numTeleportes>0 && numTeleportes!=2) {
+
+			// Verifica que se caso existam teleportes, eles não correspondam a um par
+			if (numTeleportes > 0 && numTeleportes != 2) {
 				throw new IllegalArgumentException("The file can only have 2");
 			}
-			
+
 			sendImagesToGUI();
-			System.out.println("GUI:"+gameMap);
-			for(int i = 0; i <= 50; i++)
+			System.out.println("GUI:" + gameMap);
+			for (int i = 0; i <= 50; i++)
 				System.out.print(".");
 			gui.update();
-			
-			
-			
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -195,11 +188,10 @@ public class GameEngine implements Observer {
 			bobcat.move(direction);
 
 		}
-		
 
 		sendImagesToGUI();
-		System.out.println("GUI:"+gameMap);
-		for(int i = 0; i <= 50; i++)
+		System.out.println("GUI:" + gameMap);
+		for (int i = 0; i <= 50; i++)
 			System.out.print(".");
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos
@@ -209,6 +201,7 @@ public class GameEngine implements Observer {
 				+ bobcat.getBattery());
 
 		winLevel();
+		loseLevel();
 	}
 
 	// Cria o menu de introdução que pergunta o nome ao jogador
@@ -216,7 +209,7 @@ public class GameEngine implements Observer {
 //		gui = ImageMatrixGUI.getInstance();
 		gui.setMessage("Hi! Welcome to Sokoban");
 		userName = gui.askUser("What is your name?");
-		while(userName.isBlank()) {
+		while (userName.isBlank()) {
 			gui.setMessage("Your name cannot be empty!");
 			userName = gui.askUser("What is your name?");
 		}
@@ -226,66 +219,79 @@ public class GameEngine implements Observer {
 	// Método que verifica se o nível foi ganho e que no futuro irá aumentar o nível
 	public void winLevel() {
 		if (gameMap.winsLevel()) {
-			System.out.println("Won the level!");
 			gui.setStatusMessage("You won this level!");
 			gui.setMessage("Won the level");
-//			score+=bobcat.getBattery();
+
 			levelUp();
-			if (level == 6) 
+			if (level == 6) {
 				showScores();
-				System.out.println("Cheguei aqui");
-			gui.update();
+				winsGame();
+			}
+//			gui.update();
 		}
 	}
-	
+	// Método que verifica se o nível foi perdido de forma a que se for verdade o mesmo recomece
+	public void loseLevel() {
+		if (gameMap.loseLevel()) {
+//			System.out.println("Loose level");
+			gui.setMessage("You lost this level!");
+			restartLevel();
+		}
+	}
 
 	public void levelUp() {
-		if(level >=0 && level+1<6) {
+		if (level >= 0 && level + 1 < 6) {
 			level++;
 			deleteGameMap();
 			readFiles(level);
 
-		}else {
+		} else {
 
-			//Significa que o utilizador ganhou o jogou
-			//Escreve as pontuações no ficheiro "levels/scores.txt"
+			// Significa que o utilizador ganhou o jogou
+			// Escreve as pontuações no ficheiro "levels/scores.txt"
 			Score registScore = Score.getInstance();
 			registScore.addNewScore(userName, score);
-	
+
 		}
 	}
-	
-	//mostrar os resultados numa janela a parte
+
+	// mostrar os resultados numa janela a parte
 	public void showScores() {
-		String message="";
-		int rank=registScore.getRank(userName, score);
+		String message = "";
+		int rank = registScore.getRank(userName, score);
 		System.out.println(rank);
-		if(rank!=-1) {
-			message+="Parabéns!!! Ficaste no rank"+rank+"\n";
-		}else {
-			message+="Não ficaste no top5. Tenta outra vez!\n";
+		if (rank != -1) {
+			message += "Parabéns!!! Ficaste no rank " + rank + "\n";
+		} else {
+			message += "Não ficaste no top5. Tenta outra vez!\n";
 		}
-		message+="Melhores resultados:\n";
+		message += "Melhores resultados:\n";
 
-        try {
-            // Lê o ficheiro scores
-            Scanner scanner = new Scanner(new File("levels/scores.txt"));
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                message+=line+"\n";
-            }
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        
-        gui.setMessage(message);
+		try {
+			// Lê o ficheiro scores
+			Scanner scanner = new Scanner(new File("levels/scores.txt"));
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				message += line + "\n";
+			}
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
-    }
+		gui.setMessage(message);
+
+	}
 
 	public void restartLevel() {
 		deleteGameMap();
 		readFiles(level);
+	}
+	
+	public void winsGame() {
+		gui.setStatusMessage("Ganhaste o jogo!!!");
+		gui.setMessage("Ganhaste o jogo");
+		gui.dispose();
 	}
 
 	// Criacao da planta do armazem - so' chao neste exemplo
