@@ -3,11 +3,7 @@ package pt.iscte.poo.sokobanstarter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Scanner;
-
-import javax.swing.*;
 
 import pt.iscte.poo.gui.ImageMatrixGUI;
 import pt.iscte.poo.observer.Observed;
@@ -48,14 +44,18 @@ public class GameEngine implements Observer {
 	private int score;
 	// Guarda o nome do Jogador
 	private String userName;
+	
+	//Score
+	private Score registScore;
 
 	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
 	private GameEngine() {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 5;
+		this.level = 6;
 		this.userName = "NOT_DEFINED";
+		this.registScore=Score.getInstance();
 	}
 
 	// Implementacao do singleton para o GameEngine
@@ -141,7 +141,7 @@ public class GameEngine implements Observer {
 			sendImagesToGUI();
 			System.out.println("GUI:"+gameMap);
 			for(int i = 0; i <= 50; i++)
-				System.out.println(".");
+				System.out.print(".");
 			gui.update();
 			
 			
@@ -200,7 +200,7 @@ public class GameEngine implements Observer {
 		sendImagesToGUI();
 		System.out.println("GUI:"+gameMap);
 		for(int i = 0; i <= 50; i++)
-			System.out.println(".");
+			System.out.print(".");
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos
 
@@ -230,9 +230,10 @@ public class GameEngine implements Observer {
 			gui.setStatusMessage("You won this level!");
 			gui.setMessage("Won the level");
 //			score+=bobcat.getBattery();
+			levelUp();
 			if (level == 6) 
 				showScores();
-			levelUp();
+				System.out.println("Cheguei aqui");
 			gui.update();
 		}
 	}
@@ -242,40 +243,44 @@ public class GameEngine implements Observer {
 		if(level >=0 && level+1<6) {
 			level++;
 			deleteGameMap();
-			readFiles(level);			
+			readFiles(level);
+
 		}else {
+
 			//Significa que o utilizador ganhou o jogou
 			//Escreve as pontuações no ficheiro "levels/scores.txt"
 			Score registScore = Score.getInstance();
 			registScore.addNewScore(userName, score);
+	
 		}
 	}
 	
 	//mostrar os resultados numa janela a parte
 	public void showScores() {
-        JFrame scores = new JFrame("Scores");
-        scores.setSize(200, 200);
-        scores.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        JTextArea scoresText = new JTextArea();
-        scoresText.setEditable(false);
-        scoresText.insert("Melhores resultados:" + "\n", 0);
+		String message="";
+		int rank=registScore.getRank(userName, score);
+		System.out.println(rank);
+		if(rank!=-1) {
+			message+="Parabéns!!! Ficaste no rank"+rank+"\n";
+		}else {
+			message+="Não ficaste no top5. Tenta outra vez!\n";
+		}
+		message+="Melhores resultados:\n";
 
         try {
             // Lê o ficheiro scores
             Scanner scanner = new Scanner(new File("levels/scores.txt"));
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                scoresText.append(line + "\n");
+                message+=line+"\n";
             }
             scanner.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        
+        gui.setMessage(message);
 
-        scores.getContentPane().add(new JScrollPane(scoresText));
-//      scores.setLocationRelativeTo(null);
-        scores.setVisible(true);
     }
 
 	public void restartLevel() {

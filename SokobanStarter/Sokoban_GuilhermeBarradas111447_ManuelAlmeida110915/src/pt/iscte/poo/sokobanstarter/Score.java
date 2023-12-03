@@ -83,6 +83,26 @@ public class Score {
 		add(new User(userName, score));
 		writeScoreFile();
 	}
+	
+	public int getRank(String userName, int score) {
+	    List<String> sortedScores = sortScores();
+	    System.out.println("GETRANK:");
+	    System.out.println(sortedScores);
+
+	    int index = 1;
+	    for (String actual : sortedScores) {
+	        String[] now = actual.split(" ");
+
+	        int actualScore = Integer.parseInt(now[1]);
+
+	        if (now[0].equals(userName) && actualScore == score) {
+	            return index;
+	        }
+	        index++;
+	    }
+	    return -1;
+	}
+
 
 	private void readScoreFile() {
 		try (Scanner scanner = new Scanner(file)) {
