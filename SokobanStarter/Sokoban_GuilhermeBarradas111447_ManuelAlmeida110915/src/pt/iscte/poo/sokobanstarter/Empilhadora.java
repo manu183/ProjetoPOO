@@ -6,7 +6,8 @@ import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
 public class Empilhadora extends Movable {
-
+	
+	private static final int INITIAL_BATTERY_ENERGY=100;
 	private int battery_energy;
 	private boolean hasMartelo;
 
@@ -14,7 +15,7 @@ public class Empilhadora extends Movable {
 
 	public Empilhadora(Point2D initialPosition) {
 		super(initialPosition, initialImageName, 0);
-		this.battery_energy = 75;
+		this.battery_energy = INITIAL_BATTERY_ENERGY;
 		this.hasMartelo = false;
 
 	}
@@ -95,7 +96,7 @@ public class Empilhadora extends Movable {
 			if(next instanceof Catchable) {
 				((Catchable)next).catchElement();
 			}
-			if(next instanceof Movable && next.getTransposable()==false) {				
+			if(next instanceof Movable) {				
 				((Movable) next).move(direction);
 			}
 			if(next instanceof ParedeRachada) {
@@ -104,14 +105,13 @@ public class Empilhadora extends Movable {
 		}
 		
 		
-		
-		
 		if((hasBuraco==true && hasPalete==false) || super.gameEngine.gameMap.hasCaixote() == false) {
 			gui.setStatusMessage("gg");
 			gui.setMessage("Lost the level");
 			gui.setMessage("Click on TabBar to Restart the level");
 		}
 
+		
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora
 		System.out.println(this);
 		super.move(direction);

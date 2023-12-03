@@ -52,7 +52,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 6;
+		this.level = 5;
 		this.userName = "NOT_DEFINED";
 	}
 
@@ -212,6 +212,10 @@ public class GameEngine implements Observer {
 //		gui = ImageMatrixGUI.getInstance();
 		gui.setMessage("Hi! Welcome to Sokoban");
 		userName = gui.askUser("What is your name?");
+		while(userName.isBlank()) {
+			gui.setMessage("Your name cannot be empty!");
+			userName = gui.askUser("What is your name?");
+		}
 		System.out.println(userName);
 	}
 

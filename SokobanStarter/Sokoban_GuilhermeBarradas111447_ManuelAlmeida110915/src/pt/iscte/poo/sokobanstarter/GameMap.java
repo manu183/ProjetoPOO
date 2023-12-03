@@ -55,6 +55,7 @@ public class GameMap implements Comparator<Point2D> {
 
 		// Atualizar o arraylist
 		map.put(position, elements);
+
 	}
 
 	public void updateElementPosition(GameElement gameElement, Point2D newPosition) {
@@ -79,9 +80,8 @@ public class GameMap implements Comparator<Point2D> {
 
 		return elements;
 	}
-	
 
-	//TODO Apagar esta função
+	// TODO Apagar esta função
 //	public boolean existsOnPosition(Point2D position, String imageName) {
 //		List<GameElement> elements = getElementsAt(position);
 //		for (GameElement actual : elements) {
@@ -101,18 +101,18 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return false;
 	}
-	
+
 	public boolean hasCaixote() {
 		List<GameElement> elements = convertToArrayList();
-		for(GameElement actual: elements) {
-			if(actual instanceof Caixote) {
+		for (GameElement actual : elements) {
+			if (actual instanceof Caixote) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	//Verificação que verifica se o nível foi ganho, ou seja, se 
+
+	// Verificação que verifica se o nível foi ganho, ou seja, se
 	public boolean winsLevel() {
 		boolean res = true;
 		List<GameElement> elements = convertToArrayList();
@@ -121,7 +121,7 @@ public class GameMap implements Comparator<Point2D> {
 		List<Point2D> target_positions = new ArrayList<>();
 
 		for (GameElement actual : elements) {
-			if (actual.getName().equals(Alvo.imageName)) {
+			if (actual instanceof Alvo) {
 				target_positions.add(actual.getPosition());
 			}
 		}
@@ -133,22 +133,22 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return res;
 	}
-	
-	//Esta função serve para obter todos os objetos de um certo GameElement
+
+	// Esta função serve para obter todos os objetos de um certo GameElement
 	public List<GameElement> getAllGameElement(GameElement gameElement) {
 		List<GameElement> elements = convertToArrayList();
-		
-		//Esta lista serve para guardar todos os gameElement que não
-		//pertençam à mesma classe de gameElement
+
+		// Esta lista serve para guardar todos os gameElement que não
+		// pertençam à mesma classe de gameElement
 		List<GameElement> toRemove = new ArrayList<>();
-		for(GameElement actual : elements) {
-			if(!(actual.getClass().equals(gameElement.getClass()))) {
+		for (GameElement actual : elements) {
+			if (!(actual.getClass().equals(gameElement.getClass()))) {
 				toRemove.add(actual);
 			}
 		}
-		//Remover de elements os elementos de toRemove
+		// Remover de elements os elementos de toRemove
 		elements.removeAll(toRemove);
-		
+
 		return elements;
 	}
 
@@ -164,8 +164,8 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return allElements;
 	}
-	
-	//Retorna uma lista com todos os GameElements
+
+	// Retorna uma lista com todos os GameElements
 	public List<GameElement> convertToArrayList() {
 		List<GameElement> allElements = new ArrayList<>();
 		List<Point2D> keys = new ArrayList<>(map.keySet());
@@ -194,7 +194,7 @@ public class GameMap implements Comparator<Point2D> {
 			int j = 0;
 			int elementsSize = gameElements.size();
 			for (GameElement element : gameElements) {
-				res += element.getName()+",isTranponsable:"+element.getTransposable();
+				res += element.getName() + ",isTranponsable:" + element.getTransposable();
 				if (j != elementsSize - 1)
 					res += "; ";
 				j++;

@@ -25,7 +25,7 @@ public abstract class Movable extends GameElement {
 		// Calcular a nova posição
 		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
 		// Verifica através da função isValidMove se o objeto se pode mover
-		if (isValidMove(nextPosition)) {
+		if (!super.getTransposable()&&isValidMove(nextPosition)) {
 
 			// 1.Verifica-se se este elemento é uma palete de modo a que não possa ser
 			// removido
@@ -59,6 +59,7 @@ public abstract class Movable extends GameElement {
 		} else {
 			System.err.println("It was not possible to move  " + getName() + " to position" + nextPosition);
 		}
+
 	}
 
 	protected boolean isValidMove(Point2D finalPosition) {
@@ -69,7 +70,8 @@ public abstract class Movable extends GameElement {
 
 		// Obtém todos os gameElements que existem no nextPosition
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(finalPosition);
-//		System.out.println("Next Elements:"+elements);
+
+		
 		// Verifica se existe algum objeto de elements que não seja Transposable.
 		// Verifica também se existe algum objeto que não esteja dentro do tabuleiro de
 		// jogo.
