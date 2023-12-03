@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.swing.*;
+
 import pt.iscte.poo.gui.ImageMatrixGUI;
 import pt.iscte.poo.observer.Observed;
 import pt.iscte.poo.observer.Observer;
@@ -138,7 +140,8 @@ public class GameEngine implements Observer {
 			
 			sendImagesToGUI();
 			System.out.println("GUI:"+gameMap);
-			System.out.println(".".repeat(50));
+			for(int i = 0; i <= 50; i++)
+				System.out.println(".");
 			gui.update();
 			
 			
@@ -196,7 +199,8 @@ public class GameEngine implements Observer {
 
 		sendImagesToGUI();
 		System.out.println("GUI:"+gameMap);
-		System.out.println(".".repeat(50));
+		for(int i = 0; i <= 50; i++)
+			System.out.println(".");
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos
 
@@ -222,7 +226,10 @@ public class GameEngine implements Observer {
 			gui.setStatusMessage("You won this level!");
 			gui.setMessage("Won the level");
 //			score+=bobcat.getBattery();
+			if (level == 6) 
+				showScores();
 			levelUp();
+			gui.update();
 		}
 	}
 	
@@ -239,6 +246,33 @@ public class GameEngine implements Observer {
 			registScore.addNewScore(userName, score);
 		}
 	}
+	
+	//mostrar os resultados numa janela a parte
+	public void showScores() {
+        JFrame scores = new JFrame("Scores");
+        scores.setSize(200, 200);
+        scores.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JTextArea scoresText = new JTextArea();
+        scoresText.setEditable(false);
+        scoresText.insert("Melhores resultados:" + "\n", 0);
+
+        try {
+            // Lê o ficheiro scores
+            Scanner scanner = new Scanner(new File("levels/scores.txt"));
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                scoresText.append(line + "\n");
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        scores.getContentPane().add(new JScrollPane(scoresText));
+//      scores.setLocationRelativeTo(null);
+        scores.setVisible(true);
+    }
 
 	public void restartLevel() {
 		deleteGameMap();
