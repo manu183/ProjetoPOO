@@ -13,89 +13,82 @@ public abstract class Movable extends GameElement {
 	}
 
 	public static boolean isMovable(GameElement gameElement) {
-		if (gameElement instanceof Movable) {
-			return true;
-		}
-		return false;
+	    return gameElement instanceof Movable;
 	}
 
-	public void move(Direction direction) {
-//		System.out.println("Last GameElement:" + this);
+	
+	protected boolean isValidMove(Point2D finalPosition) {
+        List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(finalPosition);
 
+        for (GameElement current : elements) {
+            if (!current.getTransposable() || !isOnBoard(finalPosition)) {
+                System.out.println("isValidMove:false");
+            	return false;
+            }
+        }
+        System.out.println("isValidMove:true");
+        return true;
+    }
+	
+	protected void checkMovablesToMove(Direction direction) {
+		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
+		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
+
+		GameElement next = null;
+
+		//TODO Adicionar um break em cada if
+		for (GameElement actual : elements) {
+			if (actual instanceof Movable) {
+				if(!actual.getTransposable()) {
+					next = actual;					
+				}
+			}
+
+		}
+
+		if (next != null) {
+			if (next instanceof Movable && !next.getTransposable()) {
+				System.out.println("Movable:"+next);
+				((Movable) next).move(direction);
+				System.out.println("Fi");
+			}
+		}
+	}
+	
+	protected void move(Direction direction) {
 		// Calcular a nova posição
 		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
+		checkMovablesToMove(direction);
 		// Verifica através da função isValidMove se o objeto se pode mover
-		if (!super.getTransposable()&&isValidMove(nextPosition)) {
-
-			// 1.Verifica-se se este elemento é uma palete de modo a que não possa ser
-			// removido
-			// 2.Verifica-se se no próxima posição existe um buraco e se não existe uma
-			// palete
+		if (isValidMove(nextPosition)) {
 			if (!(this instanceof Palete) && super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition))
 					&& !super.gameEngine.gameMap.containsOnPosition(new Palete(nextPosition))) {
-				System.out.println("BURACO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				// Como o elemento cai num buraco o mesmo desaparece
 				super.removeElement();
 			}
 			// Verificamos o caso de quando a próxima posição é um teleporte
 			else if (super.gameEngine.gameMap.containsOnPosition(new Teleporte(nextPosition))) {
 				Teleporte teleporte = new Teleporte(nextPosition);
-				Teleporte otherTeleporte = teleporte.getOtherTeleporte();
-				System.out.println("otherTeleporte:"+otherTeleporte);
-	
-				if(otherTeleporte.isAvaible()) {
-					super.gameEngine.gameMap.updateElementPosition(this, otherTeleporte.getPosition());					
-				}else {
-					super.gameEngine.gameMap.updateElementPosition(this, nextPosition);					
+				teleporte.teleporte(this, nextPosition);
 
-				}
-				
-				
 			} else {
 				// Atualiza o elemento no mapa de jogo
 				super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
 			}
-//			System.out.println("GameMap:" + super.gameEngine.gameMap);
+
 		} else {
 			System.err.println("It was not possible to move  " + getName() + " to position" + nextPosition);
 		}
 
 	}
 
-	protected boolean isValidMove(Point2D finalPosition) {
-		// Verifica se existe algum obstáculo na direção que pretende que seja uma
-		// parede ou então dois caixotes seguidos
-
-		boolean isValidMove = true;
-
-		// Obtém todos os gameElements que existem no nextPosition
-		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(finalPosition);
-
-		
-		// Verifica se existe algum objeto de elements que não seja Transposable.
-		// Verifica também se existe algum objeto que não esteja dentro do tabuleiro de
-		// jogo.
-		for (GameElement atual : elements) {
-			if (!atual.getTransposable() || !isOnBoard(finalPosition)) {
-				isValidMove = false;
-				System.out.println("Atual:" + atual);
-				System.out.println("!Transposable:" + !atual.getTransposable());
-				System.out.println("isInboard:" + !isOnBoard(finalPosition));
-				System.out.println("aqui");
-			}
-		}
-		System.out.println("isValidMove:" + isValidMove);
-
-		return isValidMove;
-
-	}
-
+	
 	public boolean isOnBoard(Point2D nextPosition) {
-		if (nextPosition.getX() < 0 && nextPosition.getX() >= 10 && nextPosition.getY() < 0
-				&& nextPosition.getY() >= 10) {
-			return false;
+		if (nextPosition.getX() >= 0 && nextPosition.getX() < 10 && nextPosition.getY() >= 0
+				&& nextPosition.getY() < 10) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	// Calcula a posição final de um movimento

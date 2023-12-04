@@ -6,8 +6,8 @@ import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
 public class Empilhadora extends Movable {
-	
-	private static final int INITIAL_BATTERY_ENERGY=100;
+
+	private static final int INITIAL_BATTERY_ENERGY = 100;
 	private int battery_energy;
 	private boolean hasMartelo;
 
@@ -17,7 +17,6 @@ public class Empilhadora extends Movable {
 		super(initialPosition, initialImageName, 0);
 		this.battery_energy = INITIAL_BATTERY_ENERGY;
 		this.hasMartelo = false;
-
 	}
 
 	public int getBattery() {
@@ -63,46 +62,38 @@ public class Empilhadora extends Movable {
 
 		// Obtém uma lista com os objetos existentes na posição seguinte
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-//		System.out.println("Elementos da posição:"+elements);
 
-		
 		GameElement next = null;
-		// Cria um gameElement para os eventuais objetos Buraco
-		boolean hasBuraco = false;
-		// Cria um gameElement para os eventuais objetos Palete
-		boolean hasPalete = false;
 
+		//TODO Adicionar um break em cada if
 		for (GameElement actual : elements) {
 			if (actual instanceof Catchable) {
 				next = actual;
-				System.out.println("Chatchable:" + next);
-			}
-			if (actual instanceof Movable) {
-				next = actual;
-				System.out.println("Movable:" + next);
-			}
-			if (actual instanceof ParedeRachada && hasMartelo == true) {
+			} 
+//			else if (actual instanceof Movable) {
+//				next = actual;
+//			} 
+			else if (actual instanceof ParedeRachada && hasMartelo == true) {
 				next = actual;
 			}
 
 		}
-		
-		if(next != null) {
-			if(next instanceof Catchable) {
-				((Catchable)next).catchElement();
+
+		if (next != null) {
+			if (next instanceof Catchable) {
+				((Catchable) next).catchElement();
 			}
-			if(next instanceof Movable) {				
-				((Movable) next).move(direction);
-			}
-			if(next instanceof ParedeRachada) {
-				((ParedeRachada)next).breakElement();
+//			if (next instanceof Movable && !next.getTransposable()) {
+//				System.out.println("Movable:"+next);
+//				((Movable) next).move(direction);
+//				System.out.println("Fi");
+//			}
+			if (next instanceof ParedeRachada) {
+				((ParedeRachada) next).breakElement();
 			}
 		}
-		
 
-		
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora
-		System.out.println(this);
 		super.move(direction);
 
 	}
@@ -122,6 +113,5 @@ public class Empilhadora extends Movable {
 		super.gameEngine.increaseScore();
 		return true;
 	}
-
 
 }

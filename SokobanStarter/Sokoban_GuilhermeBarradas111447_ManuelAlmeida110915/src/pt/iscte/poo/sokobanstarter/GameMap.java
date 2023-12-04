@@ -25,21 +25,15 @@ public class GameMap implements Comparator<Point2D> {
 		return INSTANCE;
 	}
 
-	// Adicionar um gameElement
+	// Adicionar um objeto GameElement ao tabuleiro de jogo
 	public void addElement(GameElement gameElement) {
-		// Verifica se um objeto já exista nessa posição de modo a não haver dois
-		// GameElements repetidos na mesma posição
-//		if (!containsOnPosition(gameElement)) {
-//			List<GameElement> elements = getElementsAt(gameElement.getPosition());
-//			elements.add(gameElement);
-//			map.put(gameElement.getPosition(), elements);
-//		}
 		List<GameElement> elements = getElementsAt(gameElement.getPosition());
 		elements.add(gameElement);
 		map.put(gameElement.getPosition(), elements);
 
 	}
 
+	// Função para remover um certo objeto GameElement do tabuleiro de jogo
 	public void removeElement(GameElement gameElement) {
 		Point2D position = gameElement.getPosition();
 		List<GameElement> elements = getElementsAt(position);
@@ -58,6 +52,7 @@ public class GameMap implements Comparator<Point2D> {
 
 	}
 
+	// Função para atualizar a posição de um objeto GameElement no tabuleiro de jogo
 	public void updateElementPosition(GameElement gameElement, Point2D newPosition) {
 		// Remove o elemento antigo
 		removeElement(gameElement);
@@ -81,17 +76,7 @@ public class GameMap implements Comparator<Point2D> {
 		return elements;
 	}
 
-	// TODO Apagar esta função
-//	public boolean existsOnPosition(Point2D position, String imageName) {
-//		List<GameElement> elements = getElementsAt(position);
-//		for (GameElement actual : elements) {
-//			if (actual.getName().equals(imageName)) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-
+	// Função que verifica se existe um certo objeto
 	public boolean containsOnPosition(GameElement gameElement) {
 		List<GameElement> elements = getElementsAt(gameElement.getPosition());
 		for (GameElement actual : elements) {
@@ -102,17 +87,7 @@ public class GameMap implements Comparator<Point2D> {
 		return false;
 	}
 
-	public boolean hasCaixote() {
-		List<GameElement> elements = convertToArrayList();
-		for (GameElement actual : elements) {
-			if (actual instanceof Caixote) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// Verificação que verifica se o nível foi ganho, ou seja, se
+	// Função que verifica se o nível foi ganho, ou seja, se
 	public boolean winsLevel() {
 		boolean res = true;
 		List<GameElement> elements = convertToArrayList();
@@ -133,36 +108,33 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		return res;
 	}
-	// Verificação que verifica se o nível foi ganho, ou seja, se
-		public boolean loseLevel() {
-			boolean res = true;
-			List<GameElement> elements = convertToArrayList();
-			
-			int numEmpilhadora=0;
-			int numCaixotes=0;
-			int numAlvos=0;
-			//Pretende-se calcular o número de caixotes, de alvo, e se existe empilhadora
-			for(GameElement actual:elements) {
-				if(actual instanceof Empilhadora) {
-					numEmpilhadora++;
-				}else if(actual instanceof Caixote) {
-					numCaixotes++;
-				}else if(actual instanceof Alvo) {
-					numAlvos++;
-				}
+
+	// Função que verifica se o nível foi ganho, ou seja, se
+	public boolean loseLevel() {
+		List<GameElement> elements = convertToArrayList();
+
+		int numEmpilhadora = 0;
+		int numCaixotes = 0;
+		int numAlvos = 0;
+		// Pretende-se calcular o número de caixotes, de alvo, e se existe empilhadora
+		for (GameElement actual : elements) {
+			if (actual instanceof Empilhadora) {
+				numEmpilhadora++;
+			} else if (actual instanceof Caixote) {
+				numCaixotes++;
+			} else if (actual instanceof Alvo) {
+				numAlvos++;
 			}
-			if(numEmpilhadora!=1 || numCaixotes==0 || numAlvos==0 || numCaixotes<numAlvos) {
-				return true;
-			}
-			return false;
-			
 		}
-	
-	
-	
+		if (numEmpilhadora != 1 || numCaixotes == 0 || numAlvos == 0 || numCaixotes < numAlvos) {
+			return true;
+		}
+		return false;
+
+	}
 
 	// Esta função serve para obter todos os objetos de um certo GameElement
-	public List<GameElement> getAllGameElement(GameElement gameElement) {
+	public List<GameElement> getAllOfTheseGameElement(GameElement gameElement) {
 		List<GameElement> elements = convertToArrayList();
 
 		// Esta lista serve para guardar todos os gameElement que não
@@ -188,15 +160,6 @@ public class GameMap implements Comparator<Point2D> {
 		for (Point2D actual : keys) {
 			List<GameElement> gameElements = getElementsAt(actual);
 			allElements.addAll(gameElements);
-		}
-		return allElements;
-	}
-	
-	//Uma lista de ImageTile com o GameElement Vazio para o final do jogo
-	public List<ImageTile> winGUI(){
-		List<ImageTile> allElements = arrayToGUI();
-		for(ImageTile actual:allElements) {
-			actual= new Vazio(actual.getPosition());
 		}
 		return allElements;
 	}

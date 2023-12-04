@@ -2,7 +2,6 @@ package pt.iscte.poo.sokobanstarter;
 
 import pt.iscte.poo.gui.ImageMatrixGUI;
 import pt.iscte.poo.gui.ImageTile;
-import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
 public abstract class GameElement implements ImageTile {
@@ -12,8 +11,8 @@ public abstract class GameElement implements ImageTile {
 	private Point2D position;
 	private String name;
 	private int layer;
-	
-	private boolean isTransposable=false;
+
+	private boolean isTransposable = false;
 
 	protected GameElement(Point2D position, String name, int layer) {
 		this.position = position;
@@ -21,7 +20,6 @@ public abstract class GameElement implements ImageTile {
 		this.layer = layer;
 
 	}
-
 
 	@Override
 	public String getName() {
@@ -46,23 +44,20 @@ public abstract class GameElement implements ImageTile {
 	public int getLayer() {
 		return layer;
 	}
-	
-	
+
 	public void setTransposable(boolean isTransposable) {
-		this.isTransposable=isTransposable;
+		this.isTransposable = isTransposable;
 	}
-	
+
 	public boolean getTransposable() {
 		return isTransposable;
 	}
-	
+
+	// Remover-se a ele próprio do tabuleiro de jogo
 	public void removeElement() {
-//		System.out.println("GameElement to remove:"+this);
 		gameEngine.gameMap.removeElement(this);
-//		System.out.println("GameMap after remove:");
-//		System.out.println(gameEngine.gameMap);
 	}
-	
+
 	// Criação de Objetos através da char que o identifica
 	public static GameElement createElement(char key, Point2D position) {
 
@@ -96,49 +91,9 @@ public abstract class GameElement implements ImageTile {
 		}
 	}
 
-	// Criação de Objetos através do seu nome
-//	public static GameElement createElement(GameElement gameElement) {
-//
-//		switch (gameElement.getName()) {
-//		case "Parede":
-//			return new Parede(gameElement.getPosition());
-//		case "Chao":
-//			return new Chao(gameElement.getPosition());
-//		case "Vazio":
-//			return new Vazio(gameElement.getPosition());
-//		case "Caixote":
-//			return new Caixote(gameElement.getPosition());
-//		case "Alvo":
-//			return new Alvo(gameElement.getPosition());
-//		case "Empilhadora_R":
-//			return new Empilhadora(gameElement.getPosition());
-//		case "Empilhadora_L":
-//			return new Empilhadora(gameElement.getPosition());
-//		case "Empilhadora_U":
-//			return new Empilhadora(gameElement.getPosition());
-//		case "Empilhadora_D":
-//			return new Empilhadora(gameElement.getPosition());
-//		case "Bateria":
-//			return new Bateria(gameElement.getPosition());
-//		case "Buraco":
-//			return new Buraco(gameElement.getPosition());
-//		case "Palete":
-//			return new Palete(gameElement.getPosition());
-//		case "ParedeRachada":
-//			return new ParedeRachada(gameElement.getPosition());
-//		case "Teleporte":
-//			return new Teleporte(gameElement.getPosition());
-//		default:
-//			throw new IllegalArgumentException("Unrecognized name " + gameElement.getName() + " for creating GameElement element");
-//		}
-//	}
-	
-	
-
 	@Override
 	public String toString() {
-		return getPosition() + ":" + getName()+ ", isTransposable:"+getTransposable();
+		return getPosition() + ":" + getName() + ", isTransposable:" + getTransposable();
 	}
-	
 
 }

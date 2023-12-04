@@ -31,7 +31,8 @@ public class Score {
 			return INSTANCE = new Score();
 		return INSTANCE;
 	}
-
+	
+	//Implementação da classe interna User
 	private class User {
 		private final String userName;
 		private final int score;
@@ -72,7 +73,8 @@ public class Score {
 			return userName + " " + score;
 		}
 	}
-
+	
+	//Adicionar um novo registo
 	public void addNewScore(String userName, int score) {
 		if (file.exists()) {
 			System.out.println("File exists");
@@ -202,9 +204,5 @@ public class Score {
 			e.printStackTrace();
 		}
 	}
-
-	// Única função pública que trata de chamar as funções necessárias para que seja
-	// gerado um ficheiro
-	// com as melhores pontuações
 
 }

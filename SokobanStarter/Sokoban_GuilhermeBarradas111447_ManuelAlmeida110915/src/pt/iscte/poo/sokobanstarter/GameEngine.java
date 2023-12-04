@@ -45,7 +45,7 @@ public class GameEngine implements Observer {
 	// Guarda o nome do Jogador
 	private String userName;
 
-	// Score
+	// Guarda o objeto da classe Score que é utilizado para guardar o score
 	private Score registScore;
 
 	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
@@ -53,7 +53,8 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 6;
+		this.level = 5;
+		this.score = 0;
 		this.userName = "NOT_DEFINED";
 		this.registScore = Score.getInstance();
 	}
@@ -67,22 +68,24 @@ public class GameEngine implements Observer {
 
 	// Define o mapa e atualiza automaticamente o tileList com os Valores do mapa
 
-	// Adiciona um elemento lido do ficheiro ao map e ao tileList
+	// Adiciona um elemento lido do ficheiro ao map e ao tabuleiro de jogo
 	private void addToGame(GameElement gameElement) {
 		gameMap.addElement(gameElement);
 	}
 
+	//Apaga o tabuleiro de jogo
 	private void deleteGameMap() {
 		gameMap.deleteAll();
 	}
-
+	
+	//Aumenta o score, que corresponde aos movimentos totais, em uma unidade
 	public void increaseScore() {
 		score++;
 	}
 
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
-	public void readFiles(int levelNum) {
+	private void readFiles(int levelNum) {
 		if (levelNum < 0 || levelNum > 6) {
 			throw new IllegalArgumentException("There is no level number " + levelNum);
 		}
@@ -131,13 +134,12 @@ public class GameEngine implements Observer {
 
 			// Verifica que se caso existam teleportes, eles não correspondam a um par
 			if (numTeleportes > 0 && numTeleportes != 2) {
-				throw new IllegalArgumentException("The file can only have 2");
+				throw new IllegalArgumentException("The file can only have 2 teleportes!");
 			}
 
 			sendImagesToGUI();
 			System.out.println("GUI:" + gameMap);
-			for (int i = 0; i <= 50; i++)
-				System.out.print(".");
+			System.out.println(".".repeat(50));
 			gui.update();
 
 		} catch (FileNotFoundException e) {
@@ -149,7 +151,7 @@ public class GameEngine implements Observer {
 	// Inicio
 	public void start() {
 
-//		introductionMenu();
+		introductionMenu();
 
 		// Setup inicial da janela que faz a interface com o utilizador
 		// algumas coisas poderiam ser feitas no main, mas estes passos tem sempre que
@@ -159,16 +161,13 @@ public class GameEngine implements Observer {
 		gui.registerObserver(this); // 3. registar o objeto ativo GameEngine como observador da GUI
 		gui.go(); // 4. lancar a GUI
 
-		// Criar o cenario de jogo
-//		createWarehouse(); // criar o armazem
-//		createMoreStuff();      // criar mais algun objetos (empilhadora, caixotes,...)
-//		readFiles(level);
+
 		readFiles(level);
 		sendImagesToGUI(); // enviar as imagens para a GUI
 
 		// Escrever uma mensagem na StatusBar
-		gui.setStatusMessage("Sokoban Starter | Player name:" + userName + " | level=" + level + " | Battery energy:"
-				+ bobcat.getBattery());
+		gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
+				+ "  |  " + "Movimentos:" + score);
 	}
 
 	// O metodo update() e' invocado automaticamente sempre que o utilizador carrega
@@ -191,14 +190,13 @@ public class GameEngine implements Observer {
 
 		sendImagesToGUI();
 		System.out.println("GUI:" + gameMap);
-		for (int i = 0; i <= 50; i++)
-			System.out.print(".");
+		System.out.println(".".repeat(50));
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos
 
 		// Atualiza o título da GUI
-		gui.setStatusMessage("Sokoban Starter | Player name:" + userName + " | level=" + level + " | Battery energy:"
-				+ bobcat.getBattery());
+		gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
+				+ "  |  " + "Movimentos:" + score);
 
 		winLevel();
 		loseLevel();
@@ -206,56 +204,48 @@ public class GameEngine implements Observer {
 
 	// Cria o menu de introdução que pergunta o nome ao jogador
 	public void introductionMenu() {
-//		gui = ImageMatrixGUI.getInstance();
-		gui.setMessage("Hi! Welcome to Sokoban");
-		userName = gui.askUser("What is your name?");
+		gui.setMessage("Olá! Bem-vindo ao Sokoban");
+		userName = gui.askUser("Qual é o teu nome?");
+		//Verifica se o utilizador deu um nome nulo, ou só composto por espaços
 		while (userName.isBlank()) {
-			gui.setMessage("Your name cannot be empty!");
-			userName = gui.askUser("What is your name?");
+			gui.setMessage("O teu nome tem de ser definido!");
+			userName = gui.askUser("Qual é o teu nome?");
 		}
-		System.out.println(userName);
 	}
 
 	// Método que verifica se o nível foi ganho e que no futuro irá aumentar o nível
 	public void winLevel() {
 		if (gameMap.winsLevel()) {
-			gui.setStatusMessage("You won this level!");
-			gui.setMessage("Won the level");
+			gui.setStatusMessage("Ganhaste o nível!");
+			gui.setMessage("Ganhaste o nível");
 
-			levelUp();
 			if (level == 6) {
+				registScore.addNewScore(userName, score);
 				showScores();
 				winsGame();
 			}
-//			gui.update();
+			levelUp();
 		}
 	}
-	// Método que verifica se o nível foi perdido de forma a que se for verdade o mesmo recomece
+
+	// Método que verifica se o nível foi perdido de forma a que se for verdade o
+	// mesmo recomece
 	public void loseLevel() {
 		if (gameMap.loseLevel()) {
-//			System.out.println("Loose level");
-			gui.setMessage("You lost this level!");
+			gui.setMessage("Perdeste o nível!");
 			restartLevel();
 		}
 	}
 
 	public void levelUp() {
-		if (level >= 0 && level + 1 < 6) {
+		if (level >= 0 && level + 1 <= 6) {
 			level++;
 			deleteGameMap();
 			readFiles(level);
-
-		} else {
-
-			// Significa que o utilizador ganhou o jogou
-			// Escreve as pontuações no ficheiro "levels/scores.txt"
-			Score registScore = Score.getInstance();
-			registScore.addNewScore(userName, score);
-
 		}
 	}
 
-	// mostrar os resultados numa janela a parte
+	// mostrar os resultados na gui, referindo ao utilizador o seu rank
 	public void showScores() {
 		String message = "";
 		int rank = registScore.getRank(userName, score);
@@ -287,10 +277,10 @@ public class GameEngine implements Observer {
 		deleteGameMap();
 		readFiles(level);
 	}
-	
+
 	public void winsGame() {
 		gui.setStatusMessage("Ganhaste o jogo!!!");
-		gui.setMessage("Ganhaste o jogo");
+		gui.setMessage("Ganhaste o jogo!");
 		gui.dispose();
 	}
 

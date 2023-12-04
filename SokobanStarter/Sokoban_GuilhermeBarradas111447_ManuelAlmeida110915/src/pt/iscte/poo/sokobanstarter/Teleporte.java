@@ -12,42 +12,50 @@ public class Teleporte extends GameElement {
 		super(position, imageName, 0);
 		super.setTransposable(true);
 	}
-	
+
+	// Obter o outro teleporte par
 	public Teleporte getOtherTeleporte() {
-		
-		//Obter todos os Teleportes que se encontram no mapa
-		List<GameElement> elements = super.gameEngine.gameMap.getAllGameElement(this);
-//		System.out.println("Teleportes:"+elements);
+		// Obter todos os Teleportes que se encontram no mapa
+		List<GameElement> elements = super.gameEngine.gameMap.getAllOfTheseGameElement(this);
 		Teleporte teleportePar = null;
-		//Obter o teleporte par
-		for(GameElement actual:elements) {
-			if(!(actual.getPosition().equals(super.getPosition()))) {
-				teleportePar=((Teleporte)actual);
+		// Obter o teleporte par
+		for (GameElement actual : elements) {
+			if (!(actual.getPosition().equals(super.getPosition()))) {
+				teleportePar = ((Teleporte) actual);
 				break;
 			}
 		}
-		
-//		System.out.println("Teleporte par:"+teleportePar);
-
 		return teleportePar;
 	}
-	
-	public boolean isAvaible() {
-		//Obter elementos que se ocupam o teleporte par
+
+	// Saber se o teleporte está disponível, ou seja, se não existe nenhum
+	// GameElement isTranposable na mesma posição que ele
+	public boolean isAvailable() {
+		// Obter elementos que se ocupam o teleporte par
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(super.getPosition());
-		System.out.println("Teleporte position elements:"+elements);
-		for(GameElement actual:elements) {
-			if(!actual.getTransposable()) {
+		for (GameElement actual : elements) {
+			if (!actual.getTransposable()) {
 				return false;
 			}
 		}
-		System.out.println("isAvaible:True");
 		return true;
 	}
 	
-	public void teleportElement(GameElement gameElement) {
-	
+	public void teleporte(GameElement gameElement, Point2D teleportePos) {
+		System.out.println("");
+		System.out.println("Teleport func");
+		Teleporte teleporte = new Teleporte(teleportePos);
+		Teleporte otherTeleporte = teleporte.getOtherTeleporte();
+		System.out.println("otherTeleporte:" + otherTeleporte);
+		System.out.println("GameElement to teleporte:"+gameElement);
+
+		if (otherTeleporte.isAvailable()) {
+			super.gameEngine.gameMap.updateElementPosition(gameElement, otherTeleporte.getPosition());
+			System.out.println("Teleported");
+		} else {
+			super.gameEngine.gameMap.updateElementPosition(gameElement, teleportePos);
+			System.out.println("Was not teleported");
+		}
 	}
-	
 
 }
