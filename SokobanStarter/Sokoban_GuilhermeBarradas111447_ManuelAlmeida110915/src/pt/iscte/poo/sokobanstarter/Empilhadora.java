@@ -59,39 +59,30 @@ public class Empilhadora extends Movable {
 
 		// Calcula o nova posição da empilhadora
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
-
 		// Obtém uma lista com os objetos existentes na posição seguinte
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-
-		GameElement next = null;
-
-		//TODO Adicionar um break em cada if
+		
+		GameElement element = null;
 		for (GameElement actual : elements) {
 			if (actual instanceof Catchable) {
-				next = actual;
-			} 
-//			else if (actual instanceof Movable) {
-//				next = actual;
-//			} 
-			else if (actual instanceof ParedeRachada && hasMartelo == true) {
-				next = actual;
-			}
-
-		}
-
-		if (next != null) {
-			if (next instanceof Catchable) {
-				((Catchable) next).catchElement();
-			}
-//			if (next instanceof Movable && !next.getTransposable()) {
-//				System.out.println("Movable:"+next);
-//				((Movable) next).move(direction);
-//				System.out.println("Fi");
-//			}
-			if (next instanceof ParedeRachada) {
-				((ParedeRachada) next).breakElement();
+				element=actual;
+				
+			} else if (actual instanceof ParedeRachada && hasMartelo == true) {
+				element=actual;
+				
+			} else if(actual instanceof Movable) {
+				element=actual;
 			}
 		}
+		if(element!=null) {
+			if(element instanceof Movable)
+				((Movable)element).move(direction);
+			if(element instanceof Catchable)
+				((Catchable)element).catchElement();
+			if(element instanceof ParedeRachada)
+				((ParedeRachada)element).breakElement();
+		}
+			
 
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora
 		super.move(direction);

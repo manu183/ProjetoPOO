@@ -58,7 +58,7 @@ public abstract class Movable extends GameElement {
 	protected void move(Direction direction) {
 		// Calcular a nova posição
 		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
-		checkMovablesToMove(direction);
+//		checkMovablesToMove(direction);
 		// Verifica através da função isValidMove se o objeto se pode mover
 		if (isValidMove(nextPosition)) {
 			if (!(this instanceof Palete) && super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition))
