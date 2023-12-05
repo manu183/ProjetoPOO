@@ -88,7 +88,7 @@ public class Empilhadora extends Movable {
 			if(element instanceof Catchable)
 				((Catchable)element).catchElement();
 			if(element instanceof ParedeRachada)
-				((ParedeRachada)element).breakElement();
+				((Interectable)element).interact(this, nextPosition);;
 		}
 
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora

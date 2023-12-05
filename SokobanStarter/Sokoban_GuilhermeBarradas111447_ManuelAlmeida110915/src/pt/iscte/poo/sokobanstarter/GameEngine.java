@@ -53,7 +53,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 0;
+		this.level = 6;
 		this.score = 0;
 		this.userName = "NOT_DEFINED";
 		this.registScore = Score.getInstance();
@@ -189,7 +189,7 @@ public class GameEngine implements Observer {
 		}
 
 		sendImagesToGUI();
-		System.out.println("GUI:" + gameMap);
+		System.out.println("GUI:" + gameMap.convertToArrayList());
 		System.out.println(".".repeat(50));
 		gui.update(); // redesenha a lista de ImageTiles na GUI,
 						// tendo em conta as novas posicoes dos objetos

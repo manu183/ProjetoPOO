@@ -4,7 +4,7 @@ import java.util.List;
 
 import pt.iscte.poo.utils.Point2D;
 
-public class Teleporte extends GameElement {
+public class Teleporte extends Interectable {
 
 	private static final String imageName = "Teleporte";
 
@@ -41,10 +41,10 @@ public class Teleporte extends GameElement {
 		return true;
 	}
 	
-	public void teleporte(GameElement gameElement, Point2D teleportePos) {
+	public void teleporte(GameElement gameElement, Point2D nextPosition) {
 		System.out.println("");
 		System.out.println("Teleport func");
-		Teleporte teleporte = new Teleporte(teleportePos);
+		Teleporte teleporte = new Teleporte(nextPosition);
 		Teleporte otherTeleporte = teleporte.getOtherTeleporte();
 		System.out.println("otherTeleporte:" + otherTeleporte);
 		System.out.println("GameElement to teleporte:"+gameElement);
@@ -53,9 +53,16 @@ public class Teleporte extends GameElement {
 			super.gameEngine.gameMap.updateElementPosition(gameElement, otherTeleporte.getPosition());
 			System.out.println("Teleported");
 		} else {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, teleportePos);
+			super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
 			System.out.println("Was not teleported");
 		}
+	}
+
+	@Override
+	public void interact(GameElement gameElement, Point2D nextPosition) {
+//		// TODO Auto-generated method stub
+		teleporte(gameElement,nextPosition);
+		
 	}
 
 }

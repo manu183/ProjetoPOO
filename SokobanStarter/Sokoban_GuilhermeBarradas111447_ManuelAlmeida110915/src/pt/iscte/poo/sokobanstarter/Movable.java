@@ -36,17 +36,47 @@ public abstract class Movable extends GameElement {
 		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
 		// Verifica através da função isValidMove se o objeto se pode mover
 		if (isValidMove(nextPosition)) {
-			if (!(this instanceof Palete) && super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition))
-					&& !super.gameEngine.gameMap.containsOnPosition(new Palete(nextPosition))) {
-				// Como o elemento cai num buraco o mesmo desaparece
-				super.removeElement();
+			List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
+			GameElement next=null;
+			for(GameElement actual:elements) {
+				if(actual instanceof Teleporte) {
+					next=actual;
+				}
+				if(actual instanceof Buraco) {
+					next=actual;
+				}
 			}
+			if(next!=null) {
+				System.out.println("Next:"+next);
+				if(next instanceof Teleporte) {
+					((Interectable)next).interact(this, nextPosition);
+				}
+				if(next instanceof Buraco) {
+					System.out.println("Buraco!!!!!!");
+					((Interectable)next).interact(this, nextPosition);
+//					Buraco buraco= new Buraco(nextPosition);
+//					buraco.interact(next, nextPosition);
+//					if (!(this instanceof Palete) && super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition))
+//							&& !super.gameEngine.gameMap.containsOnPosition(new Palete(nextPosition))) {
+//						// Como o elemento cai num buraco o mesmo desaparece
+//						super.removeElement();
+//					}else {
+//						super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
+//					}
+				}
+			}
+//			else if (!(this instanceof Palete) && super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition))
+//					&& !super.gameEngine.gameMap.containsOnPosition(new Palete(nextPosition))) {
+//				// Como o elemento cai num buraco o mesmo desaparece
+//				super.removeElement();
+//			}
 			// Verificamos o caso de quando a próxima posição é um teleporte
-			else if (super.gameEngine.gameMap.containsOnPosition(new Teleporte(nextPosition))) {
-				Teleporte teleporte = new Teleporte(nextPosition);
-				teleporte.teleporte(this, nextPosition);
-
-			} else {
+//			else if (super.gameEngine.gameMap.containsOnPosition(new Teleporte(nextPosition))) {
+//				Teleporte teleporte = new Teleporte(nextPosition);
+//				teleporte.teleporte(this, nextPosition);
+//
+//			} 
+			else {
 				System.out.println("Move pelo update");
 				// Atualiza o elemento no mapa de jogo
 				super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
