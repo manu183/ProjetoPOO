@@ -22,14 +22,15 @@ public class Palete extends Movable {
 		System.out.println("Contains buraco:" + containsBuraco);
 
 		if(super.getTransposable()) {
-			System.out.println("Esta palete não voltará a se mexer mais");
+			System.out.println("Esta palete não se deve mexer mais");
 		}else {
+			System.out.println("Esta palete deve-se mexer");
 			if(containsBuraco) {
 				if(!alreadyExistsPalete(nextPosition)) {
 					super.setTransposable(true);
 				}
 			}
-			super.move(direction);
+			super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
 		}
 
 		

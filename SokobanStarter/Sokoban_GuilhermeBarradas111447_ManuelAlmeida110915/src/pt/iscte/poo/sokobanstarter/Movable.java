@@ -30,35 +30,10 @@ public abstract class Movable extends GameElement {
         return true;
     }
 	
-	protected void checkMovablesToMove(Direction direction) {
-		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
-		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-
-		GameElement next = null;
-
-		//TODO Adicionar um break em cada if
-		for (GameElement actual : elements) {
-			if (actual instanceof Movable) {
-				if(!actual.getTransposable()) {
-					next = actual;					
-				}
-			}
-
-		}
-
-		if (next != null) {
-			if (next instanceof Movable && !next.getTransposable()) {
-				System.out.println("Movable:"+next);
-				((Movable) next).move(direction);
-				System.out.println("Fi");
-			}
-		}
-	}
 	
 	protected void move(Direction direction) {
 		// Calcular a nova posição
 		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
-//		checkMovablesToMove(direction);
 		// Verifica através da função isValidMove se o objeto se pode mover
 		if (isValidMove(nextPosition)) {
 			if (!(this instanceof Palete) && super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition))
@@ -72,6 +47,7 @@ public abstract class Movable extends GameElement {
 				teleporte.teleporte(this, nextPosition);
 
 			} else {
+				System.out.println("Move pelo update");
 				// Atualiza o elemento no mapa de jogo
 				super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
 			}

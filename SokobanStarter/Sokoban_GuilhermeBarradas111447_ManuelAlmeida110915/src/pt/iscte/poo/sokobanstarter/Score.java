@@ -98,7 +98,9 @@ public class Score {
 	        int actualScore = Integer.parseInt(now[1]);
 
 	        if (now[0].equals(userName) && actualScore == score) {
-	            return index;
+	            if(index<=SCORES_TO_WRITE) {
+	            	return index;
+	            }
 	        }
 	        index++;
 	    }

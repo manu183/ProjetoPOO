@@ -53,7 +53,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 6;
+		this.level = 0;
 		this.score = 0;
 		this.userName = "NOT_DEFINED";
 		this.registScore = Score.getInstance();
@@ -216,15 +216,17 @@ public class GameEngine implements Observer {
 	// Método que verifica se o nível foi ganho e que no futuro irá aumentar o nível
 	public void winLevel() {
 		if (gameMap.winsLevel()) {
-			gui.setStatusMessage("Ganhaste o nível!");
-			gui.setMessage("Ganhaste o nível");
-
 			if (level == 6) {
+				gui.setStatusMessage("Ganhaste o jogo!!!");
+				gui.setMessage("Ganhaste o jogo!");
+				winsGame();
 				registScore.addNewScore(userName, score);
 				showScores();
-				winsGame();
+			}else {
+				gui.setStatusMessage("Ganhaste o nível!");
+				gui.setMessage("Ganhaste o nível!");
+				levelUp();
 			}
-			levelUp();
 		}
 	}
 
@@ -235,11 +237,17 @@ public class GameEngine implements Observer {
 			gui.setMessage("Perdeste o nível!");
 			restartLevel();
 		}
+		if (bobcat.getBattery()<=0) {
+			gui.setMessage("Ficaste sem bateria!");
+			restartLevel();
+		}
 	}
 
 	public void levelUp() {
 		if (level >= 0 && level + 1 <= 6) {
 			level++;
+			gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
+			+ "  |  " + "Movimentos:" + score);
 			deleteGameMap();
 			readFiles(level);
 		}
@@ -253,7 +261,7 @@ public class GameEngine implements Observer {
 		if (rank != -1) {
 			message += "Parabéns!!! Ficaste no rank " + rank + "\n";
 		} else {
-			message += "Não ficaste no top5. Tenta outra vez!\n";
+			message += "Não ficaste no top 5. Tenta outra vez!\n";
 		}
 		message += "Melhores resultados:\n";
 
@@ -279,8 +287,6 @@ public class GameEngine implements Observer {
 	}
 
 	public void winsGame() {
-		gui.setStatusMessage("Ganhaste o jogo!!!");
-		gui.setMessage("Ganhaste o jogo!");
 		gui.dispose();
 	}
 
