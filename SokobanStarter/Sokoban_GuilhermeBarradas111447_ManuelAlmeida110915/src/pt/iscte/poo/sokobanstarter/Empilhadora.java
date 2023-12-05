@@ -61,34 +61,32 @@ public class Empilhadora extends Movable {
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
 		// Obtém uma lista com os objetos existentes na posição seguinte
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-		System.out.println("Elements at nextPosition:"+elements);
 		GameElement element = null;
 		for (GameElement actual : elements) {
 			if (actual instanceof Catchable) {
-				element=actual;
+				element = actual;
 				break;
-				
+
 			} else if (actual instanceof ParedeRachada && hasMartelo == true) {
-				element=actual;
+				element = actual;
 				break;
-				
-			} else if(actual instanceof Movable && !actual.getTransposable()) {
-				System.out.println("To move:"+actual);
-				element=actual;
+
+			} else if (actual instanceof Movable && !actual.getTransposable()) {
+				System.out.println("To move:" + actual);
+				element = actual;
 				break;
 			}
 		}
-		if(element!=null) {
-			if(element instanceof Movable) {
-				((Movable)element).move(direction);
-				System.out.println("After move:"+element);
-				elements=super.gameEngine.gameMap.getElementsAt(nextPosition);
-				System.out.println("After move:"+elements);
+		if (element != null) {
+			if (element instanceof Movable) {
+				((Movable) element).move(direction);
+				elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
 			}
-			if(element instanceof Catchable)
-				((Catchable)element).catchElement();
-			if(element instanceof ParedeRachada)
-				((Interectable)element).interact(this, nextPosition);;
+			if (element instanceof Catchable)
+				((Catchable) element).catchElement();
+			if (element instanceof ParedeRachada)
+				((Interectable) element).interact(this, nextPosition);
+			;
 		}
 
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora

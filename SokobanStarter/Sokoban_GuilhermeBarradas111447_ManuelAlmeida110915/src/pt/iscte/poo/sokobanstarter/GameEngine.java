@@ -35,7 +35,8 @@ public class GameEngine implements Observer {
 	private static GameEngine INSTANCE; // Referencia para o unico objeto GameEngine (singleton)
 	private ImageMatrixGUI gui; // Referencia para ImageMatrixGUI (janela de interface com o utilizador)
 	public Empilhadora bobcat; // Referencia para a empilhadora
-
+	
+	private static final int MAX_LEVELS=6;
 	// Guarda as posições de cada elemento numa classe GameMap baseada num HashMap
 	public GameMap gameMap;
 	// Guarda o nível atual do jogador
@@ -53,7 +54,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 6;
+		this.level = 5;
 		this.score = 0;
 		this.userName = "NOT_DEFINED";
 		this.registScore = Score.getInstance();
@@ -86,7 +87,7 @@ public class GameEngine implements Observer {
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
 	private void readFiles(int levelNum) {
-		if (levelNum < 0 || levelNum > 6) {
+		if (levelNum < 0 || levelNum > MAX_LEVELS) {
 			throw new IllegalArgumentException("There is no level number " + levelNum);
 		}
 		// Define todos os elementos do gameMap como chão por defeito
@@ -178,28 +179,36 @@ public class GameEngine implements Observer {
 	public void update(Observed source) {
 
 		int key = gui.keyPressed(); // obtem o codigo da tecla pressionada
+		
+		//Verifica se o key é aceite
+		if(AcceptedKeys.isAcceptedKey(key)) {
+			if (key == KeyEvent.VK_SPACE) {
+				restartLevel();
+			} else {
+				Direction direction = Direction.directionFor(key);
+				bobcat.move(direction);
 
-		if (key == KeyEvent.VK_SPACE) {
-			restartLevel();
-		} else {
-			Direction direction = Direction.directionFor(key);
+			}
+			sendImagesToGUI();
+			System.out.println("GUI:" + gameMap.convertToArrayList());
+			System.out.println(".".repeat(50));
+			gui.update(); // redesenha a lista de ImageTiles na GUI,
+							// tendo em conta as novas posicoes dos objetos
 
-			bobcat.move(direction);
+			// Atualiza o título da GUI
+			gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
+					+ "  |  " + "Movimentos:" + score);
 
+			winLevel();
+			loseLevel();
+			
+			
+		}else {
+			gui.setMessage("Essa tecla não é aceite");
 		}
+		
 
-		sendImagesToGUI();
-		System.out.println("GUI:" + gameMap.convertToArrayList());
-		System.out.println(".".repeat(50));
-		gui.update(); // redesenha a lista de ImageTiles na GUI,
-						// tendo em conta as novas posicoes dos objetos
-
-		// Atualiza o título da GUI
-		gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
-				+ "  |  " + "Movimentos:" + score);
-
-		winLevel();
-		loseLevel();
+		
 	}
 
 	// Cria o menu de introdução que pergunta o nome ao jogador
@@ -216,7 +225,7 @@ public class GameEngine implements Observer {
 	// Método que verifica se o nível foi ganho e que no futuro irá aumentar o nível
 	public void winLevel() {
 		if (gameMap.winsLevel()) {
-			if (level == 6) {
+			if (level == MAX_LEVELS) {
 				gui.setStatusMessage("Ganhaste o jogo!!!");
 				gui.setMessage("Ganhaste o jogo!");
 				winsGame();
@@ -244,7 +253,7 @@ public class GameEngine implements Observer {
 	}
 
 	public void levelUp() {
-		if (level >= 0 && level + 1 <= 6) {
+		if (level >= 0 && level + 1 <= MAX_LEVELS) {
 			level++;
 			gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
 			+ "  |  " + "Movimentos:" + score);

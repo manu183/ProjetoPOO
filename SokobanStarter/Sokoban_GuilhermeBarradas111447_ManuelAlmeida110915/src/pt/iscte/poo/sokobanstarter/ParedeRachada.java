@@ -11,15 +11,12 @@ public class ParedeRachada extends Interectable {
 	}
 
 	@Override
-	public void interact(GameElement gameElement,Point2D nextPosition) {
-		if(gameElement instanceof Empilhadora) {
-			if(((Empilhadora) gameElement).hasMartelo())
+	public void interact(GameElement gameElement, Point2D nextPosition) {
+		if (gameElement instanceof Empilhadora) {
+			if (((Empilhadora) gameElement).hasMartelo())
 				super.removeElement();
 		}
-		
-	}
-	
 
-	
+	}
 
 }

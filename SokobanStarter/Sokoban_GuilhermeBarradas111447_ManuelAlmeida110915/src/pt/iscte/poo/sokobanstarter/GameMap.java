@@ -3,7 +3,6 @@ package pt.iscte.poo.sokobanstarter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +63,7 @@ public class GameMap implements Comparator<Point2D> {
 	public void removeElement(GameElement gameElement) {
 		// Obter a posição de gameElement
 		Point2D position = gameElement.getPosition();
-		
+
 		List<GameElement> elements = map.get(position);
 
 		if (elements != null) {

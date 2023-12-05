@@ -19,21 +19,17 @@ public class Palete extends Movable {
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
 		boolean containsBuraco = super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition));
-		System.out.println("Contains buraco:" + containsBuraco);
 
-		if(super.getTransposable()) {
-			System.out.println("Esta palete não se deve mexer mais");
-		}else {
-			System.out.println("Esta palete deve-se mexer");
-			if(containsBuraco) {
-				if(!alreadyExistsPalete(nextPosition)) {
+		if (super.getTransposable()) {
+		} else {
+			if (containsBuraco) {
+				if (!alreadyExistsPalete(nextPosition)) {
 					super.setTransposable(true);
 				}
 			}
-			super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
+			super.move(direction);
 		}
 
-		
 	}
 
 	private boolean alreadyExistsPalete(Point2D position) {

@@ -31,8 +31,8 @@ public class Score {
 			return INSTANCE = new Score();
 		return INSTANCE;
 	}
-	
-	//Implementação da classe interna User
+
+	// Implementação da classe interna User
 	private class User {
 		private final String userName;
 		private final int score;
@@ -73,8 +73,8 @@ public class Score {
 			return userName + " " + score;
 		}
 	}
-	
-	//Adicionar um novo registo
+
+	// Adicionar um novo registo
 	public void addNewScore(String userName, int score) {
 		if (file.exists()) {
 			System.out.println("File exists");
@@ -85,28 +85,27 @@ public class Score {
 		add(new User(userName, score));
 		writeScoreFile();
 	}
-	
+
 	public int getRank(String userName, int score) {
-	    List<String> sortedScores = sortScores();
-	    System.out.println("GETRANK:");
-	    System.out.println(sortedScores);
+		List<String> sortedScores = sortScores();
+		System.out.println("GETRANK:");
+		System.out.println(sortedScores);
 
-	    int index = 1;
-	    for (String actual : sortedScores) {
-	        String[] now = actual.split(" ");
+		int index = 1;
+		for (String actual : sortedScores) {
+			String[] now = actual.split(" ");
 
-	        int actualScore = Integer.parseInt(now[1]);
+			int actualScore = Integer.parseInt(now[1]);
 
-	        if (now[0].equals(userName) && actualScore == score) {
-	            if(index<=SCORES_TO_WRITE) {
-	            	return index;
-	            }
-	        }
-	        index++;
-	    }
-	    return -1;
+			if (now[0].equals(userName) && actualScore == score) {
+				if (index <= SCORES_TO_WRITE) {
+					return index;
+				}
+			}
+			index++;
+		}
+		return -1;
 	}
-
 
 	private void readScoreFile() {
 		try (Scanner scanner = new Scanner(file)) {

@@ -40,29 +40,23 @@ public class Teleporte extends Interectable {
 		}
 		return true;
 	}
-	
+
 	public void teleporte(GameElement gameElement, Point2D nextPosition) {
-		System.out.println("");
-		System.out.println("Teleport func");
 		Teleporte teleporte = new Teleporte(nextPosition);
 		Teleporte otherTeleporte = teleporte.getOtherTeleporte();
-		System.out.println("otherTeleporte:" + otherTeleporte);
-		System.out.println("GameElement to teleporte:"+gameElement);
 
 		if (otherTeleporte.isAvailable()) {
 			super.gameEngine.gameMap.updateElementPosition(gameElement, otherTeleporte.getPosition());
-			System.out.println("Teleported");
 		} else {
 			super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
-			System.out.println("Was not teleported");
 		}
 	}
 
 	@Override
 	public void interact(GameElement gameElement, Point2D nextPosition) {
 //		// TODO Auto-generated method stub
-		teleporte(gameElement,nextPosition);
-		
+		teleporte(gameElement, nextPosition);
+
 	}
 
 }
