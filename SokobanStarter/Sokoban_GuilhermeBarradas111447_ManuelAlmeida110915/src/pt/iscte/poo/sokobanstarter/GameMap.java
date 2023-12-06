@@ -45,7 +45,7 @@ public class GameMap implements Comparator<Point2D> {
 
 //				System.out.println("Element added successfully at position: " + position);
 			} else {
-//				System.err.println("Element already exists at the specified position.");
+				System.out.println("Element already exists at the specified position.");
 			}
 		} else {
 			// Criamos uma nova lista elements
