@@ -2,7 +2,7 @@ package pt.iscte.poo.sokobanstarter;
 
 import pt.iscte.poo.utils.Point2D;
 
-public class Buraco extends Interectable {
+public class Buraco extends GameElement implements Interectable {
 
 	public static final String imageName = "Buraco";
 
@@ -14,9 +14,10 @@ public class Buraco extends Interectable {
 	@Override
 	public void interact(GameElement gameElement, Point2D nextPosition) {
 		Palete palete = new Palete(nextPosition);
-		if (!(gameElement instanceof Palete) && super.gameEngine.gameMap.containsOnPosition(palete)) {
+		if (!(gameElement instanceof Palete) && !super.gameEngine.gameMap.containsOnPosition(palete)) {
 			System.out.println("Existe uma palete no buraco");
-			super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
+			gameElement.removeElement();
+//			super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
 		} else {
 			super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
 		}

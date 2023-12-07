@@ -88,6 +88,8 @@ public abstract class GameElement implements ImageTile {
 			return new ParedeRachada(position);
 		case 'T':
 			return new Teleporte(position);
+		case 'S':
+			return new Sorteio(position);
 		default:
 			throw new IllegalArgumentException("Unrecognized key '" + key + "' for creating GameElement element");
 		}

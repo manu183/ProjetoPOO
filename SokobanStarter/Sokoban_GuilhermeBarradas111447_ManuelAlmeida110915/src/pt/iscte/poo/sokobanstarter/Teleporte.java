@@ -4,7 +4,7 @@ import java.util.List;
 
 import pt.iscte.poo.utils.Point2D;
 
-public class Teleporte extends Interectable {
+public class Teleporte extends GameElement implements Interectable  {
 
 	private static final String imageName = "Teleporte";
 
@@ -48,7 +48,7 @@ public class Teleporte extends Interectable {
 		if (otherTeleporte.isAvailable()) {
 			super.gameEngine.gameMap.updateElementPosition(gameElement, otherTeleporte.getPosition());
 		} else {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
+			super.gameEngine.gameMap.updateElementPosition(gameElement, this.getPosition());
 		}
 	}
 

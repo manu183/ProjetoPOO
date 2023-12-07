@@ -34,25 +34,21 @@ public abstract class Movable extends GameElement {
 		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
 		// Verifica através da função isValidMove se o objeto se pode mover
 		if (isValidMove(nextPosition)) {
+			System.out.println("Movimento válido");
 			List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
+			
 			GameElement next = null;
 			for (GameElement actual : elements) {
-				if (actual instanceof Teleporte) {
+				if (actual instanceof Interectable) {
 					next = actual;
-				}
-				if (actual instanceof Buraco) {
-					next = actual;
-				}
+				} 
 			}
 			if (next != null) {
-				System.out.println("Next:" + next);
-				if (next instanceof Teleporte) {
+				if(next instanceof Interectable) {
+					System.out.println("Interectable detected!!!!!");
 					((Interectable) next).interact(this, nextPosition);
 				}
-				if (next instanceof Buraco) {
-					System.out.println("Buraco!!!!!!");
-					((Interectable) next).interact(this, nextPosition);
-				}
+				
 			}
 
 			else {

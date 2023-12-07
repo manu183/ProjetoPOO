@@ -36,7 +36,7 @@ public class GameEngine implements Observer {
 	private ImageMatrixGUI gui; // Referencia para ImageMatrixGUI (janela de interface com o utilizador)
 	public Empilhadora bobcat; // Referencia para a empilhadora
 	
-	private static final int MAX_LEVELS=6;
+	private static final int MAX_LEVELS=7;
 	// Guarda as posições de cada elemento numa classe GameMap baseada num HashMap
 	public GameMap gameMap;
 	// Guarda o nível atual do jogador
@@ -54,7 +54,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 0;
+		this.level = 5;
 		this.score = 0;
 		this.userName = "NOT_DEFINED";
 		this.registScore = Score.getInstance();
@@ -134,9 +134,9 @@ public class GameEngine implements Observer {
 			scanner.close();
 
 			// Verifica que se caso existam teleportes, eles não correspondam a um par
-			if (numTeleportes > 0 && numTeleportes != 2) {
-				throw new IllegalArgumentException("The file can only have 2 teleportes!");
-			}
+//			if (numTeleportes > 0 && numTeleportes != 2) {
+//				throw new IllegalArgumentException("The file can only have 2 teleportes!");
+//			}
 
 			sendImagesToGUI();
 			System.out.println("GUI:" + gameMap);
