@@ -4,7 +4,7 @@ import java.util.List;
 
 import pt.iscte.poo.utils.Point2D;
 
-public class Teleporte extends GameElement implements Interectable  {
+public class Teleporte extends GameElement implements Interectable {
 
 	private static final String imageName = "Teleporte";
 
@@ -45,19 +45,25 @@ public class Teleporte extends GameElement implements Interectable  {
 		Teleporte teleporte = new Teleporte(nextPosition);
 		Teleporte otherTeleporte = teleporte.getOtherTeleporte();
 
-		gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
-		if (otherTeleporte.isAvailable()) {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, otherTeleporte.getPosition());
-		} 
-		else {
-			System.out.println(gameElement.getName() +" não se pode mexer porque existe um outro GameElement na posição do outro teleporte");
+		if (((Movable) gameElement).isValidMove(nextPosition)) {
+			if (otherTeleporte.isAvailable()) {
+				super.gameEngine.gameMap.updateElementPosition(gameElement, otherTeleporte.getPosition());
+
+			} else {
+				gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
+				System.out.println(gameElement.getName()
+						+ " não se pode mexer porque existe um outro GameElement na posição do outro teleporte");
+			}
+		}else {
+			System.err.println("Not possible to move!");
 		}
+
 	}
 
 	@Override
-	public void interact(GameElement gameElement, Point2D nextPosition) {
+	public void interact(GameElement gameElement) {
 //		// TODO Auto-generated method stub
-		teleporte(gameElement, nextPosition);
+		teleporte(gameElement, super.getPosition());
 
 	}
 

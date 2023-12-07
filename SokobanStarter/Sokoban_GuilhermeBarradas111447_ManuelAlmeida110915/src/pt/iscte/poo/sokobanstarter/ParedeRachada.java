@@ -11,16 +11,17 @@ public class ParedeRachada extends GameElement implements Interectable {
 	}
 
 	@Override
-	public void interact(GameElement gameElement, Point2D nextPosition) {
+	public void interact(GameElement gameElement) {
 		if (gameElement instanceof Empilhadora) {
 			if (((Empilhadora) gameElement).hasMartelo()) {
-//				gui.setMessage("É empilhadora e tem martelo");
 				this.removeElement();
-				super.gameEngine.gameMap.updateElementPosition(gameElement, this.getPosition());
+
 			}
 
 		}
 
 	}
+
+	
 
 }

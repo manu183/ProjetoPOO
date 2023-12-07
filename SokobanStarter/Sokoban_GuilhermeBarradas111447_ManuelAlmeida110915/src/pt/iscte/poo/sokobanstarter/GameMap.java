@@ -81,9 +81,16 @@ public class GameMap implements Comparator<Point2D> {
 
 	// Função para atualizar a posição de um objeto GameElement no tabuleiro de jogo
 	public void updateElementPosition(GameElement gameElement, Point2D newPosition) {
-		removeElement(gameElement);
-		gameElement.setPosition(newPosition);
-		addElement(gameElement);
+		if(exists(gameElement)) {
+			removeElement(gameElement);
+			gameElement.setPosition(newPosition);
+			addElement(gameElement);			
+		}else {
+			System.err.println("This GameElement cannot be updated since it doesn't exists!");
+		}
+//		removeElement(gameElement);
+//		gameElement.setPosition(newPosition);
+//		addElement(gameElement);
 	}
 
 	public void deleteAll() {
@@ -111,7 +118,7 @@ public class GameMap implements Comparator<Point2D> {
 	}
 
 	// Função que verifica se existe um certo objeto
-	public boolean containsOnPosition(GameElement gameElement) {
+	public boolean exists(GameElement gameElement) {
 		List<GameElement> elements = getElementsAt(gameElement.getPosition());
 		for (GameElement actual : elements) {
 			if (actual.getClass().equals(gameElement.getClass())) {
@@ -136,7 +143,7 @@ public class GameMap implements Comparator<Point2D> {
 		}
 		// Verificar se existe algum posição alvo que não contém um caixote
 		for (Point2D actual : target_positions) {
-			if (!containsOnPosition(new Caixote(actual))) {
+			if (!exists(new Caixote(actual))) {
 				res = false;
 			}
 		}

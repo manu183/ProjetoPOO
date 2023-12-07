@@ -4,6 +4,6 @@ import pt.iscte.poo.utils.Point2D;
 
 public interface Interectable{
 
-	public void interact(GameElement gameElement, Point2D nextPosition) ;
+	public void interact(GameElement gameElement) ;
 
 }

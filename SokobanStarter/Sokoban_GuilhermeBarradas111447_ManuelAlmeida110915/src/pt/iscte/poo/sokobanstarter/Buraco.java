@@ -12,14 +12,18 @@ public class Buraco extends GameElement implements Interectable {
 	}
 
 	@Override
-	public void interact(GameElement gameElement, Point2D nextPosition) {
-		Palete palete = new Palete(nextPosition);
-		if (!(gameElement instanceof Palete) && !super.gameEngine.gameMap.containsOnPosition(palete)) {
+	public void interact(GameElement gameElement) {
+		System.out.println("Buraco!!!!!");
+		Palete palete = new Palete(super.getPosition());
+		if (!(gameElement instanceof Palete) && !super.gameEngine.gameMap.exists(palete)) {
 			System.out.println("Existe uma palete no buraco");
 			gameElement.removeElement();
-//			super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
-		} else {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
+			System.out.println("Should have removed "+gameElement);
+		} 
+		else {
+			super.gameEngine.gameMap.updateElementPosition(gameElement, super.getPosition());
 		}
 	}
+
+	
 }

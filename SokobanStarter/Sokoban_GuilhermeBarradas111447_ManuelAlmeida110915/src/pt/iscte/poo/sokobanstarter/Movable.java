@@ -45,7 +45,7 @@ public abstract class Movable extends GameElement {
 		if (next != null) {
 			if (next instanceof Interectable) {
 				System.out.println("Interectable detected!!!!!");
-				((Interectable) next).interact(this, nextPosition);
+				((Interectable) next).interact(this);
 			}
 
 		}

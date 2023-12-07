@@ -14,7 +14,7 @@ public class Score {
 	private File file;
 
 	// Guarda o número de scores que o ficheiro deve guardar
-	private static final int SCORES_TO_WRITE = 5;
+	private static final int SCORES_TO_WRITE = 3;
 
 	private static Score INSTANCE;
 	private Map<Integer, List<User>> scores;

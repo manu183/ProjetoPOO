@@ -22,14 +22,17 @@ public class Sorteio extends GameElement implements Interectable{
 	}
 
 	@Override
-	public void interact(GameElement gameElement, Point2D nextPosition) {
+	public void interact(GameElement gameElement) {
 		// TODO Auto-generated method stub
 		System.out.println("Sorteio!!!!!!!!!");
 		if(gameElement instanceof Empilhadora) {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, this.getPosition());
+			super.gameEngine.gameMap.updateElementPosition(gameElement, super.getPosition());
+			//Chama-se a gui de modo a que a tela de jogo atualiza antes de ser mostrada a tela do sorteio
+			super.gui.update();
 			sortBattery();			
 		}
-//		super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
 	}
+
+	
 
 }

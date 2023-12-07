@@ -17,27 +17,25 @@ public class Palete extends Movable {
 	@Override
 	public void move(Direction direction) {
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
-		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-		boolean containsBuraco = super.gameEngine.gameMap.containsOnPosition(new Buraco(nextPosition));
+		boolean containsBuraco = super.gameEngine.gameMap.exists(new Buraco(nextPosition));
 
-		if (super.getTransposable()) {
-		} else {
+		if (!super.getTransposable()){
 			if (containsBuraco) {
 				if (!alreadyExistsPalete(nextPosition)) {
 					super.setTransposable(true);
 				}
 			}
-			super.move(direction);
 		}
+		super.move(direction);
 
 	}
 
 	private boolean alreadyExistsPalete(Point2D position) {
-		return super.gameEngine.gameMap.containsOnPosition(new Palete(position));
+		return super.gameEngine.gameMap.exists(new Palete(position));
 	}
 
 	public boolean isOnBuraco(Point2D position) {
-		return super.gameEngine.gameMap.containsOnPosition(new Buraco(position));
+		return super.gameEngine.gameMap.exists(new Buraco(position));
 	}
 
 }
