@@ -152,7 +152,7 @@ public class GameEngine implements Observer {
 	// Inicio
 	public void start() {
 
-		introductionMenu();
+//		introductionMenu();
 
 		// Setup inicial da janela que faz a interface com o utilizador
 		// algumas coisas poderiam ser feitas no main, mas estes passos tem sempre que

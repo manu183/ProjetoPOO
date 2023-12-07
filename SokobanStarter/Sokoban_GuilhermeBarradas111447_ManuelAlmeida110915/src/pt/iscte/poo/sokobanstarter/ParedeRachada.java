@@ -16,6 +16,7 @@ public class ParedeRachada extends GameElement implements Interectable {
 			if (((Empilhadora) gameElement).hasMartelo()) {
 //				gui.setMessage("É empilhadora e tem martelo");
 				this.removeElement();
+				super.gameEngine.gameMap.updateElementPosition(gameElement, this.getPosition());
 			}
 
 		}

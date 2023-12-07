@@ -25,7 +25,10 @@ public class Sorteio extends GameElement implements Interectable{
 	public void interact(GameElement gameElement, Point2D nextPosition) {
 		// TODO Auto-generated method stub
 		System.out.println("Sorteio!!!!!!!!!");
-		sortBattery();
+		if(gameElement instanceof Empilhadora) {
+			super.gameEngine.gameMap.updateElementPosition(gameElement, this.getPosition());
+			sortBattery();			
+		}
 //		super.gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
 	}
 

@@ -45,10 +45,12 @@ public class Teleporte extends GameElement implements Interectable  {
 		Teleporte teleporte = new Teleporte(nextPosition);
 		Teleporte otherTeleporte = teleporte.getOtherTeleporte();
 
+		gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
 		if (otherTeleporte.isAvailable()) {
 			super.gameEngine.gameMap.updateElementPosition(gameElement, otherTeleporte.getPosition());
-		} else {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, this.getPosition());
+		} 
+		else {
+			System.out.println(gameElement.getName() +" não se pode mexer porque existe um outro GameElement na posição do outro teleporte");
 		}
 	}
 

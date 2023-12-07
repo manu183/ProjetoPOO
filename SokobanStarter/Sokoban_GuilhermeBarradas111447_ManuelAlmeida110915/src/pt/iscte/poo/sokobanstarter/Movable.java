@@ -32,33 +32,30 @@ public abstract class Movable extends GameElement {
 	protected void move(Direction direction) {
 		// Calcular a nova posição
 		Point2D nextPosition = calculateFinalPosition(getPosition(), direction);
-		// Verifica através da função isValidMove se o objeto se pode mover
-		if (isValidMove(nextPosition)) {
-			System.out.println("Movimento válido");
-			List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-			
-			GameElement next = null;
-			for (GameElement actual : elements) {
-				if (actual instanceof Interectable) {
-					next = actual;
-				} 
+
+		System.out.println("Movimento válido");
+		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
+
+		GameElement next = null;
+		for (GameElement actual : elements) {
+			if (actual instanceof Interectable) {
+				next = actual;
 			}
-			if (next != null) {
-				if(next instanceof Interectable) {
-					System.out.println("Interectable detected!!!!!");
-					((Interectable) next).interact(this, nextPosition);
-				}
-				
+		}
+		if (next != null) {
+			if (next instanceof Interectable) {
+				System.out.println("Interectable detected!!!!!");
+				((Interectable) next).interact(this, nextPosition);
 			}
 
-			else {
-				System.out.println("Move pelo update");
-				// Atualiza o elemento no mapa de jogo
+		}
+
+		else {
+			System.out.println("Move pelo update");
+			// Atualiza o elemento no mapa de jogo
+			if (isValidMove(nextPosition)) {
 				super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
 			}
-
-		} else {
-			System.err.println("It was not possible to move  " + getName() + " to position" + nextPosition);
 		}
 
 	}

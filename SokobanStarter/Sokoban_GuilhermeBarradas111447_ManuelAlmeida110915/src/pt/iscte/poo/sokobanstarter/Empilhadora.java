@@ -61,19 +61,13 @@ public class Empilhadora extends Movable {
 		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);
 		// Obtém uma lista com os objetos existentes na posição seguinte
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-	
-		
+
 		GameElement next = null;
 		for (GameElement actual : elements) {
 			if (actual instanceof Catchable) {
 				next = actual;
-				
 
-			} else if (actual instanceof Interectable) {
-				next = actual;
-				
-			} 
-			else if (actual instanceof Movable) {
+			} else if (actual instanceof Movable) {
 				System.out.println("To move:" + actual);
 				next = actual;
 			}
@@ -85,11 +79,7 @@ public class Empilhadora extends Movable {
 			}
 			if (next instanceof Catchable)
 				((Catchable) next).catchElement();
-			
-			if(next instanceof Interectable) {
-				System.out.println("Interectable detected!!!!!");
-				((Interectable) next).interact(this, nextPosition);
-			}
+
 		}
 
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora
