@@ -2,7 +2,7 @@ package pt.iscte.poo.sokobanstarter;
 
 import pt.iscte.poo.utils.Point2D;
 
-public class Bateria extends Catchable {
+public class Bateria extends GameElement implements Catchable {
 
 	public static final String imageName = "Bateria";
 
@@ -13,8 +13,10 @@ public class Bateria extends Catchable {
 	}
 
 	@Override
-	public void catchElement() {
-		super.catchElement();
-		super.gameEngine.bobcat.addBattery(10);
+	public void catchElement(GameElement gameElement) {
+		if(gameElement instanceof Empilhadora) {
+			super.removeElement();
+			super.gameEngine.bobcat.addBattery(10);
+		}
 	}
 }

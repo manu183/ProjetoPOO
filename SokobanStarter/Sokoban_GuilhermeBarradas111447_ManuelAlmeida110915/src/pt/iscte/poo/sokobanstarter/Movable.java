@@ -40,6 +40,7 @@ public abstract class Movable extends GameElement {
 		for (GameElement actual : elements) {
 			if (actual instanceof Interectable) {
 				next = actual;
+				break;
 			}
 		}
 		if (next != null) {

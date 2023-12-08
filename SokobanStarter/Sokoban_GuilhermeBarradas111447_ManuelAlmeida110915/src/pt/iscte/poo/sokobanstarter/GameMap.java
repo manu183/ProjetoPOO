@@ -88,9 +88,6 @@ public class GameMap implements Comparator<Point2D> {
 		}else {
 			System.err.println("This GameElement cannot be updated since it doesn't exists!");
 		}
-//		removeElement(gameElement);
-//		gameElement.setPosition(newPosition);
-//		addElement(gameElement);
 	}
 
 	public void deleteAll() {

@@ -2,7 +2,7 @@ package pt.iscte.poo.sokobanstarter;
 
 import pt.iscte.poo.utils.Point2D;
 
-public class Martelo extends Catchable {
+public class Martelo extends GameElement implements Catchable {
 
 	public static final String imageName = "Martelo";
 
@@ -12,9 +12,11 @@ public class Martelo extends Catchable {
 	}
 	
 	@Override
-	public void catchElement() {
-		super.catchElement();
-		super.gameEngine.bobcat.addMartelo(true);
+	public void catchElement(GameElement gameElement) {
+		if(gameElement instanceof Empilhadora) {
+			super.removeElement();
+			super.gameEngine.bobcat.addMartelo(true);			
+		}
 	}
 
 }
