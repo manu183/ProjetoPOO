@@ -18,9 +18,9 @@ public abstract class Movable extends GameElement {
 
 	protected boolean isValidMove(Point2D finalPosition) {
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(finalPosition);
-
+		System.out.println("THIS:"+this);
 		for (GameElement current : elements) {
-			if (!current.getTransposable() || !isOnBoard(finalPosition)) {
+			if (!current.getTransposable() || !isOnBoard(finalPosition) || super.getTransposable()) {
 				System.out.println("isValidMove:false");
 				return false;
 			}
@@ -35,9 +35,10 @@ public abstract class Movable extends GameElement {
 
 		System.out.println("Movimento válido");
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
-
+		System.out.println(elements);
 		GameElement next = null;
 		for (GameElement actual : elements) {
+			System.out.println("a");
 			if (actual instanceof Interectable) {
 				next = actual;
 				break;
@@ -47,16 +48,12 @@ public abstract class Movable extends GameElement {
 			if (next instanceof Interectable) {
 				System.out.println("Interectable detected!!!!!");
 				((Interectable) next).interact(this);
+				
 			}
 
-		}
-
-		else {
-			System.out.println("Move pelo update");
-			// Atualiza o elemento no mapa de jogo
-			if (isValidMove(nextPosition)) {
-				super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
-			}
+		}else if(isValidMove(nextPosition)) {
+			System.out.println("Mover");
+			super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
 		}
 
 	}

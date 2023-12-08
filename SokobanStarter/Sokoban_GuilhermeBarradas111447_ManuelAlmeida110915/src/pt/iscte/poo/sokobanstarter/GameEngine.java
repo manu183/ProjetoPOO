@@ -36,7 +36,7 @@ public class GameEngine implements Observer {
 	private ImageMatrixGUI gui; // Referencia para ImageMatrixGUI (janela de interface com o utilizador)
 	public Empilhadora bobcat; // Referencia para a empilhadora
 	
-	private static final int MAX_LEVELS=7;
+	private static final int MAX_LEVEL=8;
 	// Guarda as posições de cada elemento numa classe GameMap baseada num HashMap
 	public GameMap gameMap;
 	// Guarda o nível atual do jogador
@@ -54,7 +54,7 @@ public class GameEngine implements Observer {
 //		this.tileList = new ArrayList<>();
 		this.gameMap = GameMap.getInstance();
 		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 7;
+		this.level = 8;
 		this.score = 0;
 		this.userName = "NOT_DEFINED";
 		this.registScore = Score.getInstance();
@@ -87,7 +87,7 @@ public class GameEngine implements Observer {
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
 	private void readFiles(int levelNum) {
-		if (levelNum < 0 || levelNum > MAX_LEVELS) {
+		if (levelNum < 0 || levelNum > MAX_LEVEL) {
 			throw new IllegalArgumentException("There is no level number " + levelNum);
 		}
 		// Define todos os elementos do gameMap como chão por defeito
@@ -137,6 +137,9 @@ public class GameEngine implements Observer {
 //			if (numTeleportes > 0 && numTeleportes != 2) {
 //				throw new IllegalArgumentException("The file can only have 2 teleportes!");
 //			}
+			if(bobcat==null) {
+				throw new IllegalArgumentException("The file must have a bobcat!!!");
+			}
 
 			sendImagesToGUI();
 			System.out.println("GUI:" + gameMap);
@@ -225,7 +228,7 @@ public class GameEngine implements Observer {
 	// Método que verifica se o nível foi ganho e que no futuro irá aumentar o nível
 	public void winLevel() {
 		if (gameMap.winsLevel()) {
-			if (level == MAX_LEVELS) {
+			if (level == MAX_LEVEL) {
 				gui.setStatusMessage("Ganhaste o jogo!!!");
 				gui.setMessage("Ganhaste o jogo!");
 				winsGame();
@@ -253,7 +256,7 @@ public class GameEngine implements Observer {
 	}
 
 	public void levelUp() {
-		if (level >= 0 && level + 1 <= MAX_LEVELS) {
+		if (level >= 0 && level + 1 <= MAX_LEVEL) {
 			level++;
 			gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
 			+ "  |  " + "Movimentos:" + score);

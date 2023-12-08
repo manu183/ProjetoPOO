@@ -66,14 +66,16 @@ public class Empilhadora extends Movable {
 		for (GameElement actual : elements) {
 			 if (actual instanceof Movable) {
 				System.out.println("To move:" + actual);
+				next = actual;
 				((Movable) next).move(direction);
 			}else if(actual instanceof Catchable) {
+				next=actual;
 				((Catchable) next).catchElement(this);
 			}
 		}
+
 		// Chamo a função global que move objetos Movable, de modo a mover a Empilhadora
 		super.move(direction);
-
 	}
 
 	@Override
