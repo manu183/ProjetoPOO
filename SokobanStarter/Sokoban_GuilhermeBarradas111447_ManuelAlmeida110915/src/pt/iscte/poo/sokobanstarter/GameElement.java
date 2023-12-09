@@ -7,14 +7,15 @@ import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
 public abstract class GameElement implements ImageTile {
-	protected GameEngine gameEngine = GameEngine.getInstance();
-	protected ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
+	protected GameEngine gameEngine = GameEngine.getInstance(); // Instância do GameEngine
+	protected ImageMatrixGUI gui = ImageMatrixGUI.getInstance(); // Instância da GUI
 
 	private Point2D position;
 	private String name;
 	private int layer;
 
-	private boolean isTransposable = false;
+	private boolean isTransposable = false; // atributo boleano que guarda se um objeto GameElement é ou não
+											// transposível
 
 	protected GameElement(Point2D position, String name, int layer) {
 		this.position = position;
@@ -23,34 +24,40 @@ public abstract class GameElement implements ImageTile {
 
 	}
 
+	// Método para obter o nome
 	@Override
 	public String getName() {
 		return name;
 	}
 
+	// Método para definir o nome
 	protected void setName(String newName) {
 		this.name = newName;
 	}
 
+	// Método para obter a posição
 	@Override
 	public Point2D getPosition() {
 		return position;
 	}
 
-	// Para os objetos Movable de modo a atualizar a sua posição no mapa
+	// Método para definir a posição
 	protected void setPosition(Point2D newPosition) {
 		this.position = newPosition;
 	}
 
+	// Método para obter a camada
 	@Override
 	public int getLayer() {
 		return layer;
 	}
 
+	// Método para definir se é transposível ou não
 	public void setTransposable(boolean isTransposable) {
 		this.isTransposable = isTransposable;
 	}
 
+	// Método para obter se é transposível
 	public boolean getTransposable() {
 		return isTransposable;
 	}
@@ -89,7 +96,7 @@ public abstract class GameElement implements ImageTile {
 		case 'T':
 			return new Teleporte(position);
 		case 'S':
-			return new Sorteio(position);
+			return new RoletaEnergia(position);
 		default:
 			throw new IllegalArgumentException("Unrecognized key '" + key + "' for creating GameElement element");
 		}
@@ -99,9 +106,8 @@ public abstract class GameElement implements ImageTile {
 	public String toString() {
 		return getPosition() + ":" + getName() + ", isTransposable:" + getTransposable();
 	}
-	
-	
-	//Saber se os um GameElement é igual a este
+
+	// Saber se um certo objeto é igual a este
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

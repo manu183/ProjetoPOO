@@ -9,7 +9,7 @@ import java.util.Map;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class GameMap implements Comparator<Point2D> {
+public class GameMap {
 	private Map<Point2D, List<GameElement>> map;
 	private static GameMap INSTANCE;
 
@@ -26,45 +26,42 @@ public class GameMap implements Comparator<Point2D> {
 
 	// Adicionar um objeto GameElement ao tabuleiro de jogo
 	public void addElement(GameElement gameElement) {
-		// Obter a posição de gameElement
-		Point2D position = gameElement.getPosition();
+
+		Point2D position = gameElement.getPosition();// Obter a posição de gameElement
 
 		// Verificar se já existe a key position
 		if (map.containsKey(position)) {
 
-			List<GameElement> elements = map.get(position);
+			List<GameElement> elements = map.get(position);// Obter uma lista de objetos GameElement na posição do
+															// gameElement
 
 			// Verificamos se o atual gameElement ainda não existe, de modo a não termos
 			// vários objetos GameElement iguais que estejam associados à mesma chave
 			if (!elements.contains(gameElement)) {
-				// Se de facto, não ainda não existir é adicionado
-				elements.add(gameElement);
 
-				// Atualização do hashMap com o a list elements
-				map.put(position, elements);
+				elements.add(gameElement);// Se de facto, não ainda não existir é adicionado
 
-//				System.out.println("Element added successfully at position: " + position);
+				map.put(position, elements);// Atualização do hashMap com o a list elements
+
 			} else {
 				System.out.println("Element already exists at the specified position.");
 			}
 		} else {
-			// Criamos uma nova lista elements
-			List<GameElement> elements = new ArrayList<>();
+
+			List<GameElement> elements = new ArrayList<>();// Criamos uma nova lista elements
 			elements.add(gameElement);
 
-			// Assiciamos a lista elements à chave position
-			map.put(position, elements);
+			map.put(position, elements);// Associamos a lista elements à chave position
 
-//			System.out.println("Element added successfully at position: " + position);
 		}
 	}
 
 	// Função para remover um certo objeto GameElement do tabuleiro de jogo
 	public void removeElement(GameElement gameElement) {
-		// Obter a posição de gameElement
-		Point2D position = gameElement.getPosition();
 
-		List<GameElement> elements = map.get(position);
+		Point2D position = gameElement.getPosition();// Obter a posição de gameElement
+
+		List<GameElement> elements = map.get(position);// Obter a lista de objetos GameElement na posição do gameElement
 
 		if (elements != null) {
 			if (elements.remove(gameElement)) {
@@ -81,11 +78,11 @@ public class GameMap implements Comparator<Point2D> {
 
 	// Função para atualizar a posição de um objeto GameElement no tabuleiro de jogo
 	public void updateElementPosition(GameElement gameElement, Point2D newPosition) {
-		if(exists(gameElement)) {
+		if (exists(gameElement)) {
 			removeElement(gameElement);
 			gameElement.setPosition(newPosition);
-			addElement(gameElement);			
-		}else {
+			addElement(gameElement);
+		} else {
 			System.err.println("This GameElement cannot be updated since it doesn't exists!");
 		}
 	}
@@ -99,7 +96,7 @@ public class GameMap implements Comparator<Point2D> {
 
 		if (elements == null) {
 			System.err.println("No elements found at position: " + position);
-			return new ArrayList<>(); // Return an empty list
+			return new ArrayList<>(); // Retorna uma lista vazia
 		}
 
 		// Check if elements have inconsistent positions
@@ -107,14 +104,14 @@ public class GameMap implements Comparator<Point2D> {
 			if (!element.getPosition().equals(position)) {
 				System.err.println("Inconsistent position for element " + element.getName() + ". Expected: " + position
 						+ ", Actual: " + element.getPosition());
-				return new ArrayList<>(); // Return an empty list
+				return new ArrayList<>(); // Retorna uma lista vazia
 			}
 		}
 
-		return new ArrayList<>(elements); // Return a copy to prevent external modification
+		return new ArrayList<>(elements); // Retorna uma cópia para prevenir modificações externas
 	}
 
-	// Função que verifica se existe um certo objeto
+	// Método que verifica se existe um certo objeto
 	public boolean exists(GameElement gameElement) {
 		List<GameElement> elements = getElementsAt(gameElement.getPosition());
 		for (GameElement actual : elements) {
@@ -125,7 +122,8 @@ public class GameMap implements Comparator<Point2D> {
 		return false;
 	}
 
-	// Função que verifica se o nível foi ganho, ou seja, se
+	// Método que verifica se o nível foi ganho, ou seja, se todas as posições onde
+	// existem alvos contém um caixote
 	public boolean winsLevel() {
 		boolean res = true;
 		List<GameElement> elements = convertToArrayList();
@@ -147,7 +145,7 @@ public class GameMap implements Comparator<Point2D> {
 		return res;
 	}
 
-	// Função que verifica se o nível foi ganho, ou seja, se
+	// Método que verifica se o nível foi ganho, ou seja, se
 	public boolean loseLevel() {
 		List<GameElement> elements = convertToArrayList();
 
@@ -171,7 +169,8 @@ public class GameMap implements Comparator<Point2D> {
 
 	}
 
-	// Esta função serve para obter todos os objetos de um certo GameElement
+	// Método que serve para obter todos os objetos do map que sejam de um certo
+	// GameElement
 	public List<GameElement> getAllOfTheseGameElement(GameElement gameElement) {
 		List<GameElement> elements = convertToArrayList();
 
@@ -183,7 +182,7 @@ public class GameMap implements Comparator<Point2D> {
 				toRemove.add(actual);
 			}
 		}
-		// Remover de elements os elementos de toRemove
+		// Remover os elementos de toRemove de elements
 		elements.removeAll(toRemove);
 
 		return elements;
@@ -193,12 +192,6 @@ public class GameMap implements Comparator<Point2D> {
 	// atualizar a GUI, que recebe objetos ImageTile
 	public List<ImageTile> arrayToGUI() {
 		List<ImageTile> allElements = new ArrayList<>();
-//		List<Point2D> keys = new ArrayList<>(map.keySet());
-//		keys.sort((o1, o2) -> compare(o1, o2));
-//		for (Point2D actual : keys) {
-//			List<GameElement> gameElements = getElementsAt(actual);
-//			allElements.addAll(gameElements);
-//		}
 		allElements.addAll(convertToArrayList());
 		return allElements;
 	}
@@ -207,7 +200,7 @@ public class GameMap implements Comparator<Point2D> {
 	public List<GameElement> convertToArrayList() {
 		List<GameElement> allElements = new ArrayList<>();
 		List<Point2D> keys = new ArrayList<>(map.keySet());
-		keys.sort((o1, o2) -> compare(o1, o2));
+		keys.sort(new ComparatorPoints());
 		for (Point2D actual : keys) {
 			List<GameElement> gameElements = getElementsAt(actual);
 			allElements.addAll(gameElements);
@@ -223,7 +216,7 @@ public class GameMap implements Comparator<Point2D> {
 		// i é o iterador para se poder ver até quando se deve imprimir ' | '
 		int i = 0;
 		int size = keys.size();
-		keys.sort((o1, o2) -> compare(o1, o2));
+		keys.sort(new ComparatorPoints());
 		for (Point2D actual : keys) {
 			List<GameElement> gameElements = getElementsAt(actual);
 			res += "(" + actual.getX() + ", " + actual.getY() + ")-> ";
@@ -244,13 +237,17 @@ public class GameMap implements Comparator<Point2D> {
 		return res;
 	}
 
-	@Override
-	public int compare(Point2D o1, Point2D o2) {
-		// TODO Auto-generated method stub
-		if (o1.getX() == o2.getX()) {
-			return o1.getY() - o2.getY();
-		} else {
-			return o1.getX() - o2.getX();
+	// Implementação de uma classe para a comparação de objetos Point2D
+	public class ComparatorPoints implements Comparator<Point2D> {
+		// Implementa o método compare que serve para a ordenação
+		@Override
+		public int compare(Point2D o1, Point2D o2) {
+			// TODO Auto-generated method stub
+			if (o1.getX() == o2.getX()) {
+				return o1.getY() - o2.getY();
+			} else {
+				return o1.getX() - o2.getX();
+			}
 		}
 	}
 

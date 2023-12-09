@@ -11,21 +11,6 @@ import pt.iscte.poo.observer.Observer;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
-// Note que esta classe e' um exemplo - nao pretende ser o inicio do projeto, 
-// embora tambem possa ser usada para isso.
-//
-// No seu projeto e' suposto haver metodos diferentes.
-//  
-// As coisas que comuns com o projeto, e que se pretendem ilustrar aqui, sao:
-// - GameEngine implementa Observer - para  ter o metodo update(...)  
-// - Configurar a janela do interface grafico (GUI):
-//        + definir as dimensoes
-//        + registar o objeto GameEngine ativo como observador da GUI
-//        + lancar a GUI
-// - O metodo update(...) e' invocado automaticamente sempre que se carrega numa tecla
-//
-// Tudo o mais podera' ser diferente!
-
 public class GameEngine implements Observer {
 
 	// Dimensoes da grelha de jogo
@@ -35,29 +20,29 @@ public class GameEngine implements Observer {
 	private static GameEngine INSTANCE; // Referencia para o unico objeto GameEngine (singleton)
 	private ImageMatrixGUI gui; // Referencia para ImageMatrixGUI (janela de interface com o utilizador)
 	public Empilhadora bobcat; // Referencia para a empilhadora
-	
-	private static final int MAX_LEVEL=8;
-	// Guarda as posições de cada elemento numa classe GameMap baseada num HashMap
-	public GameMap gameMap;
-	// Guarda o nível atual do jogador
-	private int level;
-	// Guarda a pontuação do jogador
-	private int score;
-	// Guarda o nome do Jogador
-	private String userName;
 
-	// Guarda o objeto da classe Score que é utilizado para guardar o score
-	private Score registScore;
+	private static final int MAX_LEVEL = 8; // Guarda o número do maior nível que o jogo tem
 
-	// Construtor - neste exemplo apenas inicializa uma lista de ImageTiles
+	public GameMap gameMap;// Guarda todos os objetos GameElement numa classe GameMap baseada num HashMap
+
+	private int level;// Guarda o nível atual do jogador
+
+	private int score;// Guarda os movimentos do jogador em cada nível
+
+	private int total_score; // Guarda todos os movimentos do jogador até ao momento
+
+	private String userName;// Guarda o nome do Jogador
+
+	// Construtor
 	private GameEngine() {
-//		this.tileList = new ArrayList<>();
+
 		this.gameMap = GameMap.getInstance();
-		this.gui = ImageMatrixGUI.getInstance();
-		this.level = 8;
+		this.gui = ImageMatrixGUI.getInstance(); // 1. obter instancia ativa de ImageMatrixGUI
+		this.level = 0;
 		this.score = 0;
+		this.total_score = 0;
 		this.userName = "NOT_DEFINED";
-		this.registScore = Score.getInstance();
+
 	}
 
 	// Implementacao do singleton para o GameEngine
@@ -67,26 +52,31 @@ public class GameEngine implements Observer {
 		return INSTANCE;
 	}
 
-	// Define o mapa e atualiza automaticamente o tileList com os Valores do mapa
-
 	// Adiciona um elemento lido do ficheiro ao map e ao tabuleiro de jogo
 	private void addToGame(GameElement gameElement) {
 		gameMap.addElement(gameElement);
 	}
 
-	//Apaga o tabuleiro de jogo
+	// Apaga o tabuleiro de jogo
 	private void deleteGameMap() {
 		gameMap.deleteAll();
 	}
-	
-	//Aumenta o score, que corresponde aos movimentos totais, em uma unidade
+
+	// Aumenta o score e o total score em uma unidade
 	public void increaseScore() {
 		score++;
+		total_score++;
+	}
+
+	// Método para definir o título da janela de jogo
+	public void setStatusBar() {
+		gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
+				+ "  |  " + "Movimentos:" + score + " | Movimentos totais:" + total_score);
 	}
 
 	// Função para ler os ficheiros que armazenam as diferentes disposições do
 	// armazém
-	private void readFiles(int levelNum) {
+	private void readFile(int levelNum) {
 		if (levelNum < 0 || levelNum > MAX_LEVEL) {
 			throw new IllegalArgumentException("There is no level number " + levelNum);
 		}
@@ -115,13 +105,11 @@ public class GameEngine implements Observer {
 					throw new IllegalArgumentException("The file " + fileName + "doesn't have a valid format");
 				}
 				for (colunas = 0; colunas < GRID_WIDTH; colunas++) {
-					// detectString(linha.charAt(colunas), new Point2D(colunas, linhas));
-					GameElement gameElement;
 					if (linha.charAt(colunas) == 'E') {
 						this.bobcat = new Empilhadora(new Point2D(colunas, linhas));
 						addToGame(bobcat);
 					} else {
-						gameElement = GameElement.createElement(linha.charAt(colunas), new Point2D(colunas, linhas));
+						GameElement gameElement = GameElement.createElement(linha.charAt(colunas), new Point2D(colunas, linhas));
 						addToGame(gameElement);
 						if (gameElement instanceof Teleporte) {
 							System.out.println("Teleporte:" + gameElement);
@@ -133,11 +121,14 @@ public class GameEngine implements Observer {
 			}
 			scanner.close();
 
-			// Verifica que se caso existam teleportes, eles não correspondam a um par
-//			if (numTeleportes > 0 && numTeleportes != 2) {
-//				throw new IllegalArgumentException("The file can only have 2 teleportes!");
-//			}
-			if(bobcat==null) {
+			// Verifica que se caso existam teleportes eles não sejam mais que 2, que
+			// correspondem a um par
+			if (numTeleportes > 0 && numTeleportes != 2) {
+				throw new IllegalArgumentException("The file can only have 2 teleportes!");
+			}
+			// Verifica se foi lida alguma empilhadora, verificando se o objeto bobcat é
+			// nulo
+			if (bobcat == null) {
 				throw new IllegalArgumentException("The file must have a bobcat!!!");
 			}
 
@@ -155,23 +146,20 @@ public class GameEngine implements Observer {
 	// Inicio
 	public void start() {
 
-//		introductionMenu();
+		introductionMenu();
 
 		// Setup inicial da janela que faz a interface com o utilizador
 		// algumas coisas poderiam ser feitas no main, mas estes passos tem sempre que
 		// ser feitos!
-//		gui = ImageMatrixGUI.getInstance(); // 1. obter instancia ativa de ImageMatrixGUI
-		gui.setSize(GRID_HEIGHT, GRID_WIDTH); // 2. configurar as dimensoes
-		gui.registerObserver(this); // 3. registar o objeto ativo GameEngine como observador da GUI
-		gui.go(); // 4. lancar a GUI
+		gui.setSize(GRID_HEIGHT, GRID_WIDTH); // 1. configurar as dimensoes
+		gui.registerObserver(this); // 2. registar o objeto ativo GameEngine como observador da GUI
+		gui.go(); // 3. lancar a GUI
 
+		readFile(level); // Ler um certo ficheiro de um certo nível
 
-		readFiles(level);
 		sendImagesToGUI(); // enviar as imagens para a GUI
 
-		// Escrever uma mensagem na StatusBar
-		gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
-				+ "  |  " + "Movimentos:" + score);
+		setStatusBar();// Escrever uma mensagem na StatusBar
 	}
 
 	// O metodo update() e' invocado automaticamente sempre que o utilizador carrega
@@ -182,62 +170,77 @@ public class GameEngine implements Observer {
 	public void update(Observed source) {
 
 		int key = gui.keyPressed(); // obtem o codigo da tecla pressionada
-		
-		//Verifica se o key é aceite
-		if(AcceptedKeys.isAcceptedKey(key)) {
+
+		// Verifica se o key é aceite
+		if (AcceptedKeys.isAcceptedKey(key)) {
+			if (key == KeyEvent.VK_ESCAPE) {
+				System.out.println("User pressed ESC to close the game!");
+				System.exit(0); // Termina o programa porque o jogador clicou em ESC
+			}
 			if (key == KeyEvent.VK_SPACE) {
-				restartLevel();
+				restartLevel(); // Como o utilizador clicou no espaço o nível reinicia
 			} else {
-				Direction direction = Direction.directionFor(key);
-				bobcat.move(direction);
+				Direction direction = Direction.directionFor(key); // Obtém a direção através da key
+				bobcat.move(direction); // Invoca o método move da empilhadora
 
 			}
-			sendImagesToGUI();
+			sendImagesToGUI();// enviar as imagens para a GUI
+
 			System.out.println("GUI:" + gameMap.convertToArrayList());
 			System.out.println(".".repeat(50));
 			gui.update(); // redesenha a lista de ImageTiles na GUI,
 							// tendo em conta as novas posicoes dos objetos
 
-			// Atualiza o título da GUI
-			gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
-					+ "  |  " + "Movimentos:" + score);
+			setStatusBar();// Atualiza o título da GUI
 
-			winLevel();
-			loseLevel();
-			
-			
-		}else {
-			gui.setMessage("Essa tecla não é aceite");
+			winLevel(); // Invoca o método que verifica se o nível atual foi ganho
+			loseLevel(); // Invoca o método que verifica se o nível atual foi perdido
+
+		} else {
+			gui.setMessage("Essa tecla não é aceite"); // Como o utilizador clicou em uma tecla que não é aceite é
+														// impressa uma mensagem na GUI
 		}
-		
 
-		
 	}
 
 	// Cria o menu de introdução que pergunta o nome ao jogador
 	public void introductionMenu() {
-		gui.setMessage("Olá! Bem-vindo ao Sokoban");
+		gui.setMessage("Olá! Bem-vindo ao Sokoban!\n");
+
 		userName = gui.askUser("Qual é o teu nome?");
-		//Verifica se o utilizador deu um nome nulo, ou só composto por espaços
+		// Verifica se o utilizador deu um nome nulo, ou só composto por espaços
 		while (userName.isBlank()) {
 			gui.setMessage("O teu nome tem de ser definido!");
 			userName = gui.askUser("Qual é o teu nome?");
 		}
+		gui.setStatusMessage("SOKOBAN");
+		String message = "Objetivo do jogo: Preencher com o menor número de movimentos possíveis todos os alvos com um caixote!\nRegras do jogo:\n1. A empilhadora só pode empurrar um elemento movível.\n2. Só é possível passar por cima de buracos caso os mesmos tenham uma palete por baixo.Caso não tenha um palete o elemento cai no buraco.\n3. Só é possível teleportar um elemento se não houver outro elemento na posição do outro teleporte.";
+		gui.setMessage(message + "\n\nSe quiseres sair durante o jogo pressiona a tecla ESC");
 	}
 
 	// Método que verifica se o nível foi ganho e que no futuro irá aumentar o nível
 	public void winLevel() {
 		if (gameMap.winsLevel()) {
+			Score.addScore(userName, score, "scores/level" + level + ".txt");// Guarda os melhores scores de cada nível
+
 			if (level == MAX_LEVEL) {
 				gui.setStatusMessage("Ganhaste o jogo!!!");
 				gui.setMessage("Ganhaste o jogo!");
-				winsGame();
-				registScore.addNewScore(userName, score);
-				showScores();
-			}else {
+				gui.dispose();//Fecha a janela de jogo da GUI
+				// Guarda os melhores scores do jogo todo
+				Score totalScore = Score.addScore(userName, total_score, "scores/scores.txt"); // Guarda os pontuações
+																								// finais através da
+																								// classe Score e guarda
+																								// o objeto dessa class
+																								// na variável score
+				showScores(totalScore);//Invoca o método showScores para mostrar as melhores pontuações
+
+				showAllLevelsScores();//Invoca o método showAllLevelsScores para mostrar as melhores pontuações de cada nível
+				System.exit(0);//Termina a execução do programa
+			} else {
 				gui.setStatusMessage("Ganhaste o nível!");
 				gui.setMessage("Ganhaste o nível!");
-				levelUp();
+				levelUp();//Invoca o método levelUp para subir de nível
 			}
 		}
 	}
@@ -245,41 +248,43 @@ public class GameEngine implements Observer {
 	// Método que verifica se o nível foi perdido de forma a que se for verdade o
 	// mesmo recomece
 	public void loseLevel() {
-		if (gameMap.loseLevel()) {
+		if (gameMap.loseLevel()) { //Invoca o método loseLevel do gameMap para verificar se o nível já foi perdido, ou seja se não existe empilhadora ou número suficientes de caixotes para o número de alvos
 			gui.setMessage("Perdeste o nível!");
-			restartLevel();
+			restartLevel();//Invoca o método para reiniciar o nível
 		}
-		if (bobcat.getBattery()<=0) {
+		if (bobcat.getBattery() <= 0 && !gameMap.winsLevel()) {
 			gui.setMessage("Ficaste sem bateria!");
-			restartLevel();
+			restartLevel();//Invoca o método para reiniciar o nível
 		}
+		
 	}
-
+	
+	//Método que implementa a subida de nível
 	public void levelUp() {
 		if (level >= 0 && level + 1 <= MAX_LEVEL) {
 			level++;
-			gui.setStatusMessage("Nome:" + userName + "  |  Nível=" + level + "  |  Energia:" + bobcat.getBattery()
-			+ "  |  " + "Movimentos:" + score);
-			deleteGameMap();
-			readFiles(level);
+			score = 0;
+			setStatusBar();// Atualiza o título da GUI
+			deleteGameMap();//Invoca para apagar o conteúdo do gameMap deste nível 
+			readFile(level);//Lê o ficheiro do novo nível
 		}
 	}
 
-	// mostrar os resultados na gui, referindo ao utilizador o seu rank
-	public void showScores() {
+	// Mostrar os resultados na GUI, referindo ao utilizador o seu rank
+	public void showScores(Score score) {
 		String message = "";
-		int rank = registScore.getRank(userName, score);
+		int rank = score.getRank();
 		System.out.println(rank);
 		if (rank != -1) {
 			message += "Parabéns!!! Ficaste no rank " + rank + "\n";
 		} else {
-			message += "Não ficaste no top 5. Tenta outra vez!\n";
+			message += "Não ficaste no top "+Score.SCORES_TO_WRITE +".Tenta outra vez!\n";
 		}
 		message += "Melhores resultados:\n";
 
 		try {
 			// Lê o ficheiro scores
-			Scanner scanner = new Scanner(new File("levels/scores.txt"));
+			Scanner scanner = new Scanner(score.getFile());
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				message += line + "\n";
@@ -288,19 +293,37 @@ public class GameEngine implements Observer {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-
 		gui.setMessage(message);
-
 	}
-
+	
+	//Mostrar as melhores pontuações de todos os níveis
+	public void showAllLevelsScores() {
+		String message = "Best Levels scores!\n";
+		for (int i = 0; i <= MAX_LEVEL; i++) {
+			File level = new File("scores/level" + i + ".txt");
+			message += "LEVEL " + i + "\n";
+			try {
+				// Lê o ficheiro scores
+				Scanner scanner = new Scanner(level);
+				while (scanner.hasNextLine()) {
+					String line = scanner.nextLine();
+					message += line + "\n";
+				}
+				scanner.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			message += "\n";
+		}
+		gui.setMessage(message);
+	}
+	
+	//Método para reiniciar o nível atual
 	public void restartLevel() {
 		deleteGameMap();
-		readFiles(level);
+		readFile(level);
 	}
-
-	public void winsGame() {
-		gui.dispose();
-	}
+	
 
 	// Criacao da planta do armazem - so' chao neste exemplo
 	private void createWarehouse() {
@@ -313,6 +336,6 @@ public class GameEngine implements Observer {
 	// inicio
 	// Nao e' suposto re-enviar os objetos se a unica coisa que muda sao as posicoes
 	private void sendImagesToGUI() {
-		gui.addImages(gameMap.arrayToGUI());
+		gui.addImages(gameMap.arrayToGUI());//Envia para a GUI uma lista de  objetos ImageTile através do método arrayToGUI do gameMap
 	}
 }

@@ -15,6 +15,7 @@ public class ParedeRachada extends GameElement implements Interectable {
 		if (gameElement instanceof Empilhadora) {
 			if (((Empilhadora) gameElement).hasMartelo()) {
 				this.removeElement();
+				super.gameEngine.gameMap.updateElementPosition(gameElement, getPosition());
 
 			}
 

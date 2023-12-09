@@ -1,6 +1,15 @@
 package pt.iscte.poo.sokobanstarter;
 
-public interface Catchable {
-	public void catchElement(GameElement gameElement);
+import pt.iscte.poo.utils.Point2D;
+
+public abstract class Catchable extends GameElement {
+	public Catchable(Point2D position, String name, int layer) {
+		super(position, name, layer);
+	}
+	
+	// O método define que por defeito, quando um Catchable é "apanhado" o mesmo desaparece
+	public void catchElement() {
+		removeElement();
+	}
 
 }

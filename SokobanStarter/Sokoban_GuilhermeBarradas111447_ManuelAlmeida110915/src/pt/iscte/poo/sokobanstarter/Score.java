@@ -10,27 +10,50 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Score {
-	private String fileName;
 	private File file;
+	private final User user;
 
 	// Guarda o número de scores que o ficheiro deve guardar
-	private static final int SCORES_TO_WRITE = 3;
+	public static final int SCORES_TO_WRITE = 3;
 
-	private static Score INSTANCE;
 	private Map<Integer, List<User>> scores;
 
-	private Score() {
-		this.fileName = "levels/scores.txt";
+	private Score(String userName, int score, String fileName) {
 		this.file = new File(fileName);
+		this.user=new User(userName,score);
 		scores = new HashMap<>();
+		
+	}
+	public static Score addScore(String userName,int score, String fileName) {
+		Score now = new Score(userName,score,fileName);
+		now.saveScore();
+		return now;
+	}
+	
+	
+	public File getFile() {
+		return file;
+	}
+	
+	
+	// Adicionar um novo registo
+	public void saveScore() {
+		if (file.exists()) {
+			System.out.println("File exists");
+			readScoreFile();
+		} else {
+			System.out.println("File does not exists");
+		}
+		add(user);
+		writeScoreFile();
 	}
 
 	// Implementacao do singleton para o Score
-	public static Score getInstance() {
-		if (INSTANCE == null)
-			return INSTANCE = new Score();
-		return INSTANCE;
-	}
+//	public static Score getInstance() {
+//		if (INSTANCE == null)
+//			return INSTANCE = new Score();
+//		return INSTANCE;
+//	}
 
 	// Implementação da classe interna User
 	private class User {
@@ -74,19 +97,9 @@ public class Score {
 		}
 	}
 
-	// Adicionar um novo registo
-	public void addNewScore(String userName, int score) {
-		if (file.exists()) {
-			System.out.println("File exists");
-			readScoreFile();
-		} else {
-			System.out.println("File does not exists");
-		}
-		add(new User(userName, score));
-		writeScoreFile();
-	}
+	
 
-	public int getRank(String userName, int score) {
+	public int getRank() {
 		List<String> sortedScores = sortScores();
 		System.out.println("GETRANK:");
 		System.out.println(sortedScores);
@@ -97,7 +110,7 @@ public class Score {
 
 			int actualScore = Integer.parseInt(now[1]);
 
-			if (now[0].equals(userName) && actualScore == score) {
+			if (now[0].equals(user.getUserName()) && actualScore == user.getScore()) {
 				if (index <= SCORES_TO_WRITE) {
 					return index;
 				}
@@ -192,7 +205,7 @@ public class Score {
 
 		try {
 			int numScoresToWrite = Math.min(sortedScores.size(), SCORES_TO_WRITE);
-			PrintWriter writer = new PrintWriter(fileName);
+			PrintWriter writer = new PrintWriter(this.file);
 			for (int i = 0; i < numScoresToWrite; i++) {
 				String now = sortedScores.get(i);
 				String ordinal = (i + 1) + ".";

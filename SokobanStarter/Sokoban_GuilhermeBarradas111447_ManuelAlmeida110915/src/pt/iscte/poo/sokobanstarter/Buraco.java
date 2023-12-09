@@ -13,17 +13,15 @@ public class Buraco extends GameElement implements Interectable {
 
 	@Override
 	public void interact(GameElement gameElement) {
-		System.out.println("Buraco!!!!!");
-		Palete palete = new Palete(super.getPosition());
+
+		Palete palete = new Palete(super.getPosition());// Um objeto do tipo palete na posição do Buraco
+
 		if (!(gameElement instanceof Palete) && !super.gameEngine.gameMap.exists(palete)) {
-			System.out.println("Existe uma palete no buraco");
-			gameElement.removeElement();
-			System.out.println("Should have removed "+gameElement);
-		} 
-		else {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, super.getPosition());
+			gameElement.removeElement(); // Caso o buraco não tenha nenhuma palete sobreposta e caso o gameElement não
+											// seja do tipo Palete o gameElement é removido porque cai no buraco
+		} else {
+			super.gameEngine.gameMap.updateElementPosition(gameElement, super.getPosition()); // Caso contrário significa que o gameElement pode transitar para cima do buraco sem que caia
 		}
 	}
 
-	
 }

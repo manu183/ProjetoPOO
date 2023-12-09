@@ -36,7 +36,10 @@ public abstract class Movable extends GameElement {
 		System.out.println("Movimento válido");
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);
 		System.out.println(elements);
+		
 		GameElement next = null;
+		
+		
 		for (GameElement actual : elements) {
 			System.out.println("a");
 			if (actual instanceof Interectable) {
@@ -48,11 +51,15 @@ public abstract class Movable extends GameElement {
 			if (next instanceof Interectable) {
 				System.out.println("Interectable detected!!!!!");
 				((Interectable) next).interact(this);
+				//Reduzir a energia
+				super.gameEngine.bobcat.decreaseBattery();;
 				
 			}
 
 		}else if(isValidMove(nextPosition)) {
 			System.out.println("Mover");
+			//Reduzir a energia
+			super.gameEngine.bobcat.decreaseBattery();;
 			super.gameEngine.gameMap.updateElementPosition(this, nextPosition);
 		}
 
