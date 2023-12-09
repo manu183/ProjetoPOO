@@ -4,7 +4,7 @@ import pt.iscte.poo.utils.Point2D;
 
 public class Buraco extends GameElement implements Interectable {
 
-	public static final String imageName = "Buraco";
+	private static final String imageName = "Buraco";
 
 	public Buraco(Point2D position) {
 		super(position, imageName, 0);
@@ -20,7 +20,12 @@ public class Buraco extends GameElement implements Interectable {
 			gameElement.removeElement(); // Caso o buraco não tenha nenhuma palete sobreposta e caso o gameElement não
 											// seja do tipo Palete o gameElement é removido porque cai no buraco
 		} else {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, super.getPosition()); // Caso contrário significa que o gameElement pode transitar para cima do buraco sem que caia
+			super.gameEngine.gameMap.updateElementPosition(gameElement, super.getPosition()); // Caso contrário
+																								// significa que o
+																								// gameElement pode
+																								// transitar para cima
+																								// do buraco sem que
+																								// caia
 		}
 	}
 

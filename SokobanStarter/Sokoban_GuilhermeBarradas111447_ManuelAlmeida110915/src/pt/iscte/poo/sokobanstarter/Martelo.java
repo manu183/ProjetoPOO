@@ -4,7 +4,7 @@ import pt.iscte.poo.utils.Point2D;
 
 public class Martelo extends Catchable {
 
-	public static final String imageName = "Martelo";
+	private static final String imageName = "Martelo";
 
 	public Martelo(Point2D position) {
 		super(position, imageName, 0);
@@ -12,8 +12,8 @@ public class Martelo extends Catchable {
 	
 	@Override
 	public void catchElement() {
-		super.catchElement();
-		super.gameEngine.bobcat.setMartelo(true);
+		super.catchElement();//Invoca o método catchElement da classe Catchable que apanha este elemento
+		super.gameEngine.bobcat.setMartelo(true);//Como o martelo foi apanhado então o atributo hasMartelo da empilhadora passa a ter o valor true
 	}
 
 }

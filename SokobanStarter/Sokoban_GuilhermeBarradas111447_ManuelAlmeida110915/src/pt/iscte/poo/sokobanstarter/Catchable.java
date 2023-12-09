@@ -9,7 +9,7 @@ public abstract class Catchable extends GameElement {
 	
 	// O método define que por defeito, quando um Catchable é "apanhado" o mesmo desaparece
 	public void catchElement() {
-		removeElement();
+		super.removeElement(); //Remove esta ParedeRachada o gameMap, e consequentemente da GUI
 	}
 
 }

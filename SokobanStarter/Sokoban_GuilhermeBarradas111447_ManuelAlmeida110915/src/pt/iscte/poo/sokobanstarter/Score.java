@@ -37,7 +37,7 @@ public class Score {
 	
 	
 	// Adicionar um novo registo
-	public void saveScore() {
+	private void saveScore() {
 		if (file.exists()) {
 			System.out.println("File exists");
 			readScoreFile();
@@ -47,13 +47,6 @@ public class Score {
 		add(user);
 		writeScoreFile();
 	}
-
-	// Implementacao do singleton para o Score
-//	public static Score getInstance() {
-//		if (INSTANCE == null)
-//			return INSTANCE = new Score();
-//		return INSTANCE;
-//	}
 
 	// Implementação da classe interna User
 	private class User {
@@ -72,7 +65,8 @@ public class Score {
 		public String getUserName() {
 			return userName;
 		}
-
+		
+		// Saber se um certo objeto é igual a este
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) {
@@ -98,11 +92,9 @@ public class Score {
 	}
 
 	
-
+	//Método para obter o rank
 	public int getRank() {
 		List<String> sortedScores = sortScores();
-		System.out.println("GETRANK:");
-		System.out.println(sortedScores);
 
 		int index = 1;
 		for (String actual : sortedScores) {
@@ -119,28 +111,25 @@ public class Score {
 		}
 		return -1;
 	}
-
+	
+	//Método para ler os ficheiros de pontuação
 	private void readScoreFile() {
 		try (Scanner scanner = new Scanner(file)) {
 			// Verifica se há mais linhas antes de tentar ler
 			while (scanner.hasNextLine()) {
-				// Leia a linha inteira e depois crie um Scanner para analisar os tokens
+				// Ler a linha inteira
 				String line = scanner.nextLine();
 				Scanner lineScanner = new Scanner(line);
 
-				String position = lineScanner.next();
-//	            System.out.println(position);
+				String rank = lineScanner.next(); //Rank
 
-				String userName = lineScanner.next();
-//	            System.out.println(userName);
+				String userName = lineScanner.next();//Nome do jogador
 
-				// Verifica se há um próximo token inteiro antes de chamá-lo
+				// Verifica se há um próximo inteiro antes de chamá-lo
 				if (lineScanner.hasNextInt()) {
-					int score = lineScanner.nextInt();
-					System.out.println(score);
-					User newUser = new User(userName, score);
-					System.out.println("New user:" + newUser.toString());
-					add(newUser);
+					int score = lineScanner.nextInt(); //Score do jogador
+					User newUser = new User(userName, score); //Guardar o registo num objeto User
+					add(newUser); //Adicionar este user ao HashMap
 				} else {
 					lineScanner.close(); // Certifique-se de fechar o scanner da linha
 					throw new IllegalArgumentException("Erro ao ler pontuação. Score não é um inteiro válido.");
@@ -152,18 +141,19 @@ public class Score {
 			throw new IllegalArgumentException("Error reading file. Invalid format.");
 		}
 	}
-
+	
+	//Método para adicionar um certo User ao HashMap
 	private void add(User user) {
-		if (!alreadyExists(user)) {
+		if (!alreadyExists(user)) {//Adiciona o user na HashMap se ele não existir já na mesma
 			List<User> users = getUsersByScore(user.getScore());
 			users.add(user);
 			scores.put(user.getScore(), users);
-			System.out.println(scores);
 		} else {
 			System.out.println("This user and this pontuaction is already registed!");
 		}
 	}
-
+	
+	//Método que verifica se existe o user no HashMap
 	private boolean alreadyExists(User user) {
 		List<User> users = getUsersByScore(user.getScore());
 		for (User actual : users) {
@@ -173,7 +163,8 @@ public class Score {
 		}
 		return false;
 	}
-
+	
+	//Método para obter todos os objetos User com um certo score
 	private List<User> getUsersByScore(int score) {
 		List<User> users = scores.get(score);
 		if (users == null) {
@@ -181,13 +172,11 @@ public class Score {
 		}
 		return users;
 	}
-
+	
+	//Método retorna uma lista de String com os objetos User ordenados de forma crescente pelo score
 	private List<String> sortScores() {
 		List<Integer> sortedKeys = new ArrayList<>(scores.keySet());
-//	    System.out.println("Sorting:...");
-		sortedKeys.sort((a, b) -> a - b);
-		System.out.println("Keys:" + sortedKeys);
-
+		sortedKeys.sort((a, b) -> a - b);//Ordena sortedKeys de forma crescebre
 		List<String> result = new ArrayList<>();
 
 		for (Integer key : sortedKeys) {
@@ -198,11 +187,10 @@ public class Score {
 		}
 		return result;
 	}
-
+	
+	//Escreve num ficheiro .txt os 3 melhores User ordenados
 	private void writeScoreFile() {
 		List<String> sortedScores = sortScores();
-		System.out.println("SortedScores:" + sortedScores);
-
 		try {
 			int numScoresToWrite = Math.min(sortedScores.size(), SCORES_TO_WRITE);
 			PrintWriter writer = new PrintWriter(this.file);
@@ -210,7 +198,6 @@ public class Score {
 				String now = sortedScores.get(i);
 				String ordinal = (i + 1) + ".";
 				writer.println(ordinal + " " + now);
-				System.out.println("Should have printed!");
 			}
 			writer.close();
 		} catch (FileNotFoundException e) {
