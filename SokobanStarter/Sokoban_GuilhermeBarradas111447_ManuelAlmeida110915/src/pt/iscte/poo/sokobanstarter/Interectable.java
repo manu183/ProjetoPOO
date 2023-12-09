@@ -1,5 +1,7 @@
 package pt.iscte.poo.sokobanstarter;
 
+import pt.iscte.poo.utils.Point2D;
+
 public interface Interectable {
-	public void interact(GameElement gameElement);
+	public Point2D interact(GameElement gameElement);// A interecao ira retornar a nova posicao do gameElement
 }

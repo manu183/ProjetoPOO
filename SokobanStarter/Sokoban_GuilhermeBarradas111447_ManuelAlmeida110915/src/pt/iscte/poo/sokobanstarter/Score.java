@@ -13,7 +13,7 @@ public class Score {
 	private File file;
 	private final User user;
 
-	// Guarda o número de scores que o ficheiro deve guardar
+	// Guarda o numero de scores que o ficheiro deve guardar
 	public static final int SCORES_TO_WRITE = 3;
 
 	private Map<Integer, List<User>> scores;
@@ -48,7 +48,7 @@ public class Score {
 		writeScoreFile();
 	}
 
-	// Implementação da classe interna User
+	// Implementacao da classe interna User
 	private class User {
 		private final String userName;
 		private final int score;
@@ -66,7 +66,7 @@ public class Score {
 			return userName;
 		}
 		
-		// Saber se um certo objeto é igual a este
+		// Saber se um certo objeto e igual a este
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) {
@@ -92,7 +92,7 @@ public class Score {
 	}
 
 	
-	//Método para obter o rank
+	//Metodo para obter o rank
 	public int getRank() {
 		List<String> sortedScores = sortScores();
 
@@ -112,10 +112,10 @@ public class Score {
 		return -1;
 	}
 	
-	//Método para ler os ficheiros de pontuação
+	//Metodo para ler os ficheiros de pontuacao
 	private void readScoreFile() {
 		try (Scanner scanner = new Scanner(file)) {
-			// Verifica se há mais linhas antes de tentar ler
+			// Verifica se ha mais linhas antes de tentar ler
 			while (scanner.hasNextLine()) {
 				// Ler a linha inteira
 				String line = scanner.nextLine();
@@ -125,26 +125,26 @@ public class Score {
 
 				String userName = lineScanner.next();//Nome do jogador
 
-				// Verifica se há um próximo inteiro antes de chamá-lo
+				// Verifica se ha um proximo inteiro antes de chama-lo
 				if (lineScanner.hasNextInt()) {
 					int score = lineScanner.nextInt(); //Score do jogador
 					User newUser = new User(userName, score); //Guardar o registo num objeto User
 					add(newUser); //Adicionar este user ao HashMap
 				} else {
-					lineScanner.close(); // Certifique-se de fechar o scanner da linha
-					throw new IllegalArgumentException("Erro ao ler pontuação. Score não é um inteiro válido.");
+					lineScanner.close();
+					throw new IllegalArgumentException("Erro ao ler pontuacao. Score nao e um inteiro valido.");
 				}
 
-				lineScanner.close(); // Certifique-se de fechar o scanner da linha
+				lineScanner.close();
 			}
 		} catch (FileNotFoundException e) {
 			throw new IllegalArgumentException("Error reading file. Invalid format.");
 		}
 	}
 	
-	//Método para adicionar um certo User ao HashMap
+	//Metodo para adicionar um certo User ao HashMap
 	private void add(User user) {
-		if (!alreadyExists(user)) {//Adiciona o user na HashMap se ele não existir já na mesma
+		if (!alreadyExists(user)) {//Adiciona o user na HashMap se ele nao existir ja na mesma
 			List<User> users = getUsersByScore(user.getScore());
 			users.add(user);
 			scores.put(user.getScore(), users);
@@ -153,7 +153,7 @@ public class Score {
 		}
 	}
 	
-	//Método que verifica se existe o user no HashMap
+	//Metodo que verifica se existe o user no HashMap
 	private boolean alreadyExists(User user) {
 		List<User> users = getUsersByScore(user.getScore());
 		for (User actual : users) {
@@ -164,7 +164,7 @@ public class Score {
 		return false;
 	}
 	
-	//Método para obter todos os objetos User com um certo score
+	//Metodo para obter todos os objetos User com um certo score
 	private List<User> getUsersByScore(int score) {
 		List<User> users = scores.get(score);
 		if (users == null) {
@@ -173,10 +173,10 @@ public class Score {
 		return users;
 	}
 	
-	//Método retorna uma lista de String com os objetos User ordenados de forma crescente pelo score
+	//Metodo retorna uma lista de String com os objetos User ordenados de forma crescente pelo score
 	private List<String> sortScores() {
 		List<Integer> sortedKeys = new ArrayList<>(scores.keySet());
-		sortedKeys.sort((a, b) -> a - b);//Ordena sortedKeys de forma crescebre
+		sortedKeys.sort((a, b) -> a - b);//Ordena sortedKeys de forma crescente
 		List<String> result = new ArrayList<>();
 
 		for (Integer key : sortedKeys) {

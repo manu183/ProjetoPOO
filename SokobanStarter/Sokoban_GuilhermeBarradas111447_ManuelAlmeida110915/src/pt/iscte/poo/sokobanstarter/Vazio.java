@@ -8,7 +8,5 @@ public class Vazio extends GameElement {
 
 	public Vazio(Point2D position) {
 		super(position, imageName, 0);
-
 	}
-
 }

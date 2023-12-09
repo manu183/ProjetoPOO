@@ -2,7 +2,7 @@ package pt.iscte.poo.sokobanstarter;
 
 import java.awt.event.KeyEvent;
 
-//Representa as teclas que são aceites no jogo
+//Representa as teclas que sao aceites no jogo
 public enum AcceptedKeys {
     SPACE(KeyEvent.VK_SPACE),
     UP(KeyEvent.VK_UP),
@@ -21,7 +21,7 @@ public enum AcceptedKeys {
 		return keyCode;
 	}
 
-	// Método para verificar se uma tecla é aceite
+	// Metodo para verificar se uma tecla e aceite
 	public static boolean isAcceptedKey(int key) {
 		for (AcceptedKeys acceptedKey : values()) {
 			if (acceptedKey.getKeyCode() == key) {

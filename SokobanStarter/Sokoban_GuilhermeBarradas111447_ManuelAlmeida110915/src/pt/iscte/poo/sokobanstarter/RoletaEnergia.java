@@ -10,7 +10,7 @@ public class RoletaEnergia extends GameElement implements Interectable {
 		super.setTransposable(true);
 	}
 
-	// Método para sorteiar e alterar o nível de energia da bateria da empilhadora
+	// Metodo para sorteiar e alterar o nivel de energia da bateria da empilhadora
 	private void sortBattery() {
 		int sorted = (int) (Math.random() * (121)) - 50;
 		if (sorted > 0) {
@@ -22,17 +22,13 @@ public class RoletaEnergia extends GameElement implements Interectable {
 	}
 
 	@Override
-	public void interact(GameElement gameElement) {
+	public Point2D interact(GameElement gameElement) {
 		// TODO Auto-generated method stub
 		if (gameElement instanceof Empilhadora) {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, super.getPosition());// Move-se o objeto que
-																								// interage com esta
-																								// RoletaEnergia para a
-																								// posição da mesma
-			super.gui.update();// Chama-se a gui de modo a que a tela de jogo atualiza antes de ser mostrada a
-								// tela do sorteio
-			sortBattery();// Invoca-se o método sortBattery para sorteiar a energia
+			sortBattery();// Invoca-se o metodo sortBattery para sorteiar a energia
+			return super.getPosition();// Move-se o objeto que
 		}
+		return gameElement.getPosition();
 	}
 
 }

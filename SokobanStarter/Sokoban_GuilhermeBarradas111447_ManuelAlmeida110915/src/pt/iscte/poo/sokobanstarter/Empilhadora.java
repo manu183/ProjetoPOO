@@ -23,27 +23,27 @@ public class Empilhadora extends Movable {
 		return battery_energy;
 	}
 
-	// Método em que é possível adicionar nível de energia à bateria
+	// Metodo em que e possivel adicionar nivel de energia na bateria
 	public void addBattery(int energy) {
 		battery_energy += energy;
 	}
 
-	// Método onde é possível remover um nível de energia à bateria
+	// Metodo onde e possível remover um nivel de energia na bateria
 	public void decreaseBattery() {
 		battery_energy--;
 	}
 
-	// Método onde é possível verificar se a empilhadora tem martelo
+	// Metodo onde e possivel verificar se a empilhadora tem martelo
 	public boolean hasMartelo() {
 		return hasMartelo;
 	}
 
-	// Método onde é possível definir se a empilhadora tem martelo
+	// Metodo onde e possivel definir se a empilhadora tem martelo
 	public void setMartelo(boolean hasMartelo) {
 		this.hasMartelo = hasMartelo;
 	}
 
-	// Método que atualiza o name da Empilhadora, que varia consoante a sua direção.
+	// Metodo que atualiza o name da Empilhadora, que varia consoante a sua direcao
 	private void updateImageName(Direction direction) {
 		switch (direction) {
 		case RIGHT:
@@ -62,44 +62,36 @@ public class Empilhadora extends Movable {
 	}
 
 	@Override
-	public void move(Direction direction) {
+	protected void move(Direction direction) {
 
 		updateImageName(direction);// Redefine o imageName para a imagem da Empilhadora alterar
 
-		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);// Calcula o nova posição da
+		Point2D nextPosition = super.calculateFinalPosition(getPosition(), direction);// Calcula o nova posicao da
 																						// empilhadora
 
-		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);// Obtém uma lista com os
+		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(nextPosition);// Obtem uma lista com os
 																							// objetos existentes na
-																							// posição seguinte
-
-		GameElement next = null;
+																							// posicao seguinte
 		for (GameElement actual : elements) {
 			if (actual instanceof Movable) {
-				System.out.println("To move:" + actual);
-				next = actual;
-				((Movable) next).move(direction);
+				((Movable) actual).move(direction);
 			} else if (actual instanceof Catchable) {
-				next = actual;
-				((Catchable) next).catchElement();
+				((Catchable) actual).catchElement();
 			}
 		}
 
-		// Invoca-se a função global que move objetos Movable, de modo a mover a
-		// Empilhadora
-		super.move(direction);
+		super.move(direction);// Invoca-se a funcao global que move objetos Movable, de modo a mover a
+								// Empilhadora
 	}
 
 	@Override
 	protected boolean isValidMove(Point2D finalPosition) {
-		// A função retorna falso caso a bateria
-		if (battery_energy - 1 < 0 || !super.isValidMove(finalPosition))
-			return false;
-		// Reduz a battery_energy
+		// O metodo retorna falso caso a bateria depois do movimento seja menor que 0 ou entao se o metodo isValidMove da classe Movable retornar false
+		if (battery_energy - 1 < 0 || !super.isValidMove(finalPosition)) {
 
-		// Cada vez que existe um movimento válido o score do gameEngine aumenta
-		// de modo a registar o total de movimentações
-		super.gameEngine.increaseScore();
+			return false;
+		}
+		
 		return true;
 	}
 

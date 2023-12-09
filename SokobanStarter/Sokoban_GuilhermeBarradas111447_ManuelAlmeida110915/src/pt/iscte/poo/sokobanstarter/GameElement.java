@@ -7,15 +7,15 @@ import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
 public abstract class GameElement implements ImageTile {
-	protected GameEngine gameEngine = GameEngine.getInstance(); // Instância do GameEngine
-	protected ImageMatrixGUI gui = ImageMatrixGUI.getInstance(); // Instância da GUI
+	protected GameEngine gameEngine = GameEngine.getInstance(); // Instancia do GameEngine
+	protected ImageMatrixGUI gui = ImageMatrixGUI.getInstance(); // Instancia da GUI
 
 	private Point2D position;
 	private String name;
 	private int layer;
 
-	private boolean isTransposable = false; // atributo boleano que guarda se um objeto GameElement é ou não
-											// transposível
+	private boolean isTransposable = false; // atributo boleano que guarda se um objeto GameElement e ou nao
+											// transposivel
 
 	protected GameElement(Point2D position, String name, int layer) {
 		this.position = position;
@@ -24,50 +24,50 @@ public abstract class GameElement implements ImageTile {
 
 	}
 
-	// Método para obter o nome
+	// Metodo para obter o nome
 	@Override
 	public String getName() {
 		return name;
 	}
 
-	// Método para definir o nome
-	protected void setName(String newName) {
+	// Metodo para definir o nome
+	public void setName(String newName) {
 		this.name = newName;
 	}
 
-	// Método para obter a posição
+	// Metodo para obter a posicao
 	@Override
 	public Point2D getPosition() {
 		return position;
 	}
 
-	// Método para definir a posição
-	protected void setPosition(Point2D newPosition) {
+	// Metodo para definir a posicao
+	public void setPosition(Point2D newPosition) {
 		this.position = newPosition;
 	}
 
-	// Método para obter a camada
+	// Metodo para obter a camada
 	@Override
 	public int getLayer() {
 		return layer;
 	}
 
-	// Método para definir se é transposível ou não
+	// Metodo para definir se e transposivel ou nao
 	public void setTransposable(boolean isTransposable) {
 		this.isTransposable = isTransposable;
 	}
 
-	// Método para obter se é transposível
+	// Metodo para obter se e transposivel
 	public boolean getTransposable() {
 		return isTransposable;
 	}
 
-	// Remover-se a ele próprio do tabuleiro de jogo
-	public void removeElement() {
+	// Remover-se a ele proprio do tabuleiro de jogo
+	protected void removeElement() {
 		gameEngine.gameMap.removeElement(this);
 	}
 
-	// Criação de Objetos através da char que o identifica
+	// Criacao de Objetos atraves da char que o identifica
 	public static GameElement createElement(char key, Point2D position) {
 
 		switch (key) {
@@ -107,7 +107,7 @@ public abstract class GameElement implements ImageTile {
 		return getPosition() + ":" + getName() + ", isTransposable:" + getTransposable();
 	}
 
-	// Saber se um certo objeto é igual a este
+	// Saber se um certo objeto e igual a este
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

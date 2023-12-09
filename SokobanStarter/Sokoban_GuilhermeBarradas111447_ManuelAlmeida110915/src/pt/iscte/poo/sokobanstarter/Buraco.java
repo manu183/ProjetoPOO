@@ -12,18 +12,16 @@ public class Buraco extends GameElement implements Interectable {
 	}
 
 	@Override
-	public void interact(GameElement gameElement) {
+	public Point2D interact(GameElement gameElement) {
 
-		Palete palete = new Palete(super.getPosition());// Um objeto do tipo palete na posição do Buraco
+		Palete palete = new Palete(super.getPosition());// Um objeto do tipo palete na posicao do Buraco
 
 		if (!(gameElement instanceof Palete) && !super.gameEngine.gameMap.exists(palete)) {
-			gameElement.removeElement(); // Caso o buraco não tenha nenhuma palete sobreposta e caso o gameElement não
-											// seja do tipo Palete o gameElement é removido porque cai no buraco
+			gameElement.removeElement(); // Caso o buraco nao tenha nenhuma palete sobreposta e caso o gameElement nao
+											// seja do tipo Palete o gameElement e removido porque cai no buraco
+			return gameElement.getPosition();
 		} else {
-			super.gameEngine.gameMap.updateElementPosition(gameElement, super.getPosition()); // Caso contrário
-																								// significa que o
-																								// gameElement pode
-																								// transitar para cima
+			return super.getPosition(); // Caso contrario significa que o gameElement pode transitar para cima
 																								// do buraco sem que
 																								// caia
 		}

@@ -13,7 +13,7 @@ public class Teleporte extends GameElement implements Interectable {
 		super.setTransposable(true);
 	}
 
-	// Método para obter o outro teleporte par
+	// Metodo para obter o outro teleporte par
 	public Teleporte getOtherTeleporte() {
 		// Obter todos os Teleportes que se encontram no mapa
 		List<GameElement> elements = super.gameEngine.gameMap.getAllOfTheseGameElement(this);
@@ -28,8 +28,8 @@ public class Teleporte extends GameElement implements Interectable {
 		return teleportePar;
 	}
 
-	// Saber se o teleporte está disponível, ou seja, se não existe nenhum
-	// GameElement isTranposable na mesma posição que ele
+	// Saber se o teleporte esta disponivel, ou seja, se nao existe nenhum
+	// GameElement isTranposable na mesma posicao que ele
 	public boolean isAvailable() {
 		List<GameElement> elements = super.gameEngine.gameMap.getElementsAt(super.getPosition());// Obter elementos que se ocupam o teleporte par
 		for (GameElement actual : elements) {
@@ -40,31 +40,28 @@ public class Teleporte extends GameElement implements Interectable {
 		return true;
 	}
 	
-	//Método que teleporta um certo gameElement para uma certa posião
-	public void teleporte(GameElement gameElement, Point2D nextPosition) {
-		Teleporte teleporte = new Teleporte(nextPosition);
+
+	//Implementa o metodo interact que teleporta o objeto que interaje com o teleporte
+	@Override
+	public Point2D interact(GameElement gameElement) {
+		Teleporte teleporte = new Teleporte(getPosition());
 		Teleporte otherTeleporte = teleporte.getOtherTeleporte();
 
-		if (((Movable) gameElement).isValidMove(nextPosition)) {//Só é possível realizar o teleporte caso o método isValidMove retorn true
-			if (otherTeleporte.isAvailable()) {//Verifica se o teleporte par está disponível
-				super.gameEngine.gameMap.updateElementPosition(gameElement, otherTeleporte.getPosition());//Altera a posição de gameElement para a posição do teleporte par
-
+		if (((Movable) gameElement).isValidMove(getPosition())) {//So e possivel realizar o teleporte caso o metodo isValidMove retorne true
+			if (otherTeleporte.isAvailable()) {//Verifica se o teleporte par esta disponivel
+				return otherTeleporte.getPosition();
 			} else {
-				gameEngine.gameMap.updateElementPosition(gameElement, nextPosition);
+				
 				System.out.println(gameElement.getName()
-						+ " não se pode teleportar porque existe um outro GameElement na posição do outro teleporte");
+						+ " nao se pode teleportar porque existe um outro GameElement na posicao do outro teleporte");
+				return getPosition();
 			}
 		}else {
 			System.err.println("Not possible to move!");
+			return gameElement.getPosition();
 		}
 
 	}
-	
-	//Implementa o método interact que teleporta o objeto que interaje com o teleporte
-	@Override
-	public void interact(GameElement gameElement) {
-		teleporte(gameElement, super.getPosition());
 
-	}
 
 }
